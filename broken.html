@@ -1,0 +1,608 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Untitled</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .cal .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+  .cal .dow { font-size: .78rem; color: var(--faint); font-weight: 700; padding: 4px 0; }
+  .promo { background: var(--gold); color: var(--surface); font-size: .85rem; font-weight: 700; }
+  .promo .wrap { padding-block: 6px; }
+  .foot-form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .foot-form input { font: inherit; padding: 8px 10px; border-radius: 8px; border: 0; }
+</style>
+</head>
+<body class="no-focus">
+
+<div class="practice">
+  <div class="wrap">
+    <div><strong>Practice site.</strong> Version 2 of 2: deliberately inaccessible. Wyvernway is not a real company.</div>
+    <div>For all versions <a href="index.html">click here</a></div>
+  </div>
+</div>
+
+<div class="promo"><div class="wrap" id="promo">Flash sale: 20% off flights to Valhalla. Ends in 0:45</div></div>
+
+<div class="site-header">
+  <div class="wrap">
+    <div class="brand" onclick="location.href='broken.html'" style="cursor:pointer">
+      <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'%3E%3Cpath d='M3 22c6-1 10-5 12-12 2 6 6 9 16 9-6 3-11 3-14 1-2 4-8 6-14 2z' fill='%23f4f6fa'/%3E%3Ccircle cx='24' cy='10' r='2.4' fill='%234fd1c5'/%3E%3C/svg%3E" width="34" height="34">
+      Wyvernway
+    </div>
+    <div class="site-nav">
+      <div class="navlist">
+        <div class="navitem current" onclick="location.href='broken.html'">Flights</div>
+        <div class="navitem">Hotels</div>
+        <div class="navitem">Car hire</div>
+        <div class="navitem">Help</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Flights to places that never existed</div>
+      <div class="h1">Search flights to legendary places</div>
+      <div class="lede">Compare fares from six imaginary airlines to fifteen mythical destinations, from Camelot to Valhalla.</div>
+    </div>
+  </div>
+
+  <div class="wrap search-wrap">
+    <div class="search-card">
+      <div class="vague-error" id="errors" hidden>Please check the highlighted fields</div>
+
+      <div class="row row-top">
+        <div class="seg" id="trip">
+          <div class="opt on" data-value="return"><span class="dot"></span>Return</div>
+          <div class="opt" data-value="oneway"><span class="dot"></span>One way</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="route">
+          <div class="field">
+            <div class="label">From</div>
+            <input id="from-input" class="control" type="text" autocomplete="off">
+            <div id="from-list" class="pop listbox" hidden></div>
+          </div>
+          <div class="swap" id="swap">
+            <svg width="20" height="20" viewBox="0 0 20 20"><path d="M6 3 2 7l4 4M2 7h12M14 17l4-4-4-4M18 13H6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="field">
+            <div class="label">To</div>
+            <input id="to-input" class="control" type="text" autocomplete="off">
+            <div id="to-list" class="pop listbox" hidden></div>
+          </div>
+        </div>
+        <div class="field" style="flex: 1 1 320px;">
+          <div class="label">Travel dates</div>
+          <div class="control btnlike cal-btn" id="dates-btn"><span id="dates-val"></span>
+            <svg width="18" height="18" viewBox="0 0 18 18"><rect x="2" y="3.5" width="14" height="12.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 7.5h14M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.6"/></svg>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field" style="flex: 0 1 340px;">
+          <div class="label">Passengers and cabin</div>
+          <div class="control btnlike" id="pax-btn"><span id="pax-val">1 adult, Economy</span></div>
+          <div class="pop pax-pop" id="pax-pop" hidden>
+            <div class="counter">
+              <div class="who"><span>Adults</span><span class="hint lowc">16 or over</span></div>
+              <div class="stepper">
+                <span class="step-btn" data-for="adults" data-step="-1">−</span>
+                <span class="step-val" id="adults" data-min="1" data-max="9">1</span>
+                <span class="step-btn" data-for="adults" data-step="1">+</span>
+              </div>
+            </div>
+            <div class="counter">
+              <div class="who"><span>Children</span><span class="hint lowc">2 to 15</span></div>
+              <div class="stepper">
+                <span class="step-btn" data-for="children" data-step="-1">−</span>
+                <span class="step-val" id="children" data-min="0" data-max="8">0</span>
+                <span class="step-btn" data-for="children" data-step="1">+</span>
+              </div>
+            </div>
+            <div class="field">
+              <div class="label">Cabin class</div>
+              <div class="control btnlike" id="cabin"><span id="cabin-val">Economy</span></div>
+              <div class="pop listbox" id="cabin-list" hidden></div>
+            </div>
+            <div class="btn btn-primary" id="pax-done">Done</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="justify-content: space-between; align-items: center;">
+        <div class="options">
+          <div class="chk" id="opt-direct"><span class="box"></span><span>Direct flights only</span></div>
+          <span class="tip-wrap">
+            <div class="chk" id="opt-nearby"><span class="box"></span><span>Include nearby airports</span></div>
+            <span class="tip-btn" id="tip-btn"><svg viewBox="0 0 16 16"><circle cx="8" cy="4" r="1.3" fill="currentColor"/><path d="M8 7v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <div class="tip" id="tip" hidden>Adds airports within 150 miles. For example, Lyonesse when you fly to Avalon.</div>
+          </span>
+          <div class="chk" id="opt-flex"><span class="switch-track"></span><span>Flexible dates (3 days either side)</span></div>
+        </div>
+        <div class="btn btn-primary btn-search" id="search-btn">Search</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cal" id="cal" hidden>
+    <div class="cal-head">
+      <div class="cal-nav" id="cal-prev">‹</div>
+      <div class="h3" id="cal-title"></div>
+      <div class="cal-nav" id="cal-next">›</div>
+    </div>
+    <div class="days" id="cal-grid"></div>
+  </div>
+
+  <div class="results wrap" id="results" hidden>
+    <div class="results-head">
+      <div>
+        <div class="h2" id="results-h">Flights</div>
+        <div class="hint lowc" id="results-meta"></div>
+      </div>
+      <div id="status" class="status"></div>
+    </div>
+
+    <div class="layout">
+      <div class="filters">
+        <div class="h2">Filter results</div>
+        <div class="facet">
+          <div class="acc-btn open" data-target="f-stops">Stops</div>
+          <div class="facet-body" id="f-stops">
+            <div class="chk on" data-stops="0"><span class="box"></span><span>Direct</span></div>
+            <div class="chk on" data-stops="1"><span class="box"></span><span>1 stop</span></div>
+            <div class="chk on" data-stops="2"><span class="box"></span><span>2 or more stops</span></div>
+          </div>
+        </div>
+        <div class="facet">
+          <div class="acc-btn open" data-target="f-air">Airlines</div>
+          <div class="facet-body" id="f-air"></div>
+        </div>
+        <div class="facet">
+          <div class="acc-btn" data-target="f-time">Departure time</div>
+          <div class="facet-body range-row" id="f-time" hidden>
+            <div class="lowc">Departs before</div>
+            <div class="slider" id="slider">
+              <div class="slider-track"></div>
+              <div class="slider-fill" id="slider-fill" style="width: 100%;"></div>
+              <div class="slider-thumb" id="before" style="left: 100%;"></div>
+            </div>
+            <div class="value-out" id="before-out">Any time</div>
+          </div>
+        </div>
+        <div class="facet facet-body" style="padding-top: 14px;">
+          <div class="btn btn-secondary" id="reset">Reset</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sort">
+          <div class="tab on" data-value="best"><span class="t">Best</span><span class="s" id="sub-best"></span></div>
+          <div class="tab" data-value="cheapest"><span class="t">Cheapest</span><span class="s" id="sub-cheapest"></span></div>
+          <div class="tab" data-value="fastest"><span class="t">Fastest</span><span class="s" id="sub-fastest"></span></div>
+        </div>
+        <div class="flist" id="list"></div>
+        <div class="empty" id="empty" hidden>
+          <div class="h3">Nothing here</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dest wrap">
+    <div class="dest-head">
+      <div><div class="h2">Popular destinations</div></div>
+      <div class="dest-controls">
+        <div class="cal-nav" id="dest-prev">‹</div>
+        <div class="cal-nav" id="dest-next">›</div>
+      </div>
+    </div>
+    <div class="dest-stack fade" id="dest-slides"></div>
+  </div>
+
+  <div class="faq wrap">
+    <div class="h2">Questions before you fly</div>
+    <div class="faq-list">
+      <div class="faq-item"><div class="acc-btn" data-target="a1">Can I take a pet dragon in the cabin?</div><div class="faq-body" id="a1" hidden>Dragons under 8 kg can travel in the cabin in a fireproof carrier. Larger dragons travel in the hold, which is heated to their liking.</div></div>
+      <div class="faq-item"><div class="acc-btn" data-target="a2">How much luggage is included?</div><div class="faq-body" id="a2" hidden>Every fare includes one cabin bag up to 10 kg. You can add a 23 kg checked bag when you book, for £35 each way.</div></div>
+      <div class="faq-item"><div class="acc-btn" data-target="a3">Can I change my dates after booking?</div><div class="faq-body" id="a3" hidden>Yes. Changes cost £25 per passenger, plus any difference in fare. Changes close 3 hours before departure.</div></div>
+      <div class="faq-item"><div class="acc-btn" data-target="a4">What happens if Atlantis sinks before my flight?</div><div class="faq-body" id="a4" hidden>We rebook you to Lemuria or Hy-Brasil at no extra cost, or give you a full refund.</div></div>
+      <div class="faq-item"><div class="acc-btn" data-target="a5">Is there step-free access at Mount Olympus airport?</div><div class="faq-body" id="a5" hidden>Yes. Every Wyvernway gate has step-free boarding. You can book assistance up to 48 hours before you fly, including help for guide dog owners.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="site-footer">
+  <div class="wrap">
+    <div>Wyvernway is a fictional company made for screen reader practice. No real flights are sold.</div>
+    <div class="foot-form">
+      <input type="text" placeholder="Email for deals" tabindex="1">
+      <div class="btn btn-primary" id="deals">Go</div>
+    </div>
+    <div class="foot-links">
+      <span class="link" onclick="location.href='index.html'">About</span>
+      <span class="link">Help</span>
+      <span class="link">Accessibility</span>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="book-backdrop" hidden>
+  <div class="modal" id="book">
+    <div class="modal-head">
+      <div class="h2">Book your flight</div>
+      <div class="icon-btn" id="book-close">×</div>
+    </div>
+    <div class="modal-body" id="book-body">
+      <div class="trip-sum" id="trip-sum"></div>
+      <input type="text" id="pname" class="control" placeholder="Full name">
+      <input type="text" id="pemail" class="control" placeholder="Email">
+      <div>
+        <div class="legend">Seat</div>
+        <div class="stack" id="seat">
+          <div class="chk on" data-value="window"><span class="dot"></span>Window</div>
+          <div class="chk" data-value="aisle"><span class="dot"></span>Aisle</div>
+          <div class="chk" data-value="none"><span class="dot"></span>No preference</div>
+        </div>
+      </div>
+      <div>
+        <div class="legend">Extras</div>
+        <div class="stack" id="extras"></div>
+      </div>
+      <div class="total">
+        <span>Total</span>
+        <span id="total" class="price"></span>
+      </div>
+      <div class="chk" id="terms"><span class="box"></span><span class="lowc">I accept the fare rules and the Wyvernway terms</span></div>
+      <div class="row" style="justify-content: flex-end;">
+        <div class="btn btn-secondary" id="book-cancel">Cancel</div>
+        <div class="btn btn-primary" id="book-confirm">Confirm</div>
+      </div>
+    </div>
+    <div class="confirm" id="confirm" hidden>
+      <div class="h2">Done!</div>
+      <div class="ref" id="ref"></div>
+    </div>
+  </div>
+</div>
+
+<div class="cookie" id="cookie">
+  <div class="wrap">
+    <div>We use cookies to make your journey magical. <span class="lowc">By continuing you agree to our policy.</span></div>
+    <div class="cookie-actions">
+      <span class="link lowc" id="cookie-settings" style="cursor:pointer; text-decoration: underline;">Settings</span>
+      <div class="btn btn-primary" id="cookie-ok">OK</div>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="ck-backdrop" hidden>
+  <div class="modal">
+    <div class="modal-head">
+      <div class="h2">Cookie settings</div>
+      <div class="icon-btn" id="ck-x">×</div>
+    </div>
+    <div class="modal-body">
+      <div class="prefs">
+        <div class="pref"><div class="label">Essential</div><div class="chk sw on locked"><span class="switch-track"></span></div></div>
+        <div class="pref"><div class="label">Analytics</div><div class="chk sw on" data-ck><span class="switch-track"></span></div></div>
+        <div class="pref"><div class="label">Marketing</div><div class="chk sw on" data-ck><span class="switch-track"></span></div></div>
+        <div class="pref"><div class="label">Personalisation</div><div class="chk sw on" data-ck><span class="switch-track"></span></div></div>
+      </div>
+      <div class="row" style="justify-content: flex-end;">
+        <div class="btn btn-primary" id="ck-save">Save</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  const W = WYV;
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const state = {
+    trip: 'return', flights: [], sort: 'best', search: null, cabin: 'economy', saved: new Set(),
+    filters: { stops: new Set(['0', '1', '2']), airlines: new Set(W.airlines.map(a => a.code)), before: 24 }
+  };
+  const isOn = el => el.classList.contains('on');
+  const toggle = el => el.classList.toggle('on');
+
+  // Countdown that never pauses and silently restarts
+  let secs = 45;
+  setInterval(() => { secs = secs <= 0 ? 45 : secs - 1; $('#promo').textContent = 'Flash sale: 20% off flights to Valhalla. Ends in 0:' + String(secs).padStart(2, '0'); }, 1000);
+
+  $('#cookie-ok').onclick = () => { $('#cookie').hidden = true; };
+
+  // Cookie settings overlay: no dialog role, focus stays behind it, state shown only by colour and position
+  $('#cookie-settings').onclick = () => { $('#ck-backdrop').hidden = false; };
+  $$('[data-ck]').forEach(s => s.onclick = () => toggle(s));
+  $('#ck-x').onclick = () => { $('#ck-backdrop').hidden = true; };
+  $('#ck-save').onclick = () => { $('#ck-backdrop').hidden = true; $('#cookie').hidden = true; };
+
+  // Tooltip: only appears on mouse hover and vanishes as soon as the pointer moves off the icon
+  $('#tip-btn').onmouseenter = () => { $('#tip').hidden = false; };
+  $('#tip-btn').onmouseleave = () => { $('#tip').hidden = true; };
+
+  // Carousel: rotates every 4 seconds with no way to pause. Hidden slides are only transparent, so screen readers read all of them
+  const slides = $('#dest-slides');
+  W.destinations.forEach((d, i) => {
+    const s = document.createElement('div');
+    s.className = 'dest-slide' + (i === 0 ? ' on' : '');
+    s.innerHTML = '<div class="dest-card"><img src="' + d.img + '" width="320" height="180">' +
+      '<div class="dest-body"><div class="dest-region lowc">' + d.region + '</div><div class="h3">' + W.airport(d.code).name + '</div><div>' + d.blurb + '</div>' +
+      '<div class="dest-price">from <strong>' + W.money(d.price) + '</strong></div><span class="read-more" style="color: var(--accent); font-weight: 700; cursor: pointer; text-decoration: underline;">Read more</span></div></div>';
+    $('.read-more', s).onclick = () => { setAirport(toIn, d.code); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+    slides.appendChild(s);
+  });
+  let slide = 0;
+  function go(n) { slide = (n + W.destinations.length) % W.destinations.length; $$('.dest-slide', slides).forEach((s, j) => s.classList.toggle('on', j === slide)); }
+  setInterval(() => go(slide + 1), 4000);
+  $('#dest-prev').onclick = () => go(slide - 1);
+  $('#dest-next').onclick = () => go(slide + 1);
+
+  // Trip type
+  $$('#trip .opt').forEach(o => o.onclick = () => {
+    $$('#trip .opt').forEach(x => x.classList.toggle('on', x === o));
+    state.trip = o.dataset.value;
+    showDates();
+  });
+
+  // From / To: suggestions can only be chosen with a mouse
+  function setAirport(input, code) {
+    const a = W.airport(code);
+    input.value = a ? a.name : '';
+    input.dataset.code = a ? a.code : '';
+  }
+  function suggest(input, list) {
+    input.oninput = () => {
+      input.dataset.code = '';
+      const q = input.value.trim().toLowerCase();
+      const opts = W.airports.filter(a => q && a.name.toLowerCase().includes(q));
+      list.innerHTML = '';
+      opts.forEach(a => {
+        const d = document.createElement('div');
+        d.className = 'optrow';
+        d.innerHTML = '<span>' + a.name + '</span><span class="code">' + a.code + '</span>';
+        d.onmousedown = e => { e.preventDefault(); setAirport(input, a.code); list.hidden = true; input.classList.remove('bad'); };
+        list.appendChild(d);
+      });
+      list.hidden = !opts.length;
+    };
+    input.onblur = () => setTimeout(() => { list.hidden = true; }, 150);
+  }
+  const fromIn = $('#from-input'), toIn = $('#to-input');
+  suggest(fromIn, $('#from-list')); suggest(toIn, $('#to-list'));
+  setAirport(fromIn, 'CML'); setAirport(toIn, 'ATS');
+  $('#swap').onclick = () => { const a = fromIn.dataset.code, b = toIn.dataset.code; setAirport(fromIn, b); setAirport(toIn, a); };
+
+  // Dates: mouse-only calendar made of divs. First click picks departure, second click picks return.
+  // Nothing tells you which one you are choosing, and cheap or expensive days are shown only by a coloured line.
+  const datesBtn = $('#dates-btn');
+  const t0 = W.today();
+  const dates = { dep: null, ret: null };
+  function showDates() { $('#dates-val').textContent = dates.dep ? W.fmtShort(dates.dep) + (state.trip === 'oneway' || !dates.ret ? '' : ' – ' + W.fmtShort(dates.ret)) : ''; }
+  showDates();
+  const cal = $('#cal');
+  let view = null, picking = 'dep';
+  function renderCal() {
+    const y = view.getFullYear(), m = view.getMonth();
+    $('#cal-title').textContent = W.fmtMonth(view);
+    const min = picking === 'ret' ? W.parseISO(dates.dep) : W.today();
+    const offset = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
+    let html = ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(d => '<div class="dow">' + d + '</div>').join('');
+    for (let i = 0; i < offset; i++) html += '<div></div>';
+    for (let d = 1; d <= days; d++) {
+      const date = new Date(y, m, d), iso = W.iso(date);
+      const band = date < min ? '' : ' ' + W.dayPrice(fromIn.dataset.code || 'CML', toIn.dataset.code || 'ATS', iso).band;
+      const sel = iso === dates.dep || (state.trip !== 'oneway' && iso === dates.ret);
+      html += '<div class="day' + (sel ? ' sel' : '') + (date < min ? ' off' : '') + (iso === W.iso(W.today()) ? ' today' : '') + band + '" data-date="' + iso + '">' + d + '</div>';
+    }
+    $('#cal-grid').innerHTML = html;
+  }
+  datesBtn.onclick = () => {
+    if (!cal.hidden) { cal.hidden = true; return; }
+    picking = 'dep'; view = dates.dep ? W.parseISO(dates.dep) : W.today(); datesBtn.parentElement.appendChild(cal); cal.hidden = false; renderCal();
+  };
+  $('#cal-prev').onclick = () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); renderCal(); };
+  $('#cal-next').onclick = () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); renderCal(); };
+  $('#cal-grid').onclick = e => {
+    const d = e.target.closest('.day');
+    if (!d || d.classList.contains('off')) return;
+    if (picking === 'dep') {
+      dates.dep = d.dataset.date;
+      dates.ret = null;
+      showDates();
+      if (state.trip === 'oneway') { cal.hidden = true; return; }
+      picking = 'ret'; renderCal(); return;
+    }
+    dates.ret = d.dataset.date; showDates(); cal.hidden = true;
+  };
+
+  // Passengers
+  const paxPop = $('#pax-pop');
+  function updatePax() {
+    const a = +$('#adults').textContent, c = +$('#children').textContent;
+    $('#pax-val').textContent = a + (a === 1 ? ' adult' : ' adults') + (c ? ', ' + c + (c === 1 ? ' child' : ' children') : '') + ', ' + W.cabin(state.cabin).label;
+  }
+  $('#pax-btn').onclick = () => { paxPop.hidden = !paxPop.hidden; };
+  $('#pax-done').onclick = () => { paxPop.hidden = true; };
+  $$('.step-btn').forEach(b => b.onclick = () => {
+    const el = $('#' + b.dataset.for);
+    el.textContent = Math.max(+el.dataset.min, Math.min(+el.dataset.max, +el.textContent + +b.dataset.step));
+    updatePax();
+  });
+  const cabList = $('#cabin-list');
+  W.cabins.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'optrow'; d.textContent = c.label;
+    d.onclick = () => { state.cabin = c.value; $('#cabin-val').textContent = c.label; cabList.hidden = true; updatePax(); };
+    cabList.appendChild(d);
+  });
+  $('#cabin').onclick = () => { cabList.hidden = !cabList.hidden; };
+
+  // Options
+  ['#opt-direct', '#opt-nearby', '#opt-flex'].forEach(id => { $(id).onclick = () => toggle($(id)); });
+
+  // Search
+  $('#search-btn').onclick = () => {
+    [fromIn, toIn].forEach(i => i.classList.remove('bad'));
+    let ok = true;
+    if (!fromIn.dataset.code) { fromIn.classList.add('bad'); ok = false; }
+    if (!toIn.dataset.code || toIn.dataset.code === fromIn.dataset.code) { toIn.classList.add('bad'); ok = false; }
+    $('#dates-btn').classList.toggle('bad', !dates.dep || (state.trip !== 'oneway' && !dates.ret));
+    if ($('#dates-btn').classList.contains('bad')) ok = false;
+    $('#errors').hidden = ok;
+    if (ok) runSearch(true);
+  };
+  function runSearch(fromUser) {
+    state.search = {
+      from: fromIn.dataset.code, to: toIn.dataset.code, depart: dates.dep,
+      ret: state.trip === 'oneway' ? null : dates.ret,
+      adults: +$('#adults').textContent, children: +$('#children').textContent, cabin: state.cabin
+    };
+    state.flights = W.flights(state.search.from, state.search.to, state.search.depart, state.cabin);
+    if (isOn($('#opt-direct'))) setStops(['0']); else if (fromUser) setStops(['0', '1', '2']);
+    $('#results').hidden = false;
+    render();
+  }
+  function setStops(vals) {
+    state.filters.stops = new Set(vals);
+    $$('[data-stops]').forEach(c => c.classList.toggle('on', state.filters.stops.has(c.dataset.stops)));
+  }
+
+  // Filters
+  $$('[data-stops]').forEach(c => c.onclick = () => { toggle(c); isOn(c) ? state.filters.stops.add(c.dataset.stops) : state.filters.stops.delete(c.dataset.stops); render(); });
+  W.airlines.forEach(a => {
+    const d = document.createElement('div');
+    d.className = 'chk on'; d.dataset.airline = a.code;
+    d.innerHTML = '<span class="box"></span><span>' + a.name + '</span>';
+    d.onclick = () => { toggle(d); isOn(d) ? state.filters.airlines.add(a.code) : state.filters.airlines.delete(a.code); render(); };
+    $('#f-air').appendChild(d);
+  });
+  $$('.acc-btn').forEach(b => b.onclick = () => { const p = $('#' + b.dataset.target); p.hidden = !p.hidden; b.classList.toggle('open', !p.hidden); });
+
+  const slider = $('#slider');
+  function setBefore(v) {
+    const pct = (v - 7) / 17 * 100;
+    $('#before').style.left = pct + '%'; $('#slider-fill').style.width = pct + '%';
+    $('#before-out').textContent = W.beforeText(v);
+    if (state.filters.before !== v) { state.filters.before = v; render(); }
+  }
+  function fromPointer(e) { const r = slider.getBoundingClientRect(); setBefore(Math.round(7 + Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * 17)); }
+  slider.addEventListener('pointerdown', e => { slider.setPointerCapture(e.pointerId); fromPointer(e); });
+  slider.addEventListener('pointermove', e => { if (slider.hasPointerCapture(e.pointerId)) fromPointer(e); });
+  $('#reset').onclick = () => {
+    setStops(['0', '1', '2']);
+    state.filters.airlines = new Set(W.airlines.map(a => a.code));
+    $$('[data-airline]').forEach(c => c.classList.add('on'));
+    state.filters.before = 23; setBefore(24);
+  };
+
+  $$('.sort .tab').forEach(t => t.onclick = () => {
+    $$('.sort .tab').forEach(x => x.classList.toggle('on', x === t));
+    state.sort = t.dataset.value; render();
+  });
+
+  function render() {
+    const s = state.search, fromA = W.airport(s.from), toA = W.airport(s.to);
+    $('#results-h').textContent = fromA.name + ' → ' + toA.name;
+    $('#results-meta').textContent = W.fmtShort(s.depart) + (s.ret ? ' – ' + W.fmtShort(s.ret) : '') + ' · ' + (s.adults + s.children) + ' pax · ' + W.cabin(s.cabin).label;
+    const filtered = W.filterFlights(state.flights, state.filters);
+    ['best', 'cheapest', 'fastest'].forEach(m => { const top = W.sortFlights(filtered, m)[0]; $('#sub-' + m).textContent = top ? W.money(top.price) + ' · ' + W.fmtDur(top.dur) : '–'; });
+    const list = W.sortFlights(filtered, state.sort);
+    const box = $('#list');
+    box.innerHTML = '';
+    list.forEach(f => {
+      const c = document.createElement('div');
+      c.className = 'card';
+      c.innerHTML =
+        '<div class="card-main">' +
+          '<div class="carrier"><img class="wide" src="' + W.logo(f.airline, true) + '"><span class="fno lowc">' + f.flightNo + '</span></div>' +
+          '<div class="leg">' +
+            '<div><span class="t">' + W.fmtTime(f.dep) + '</span><div class="ap">' + fromA.code + '</div></div>' +
+            '<div class="mid"><span>' + W.fmtDur(f.dur) + '</span><span class="line' + (f.stops ? ' stops' : '') + '"></span><span class="' + (f.stops ? '' : 'direct') + '">' + W.stopsText(f) + '</span></div>' +
+            '<div><span class="t">' + W.fmtTime(f.arr) + (W.nextDay(f) ? '<span class="plus1">+1</span>' : '') + '</span><div class="ap">' + toA.code + '</div></div>' +
+          '</div>' +
+          '<div class="more"><span class="more-btn">Flight details</span> <span class="lowc">· For fare rules <a href="#">click here</a></span>' +
+          '<div class="more-body" hidden><div>' + f.flightNo + '</div><div>' + (f.stops ? 'Via ' + f.via.join(' and ') : 'Non-stop') + '</div><div>1 bag, up to 10 kg</div><div>Changes £25</div></div></div>' +
+        '</div>' +
+        '<div class="card-side"><div><div class="price">' + W.money(f.price) + '</div><div class="price-note lowc">pp</div></div>' +
+          '<div class="card-actions"><div class="save-btn' + (state.saved.has(f.id) ? ' on' : '') + '"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div><div class="btn btn-primary sel">Select</div></div>' +
+          '<span class="saved-note" hidden>Saved!</span></div>';
+      $('.more-btn', c).onclick = () => { const b = $('.more-body', c); b.hidden = !b.hidden; };
+      $('.save-btn', c).onclick = e => {
+        const b = e.currentTarget, note = $('.saved-note', c);
+        b.classList.toggle('on');
+        b.classList.contains('on') ? state.saved.add(f.id) : state.saved.delete(f.id);
+        note.hidden = !b.classList.contains('on');
+        setTimeout(() => { note.hidden = true; }, 1500);
+      };
+      $('.sel', c).onclick = () => openBooking(f);
+      box.appendChild(c);
+    });
+    $('#empty').hidden = list.length > 0;
+    $('#status').textContent = list.length + ' results';
+  }
+
+  // Booking overlay: focus never moves into it and the page behind stays reachable
+  const backdrop = $('#book-backdrop');
+  let current = null;
+  W.extras.forEach(e => {
+    const d = document.createElement('div');
+    d.className = 'chk'; d.dataset.extra = e.value;
+    d.innerHTML = '<span class="box"></span>' + e.label + ' +' + W.money(e.price);
+    d.onclick = () => { toggle(d); updateTotal(); };
+    $('#extras').appendChild(d);
+  });
+  $$('#seat .chk').forEach(o => o.onclick = () => $$('#seat .chk').forEach(x => x.classList.toggle('on', x === o)));
+  $('#terms').onclick = () => toggle($('#terms'));
+  function updateTotal() {
+    const n = state.search.adults + state.search.children;
+    const extras = $$('[data-extra].on').reduce((s, c) => s + W.extras.find(e => e.value === c.dataset.extra).price, 0);
+    $('#total').textContent = W.money((current.price + extras) * n);
+  }
+  function openBooking(f) {
+    current = f;
+    const s = state.search;
+    $('#pname').value = ''; $('#pemail').value = '';
+    [$('#pname'), $('#pemail')].forEach(i => i.classList.remove('bad'));
+    $('#terms').classList.remove('on'); $('#terms').style.color = '';
+    $$('[data-extra]').forEach(c => c.classList.remove('on'));
+    $('#book-body').hidden = false; $('#confirm').hidden = true;
+    $('#trip-sum').innerHTML = '<img class="wide" src="' + W.logo(f.airline, true) + '"><span>' + W.airport(s.from).code + ' → ' + W.airport(s.to).code + ' · ' + W.fmtShort(s.depart) + ' · ' + W.fmtTime(f.dep) + '–' + W.fmtTime(f.arr) + '</span>';
+    updateTotal();
+    backdrop.hidden = false;
+  }
+  const close = () => { backdrop.hidden = true; };
+  $('#book-close').onclick = close;
+  $('#book-cancel').onclick = close;
+  $('#book-confirm').onclick = () => {
+    let ok = true;
+    const name = $('#pname'), email = $('#pemail');
+    name.classList.toggle('bad', !name.value.trim()); if (!name.value.trim()) ok = false;
+    const goodEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+    email.classList.toggle('bad', !goodEmail); if (!goodEmail) ok = false;
+    if (!isOn($('#terms'))) { $('#terms').style.color = 'var(--danger)'; ok = false; }
+    if (!ok) return;
+    $('#ref').textContent = W.bookingRef();
+    $('#book-body').hidden = true; $('#confirm').hidden = false;
+    setTimeout(close, 4000);
+  };
+
+})();
+</script>
+</body>
+</html>

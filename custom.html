@@ -1,0 +1,1288 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Search flights – Wyvernway (custom components version)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="page">
+<a class="skip" href="#main">Skip to main content</a>
+
+<div class="practice">
+  <div class="wrap">
+    <p><strong>Practice site.</strong> Version 1 of 2: accessible, built with custom ARIA components. Wyvernway is not a real company.</p>
+    <a href="index.html">All versions and practice tasks</a>
+  </div>
+</div>
+
+<div class="cookie inline" id="cookie" role="region" aria-labelledby="cookie-h">
+  <div class="wrap">
+    <div class="cookie-text" id="cookie-ask">
+      <h2 class="h3" id="cookie-h">Cookies on Wyvernway</h2>
+      <p>We use essential cookies to make this site work. We would also like to use analytics and marketing cookies, but only if you agree.</p>
+    </div>
+    <div class="cookie-actions" id="cookie-btns">
+      <div class="btn btn-primary" role="button" tabindex="0" data-cookie="all">Accept all cookies</div>
+      <div class="btn btn-secondary" role="button" tabindex="0" data-cookie="none">Reject optional cookies</div>
+      <div class="btn btn-secondary" role="button" tabindex="0" id="cookie-manage" aria-haspopup="dialog">Manage cookies</div>
+    </div>
+    <div class="cookie-text" id="cookie-done" tabindex="-1" hidden><p id="cookie-done-text"></p></div>
+    <div class="cookie-actions" id="cookie-done-btns" hidden><div class="btn btn-secondary" role="button" tabindex="0" id="cookie-change" aria-haspopup="dialog">Change cookie settings</div><div class="btn btn-secondary" role="button" tabindex="0" id="cookie-hide">Hide cookie message</div></div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="custom.html">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true" focusable="false"><path d="M3 22c6-1 10-5 12-12 2 6 6 9 16 9-6 3-11 3-14 1-2 4-8 6-14 2z" fill="currentColor"/><circle cx="24" cy="10" r="2.4" fill="#4fd1c5"/></svg>
+      Wyvernway
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="custom.html" aria-current="page">Flights</a></li>
+        <li><a href="#main">Hotels</a></li>
+        <li><a href="#main">Car hire</a></li>
+        <li><a href="#faq-h">Help</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <div class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Flights to places that never existed</p>
+      <h1>Search flights to legendary places</h1>
+      <p class="lede">Compare fares from six imaginary airlines to fifteen mythical destinations, from Camelot to Valhalla.</p>
+    </div>
+  </div>
+
+  <div class="wrap search-wrap">
+    <section class="search-card" aria-labelledby="search-h">
+      <h2 id="search-h" class="vh">Flight search</h2>
+
+      <div class="error-summary" id="errors" tabindex="-1" hidden>
+        <h3 id="errors-h">There is a problem with your search</h3>
+        <ul id="errors-list"></ul>
+      </div>
+
+      <div class="row row-top">
+        <div>
+          <div class="legend" id="trip-label">Trip type</div>
+          <div class="seg" role="radiogroup" aria-labelledby="trip-label" id="trip">
+            <div class="opt" role="radio" aria-checked="true" tabindex="0" data-value="return"><span class="dot"></span>Return</div>
+            <div class="opt" role="radio" aria-checked="false" tabindex="-1" data-value="oneway"><span class="dot"></span>One way</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="route">
+          <div class="field">
+            <label for="from-input">From</label>
+            <input id="from-input" class="control" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="from-list" autocomplete="off" spellcheck="false">
+            <ul id="from-list" class="pop listbox" role="listbox" aria-label="From suggestions" hidden></ul>
+            <span class="field-error" id="from-err" hidden></span>
+          </div>
+          <div class="swap" role="button" tabindex="0" id="swap" aria-label="Swap From and To">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 3 2 7l4 4M2 7h12M14 17l4-4-4-4M18 13H6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="field">
+            <label for="to-input">To</label>
+            <input id="to-input" class="control" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="to-list" autocomplete="off" spellcheck="false">
+            <ul id="to-list" class="pop listbox" role="listbox" aria-label="To suggestions" hidden></ul>
+            <span class="field-error" id="to-err" hidden></span>
+          </div>
+        </div>
+        <div class="field" id="dates-field" style="flex: 1 1 320px;">
+          <div class="label" id="dates-label">Travel dates</div>
+          <button type="button" class="control btnlike cal-btn" id="dates-btn" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="dates-label dates-val"><span id="dates-val"><span id="dates-show" aria-hidden="true"></span><span class="vh" id="dates-say"></span></span>
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" focusable="false"><rect x="2" y="3.5" width="14" height="12.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 7.5h14M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.6"/></svg>
+          </button>
+          <span class="field-error" id="dates-btn-err" hidden></span>
+        </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field" style="flex: 0 1 340px;">
+          <div class="label" id="pax-label">Passengers and cabin</div>
+          <div class="control btnlike" role="button" tabindex="0" id="pax-btn" aria-expanded="false" aria-controls="pax-pop" aria-labelledby="pax-label pax-val"><span id="pax-val">1 adult, Economy</span></div>
+          <div class="pop pax-pop" id="pax-pop" role="group" aria-labelledby="pax-label" hidden>
+            <div class="counter">
+              <div class="who"><span id="ad-label">Adults</span><span class="hint">16 or over</span></div>
+              <div class="stepper">
+                <span class="step-btn" role="button" tabindex="-1" aria-label="Fewer adults" data-for="adults" data-step="-1">−</span>
+                <span class="step-val" role="spinbutton" tabindex="0" id="adults" aria-labelledby="ad-label" aria-valuemin="1" aria-valuemax="9" aria-valuenow="1">1</span>
+                <span class="step-btn" role="button" tabindex="-1" aria-label="More adults" data-for="adults" data-step="1">+</span>
+              </div>
+            </div>
+            <div class="counter">
+              <div class="who"><span id="ch-label">Children</span><span class="hint">2 to 15</span></div>
+              <div class="stepper">
+                <span class="step-btn" role="button" tabindex="-1" aria-label="Fewer children" data-for="children" data-step="-1">−</span>
+                <span class="step-val" role="spinbutton" tabindex="0" id="children" aria-labelledby="ch-label" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0">0</span>
+                <span class="step-btn" role="button" tabindex="-1" aria-label="More children" data-for="children" data-step="1">+</span>
+              </div>
+            </div>
+            <div class="field">
+              <div class="label" id="cabin-label">Cabin class</div>
+              <div class="control btnlike" role="combobox" tabindex="0" id="cabin" aria-haspopup="listbox" aria-expanded="false" aria-controls="cabin-list" aria-labelledby="cabin-label"><span id="cabin-val">Economy</span></div>
+              <ul class="pop listbox" id="cabin-list" role="listbox" aria-labelledby="cabin-label" tabindex="-1" hidden></ul>
+            </div>
+            <div class="btn btn-primary" role="button" tabindex="0" id="pax-done">Done</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="justify-content: space-between; align-items: center;">
+        <div class="options">
+          <div class="chk" role="checkbox" aria-checked="false" tabindex="0" id="opt-direct"><span class="box"></span>Direct flights only</div>
+          <span class="tip-wrap" id="tip-wrap">
+            <div class="chk" role="checkbox" aria-checked="false" tabindex="0" id="opt-nearby"><span class="box"></span>Include nearby airports</div>
+            <div class="tip-btn" role="button" tabindex="0" id="tip-nearby-btn" aria-label="About nearby airports" aria-describedby="tip-nearby">?</div>
+            <div class="tip" role="tooltip" id="tip-nearby" hidden>Adds airports within 150 miles. For example, Lyonesse when you fly to Avalon.</div>
+          </span>
+          <div class="chk" role="switch" aria-checked="false" tabindex="0" id="opt-flex"><span class="switch-track"></span>Flexible dates (3 days either side)</div>
+        </div>
+        <div class="btn btn-primary btn-search" role="button" tabindex="0" id="search-btn">Search flights</div>
+      </div>
+      <div id="combo-status" class="vh" role="status"></div>
+    </section>
+  </div>
+
+  <div class="cal" id="cal" role="dialog" aria-modal="true" aria-labelledby="cal-step" aria-describedby="cal-help" hidden>
+    <div class="cal-app" role="application" aria-labelledby="cal-step">
+    <h2 class="cal-step" id="cal-step">Choose your departure date</h2>
+    <p class="cal-keys" id="cal-help"></p>
+    <h3 class="h3 cal-month-h" id="cal-title"></h3>
+    <div class="cal-jumps">
+      <button type="button" class="btn btn-secondary cal-month-btn" id="cal-prev">Previous month</button>
+      <button type="button" class="btn btn-secondary cal-month-btn" id="cal-next">Next month</button>
+      <button type="button" class="btn btn-secondary cal-cheap-btn" id="cal-cheap"></button>
+    </div>
+    <table role="grid" id="cal-grid" aria-labelledby="cal-title"></table>
+    <div hidden id="cal-descs"></div>
+    <div class="cal-legend" aria-hidden="true"><span class="lg low">Low price</span><span class="lg high">High price</span></div>
+    <div class="vh" id="cal-live" aria-live="assertive" aria-atomic="true"></div>
+    <div class="cal-foot">
+      <button type="button" class="btn btn-secondary" id="cal-redep" hidden>Change departure date</button>
+      <button type="button" class="btn btn-secondary" id="cal-cancel">Cancel</button>
+    </div>
+    </div>
+  </div>
+  </div>
+
+  <section class="results wrap" id="results" aria-labelledby="results-h" hidden>
+    <div class="results-head">
+      <div>
+        <h2 id="results-h" tabindex="-1">Flights</h2>
+        <p class="hint" id="results-meta"></p>
+      </div>
+      <div id="status" class="status" role="status"></div>
+      <div id="save-status" class="vh" role="status"></div>
+    </div>
+
+    <div class="layout">
+      <aside class="filters" aria-labelledby="filters-h">
+        <h2 id="filters-h">Filter results</h2>
+        <div class="facet">
+          <h3><div class="acc-btn" role="button" tabindex="0" id="f-stops-btn" aria-expanded="true" aria-controls="f-stops">Stops</div></h3>
+          <div class="facet-body" id="f-stops" role="region" aria-labelledby="f-stops-btn">
+            <div role="group" aria-labelledby="f-stops-btn" class="stack">
+              <div class="chk" role="checkbox" aria-checked="true" tabindex="0" data-stops="0"><span class="box"></span>Direct</div>
+              <div class="chk" role="checkbox" aria-checked="true" tabindex="0" data-stops="1"><span class="box"></span>1 stop</div>
+              <div class="chk" role="checkbox" aria-checked="true" tabindex="0" data-stops="2"><span class="box"></span>2 or more stops</div>
+            </div>
+          </div>
+        </div>
+        <div class="facet">
+          <h3><div class="acc-btn" role="button" tabindex="0" id="f-air-btn" aria-expanded="true" aria-controls="f-air">Airlines</div></h3>
+          <div class="facet-body" id="f-air" role="region" aria-labelledby="f-air-btn">
+            <div role="group" aria-labelledby="f-air-btn" class="stack" id="airline-filters"></div>
+          </div>
+        </div>
+        <div class="facet">
+          <h3><div class="acc-btn" role="button" tabindex="0" id="f-time-btn" aria-expanded="false" aria-controls="f-time">Departure time</div></h3>
+          <div class="facet-body range-row" id="f-time" role="region" aria-labelledby="f-time-btn" hidden>
+            <div id="before-label">Departs before</div>
+            <div class="slider" id="slider">
+              <div class="slider-track"></div>
+              <div class="slider-fill" id="slider-fill" style="width: 100%;"></div>
+              <div class="slider-thumb" role="slider" tabindex="0" id="before" aria-labelledby="before-label" aria-valuemin="7" aria-valuemax="24" aria-valuenow="24" aria-valuetext="Any time" style="left: 100%;"></div>
+            </div>
+            <div class="value-out" id="before-out" aria-hidden="true">Any time</div>
+          </div>
+        </div>
+        <div class="facet facet-body" style="padding-top: 14px;">
+          <div class="btn btn-secondary" role="button" tabindex="0" id="reset">Reset filters</div>
+        </div>
+      </aside>
+
+      <div>
+        <div class="sort" role="tablist" aria-label="Sort results">
+          <div class="tab" role="tab" id="tab-best" data-value="best" aria-selected="true" aria-controls="panel" tabindex="0"><span class="t">Best</span><span class="s" id="sub-best"></span></div>
+          <div class="tab" role="tab" id="tab-cheapest" data-value="cheapest" aria-selected="false" aria-controls="panel" tabindex="-1"><span class="t">Cheapest</span><span class="s" id="sub-cheapest"></span></div>
+          <div class="tab" role="tab" id="tab-fastest" data-value="fastest" aria-selected="false" aria-controls="panel" tabindex="-1"><span class="t">Fastest</span><span class="s" id="sub-fastest"></span></div>
+        </div>
+        <div role="tabpanel" id="panel" aria-labelledby="tab-best" tabindex="0">
+          <ul class="flist" id="list"></ul>
+          <div class="empty" id="empty" hidden>
+            <h3>No flights match your filters</h3>
+            <p>Try allowing more stops, more airlines or a later departure time.</p>
+            <p><span class="btn btn-secondary" role="button" tabindex="0" id="reset2">Reset filters</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dest wrap" aria-roledescription="carousel" aria-labelledby="dest-h" id="dest">
+    <div class="dest-head">
+      <div>
+        <h2 id="dest-h">Popular destinations</h2>
+        <p class="dest-count" id="dest-count" aria-hidden="true"></p>
+      </div>
+      <div class="dest-controls">
+        <div class="btn btn-secondary" role="button" tabindex="0" id="dest-rotate">Stop slide rotation</div>
+        <div class="cal-nav" role="button" tabindex="0" id="dest-prev" aria-controls="dest-slides" aria-label="Previous slide">‹</div>
+        <div class="cal-nav" role="button" tabindex="0" id="dest-next" aria-controls="dest-slides" aria-label="Next slide">›</div>
+      </div>
+    </div>
+    <div class="dest-stack" id="dest-slides" aria-live="off" aria-atomic="false"></div>
+  </section>
+
+  <section class="faq wrap" aria-labelledby="faq-h">
+    <h2 id="faq-h">Questions before you fly</h2>
+    <div class="faq-list">
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q1" aria-expanded="false" aria-controls="a1">Can I take a pet dragon in the cabin?</div></h3><div class="faq-body" id="a1" role="region" aria-labelledby="q1" hidden><p>Dragons under 8 kg can travel in the cabin in a fireproof carrier. Larger dragons travel in the hold, which is heated to their liking.</p></div></div>
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q2" aria-expanded="false" aria-controls="a2">How much luggage is included?</div></h3><div class="faq-body" id="a2" role="region" aria-labelledby="q2" hidden><p>Every fare includes one cabin bag up to 10 kg. You can add a 23 kg checked bag when you book, for £35 each way.</p></div></div>
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q3" aria-expanded="false" aria-controls="a3">Can I change my dates after booking?</div></h3><div class="faq-body" id="a3" role="region" aria-labelledby="q3" hidden><p>Yes. Changes cost £25 per passenger, plus any difference in fare. Changes close 3 hours before departure.</p></div></div>
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q4" aria-expanded="false" aria-controls="a4">What happens if Atlantis sinks before my flight?</div></h3><div class="faq-body" id="a4" role="region" aria-labelledby="q4" hidden><p>We rebook you to Lemuria or Hy-Brasil at no extra cost, or give you a full refund.</p></div></div>
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q5" aria-expanded="false" aria-controls="a5">Is there step-free access at Mount Olympus airport?</div></h3><div class="faq-body" id="a5" role="region" aria-labelledby="q5" hidden><p>Yes. Every Wyvernway gate has step-free boarding. You can book assistance up to 48 hours before you fly, including help for guide dog owners.</p></div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Wyvernway is a fictional company made for screen reader practice. No real flights are sold.</p>
+    <nav aria-label="Footer">
+      <ul class="foot-links">
+        <li><a href="index.html">About this practice site</a></li>
+        <li><a href="#faq-h">Help</a></li>
+        <li><a href="#main">Accessibility</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+</div>
+
+<div class="backdrop" id="book-backdrop" hidden>
+  <div class="modal" id="book" role="dialog" aria-modal="true" aria-labelledby="book-h">
+    <div class="modal-head">
+      <h2 id="book-h" tabindex="-1">Book your flight</h2>
+      <div class="icon-btn" role="button" tabindex="0" id="book-close" aria-label="Close"><span aria-hidden="true">×</span></div>
+    </div>
+    <div class="modal-body" id="book-body">
+      <div class="trip-sum" id="trip-sum"></div>
+      <div class="field">
+        <label for="pname">Full name, as on your passport</label>
+        <input type="text" id="pname" class="control" autocomplete="name">
+        <span class="field-error" id="pname-err" hidden></span>
+      </div>
+      <div class="field">
+        <label for="pemail">Email address</label>
+        <input type="text" inputmode="email" id="pemail" class="control" autocomplete="email" aria-describedby="pemail-hint">
+        <span class="hint" id="pemail-hint">We send your e-ticket here.</span>
+        <span class="field-error" id="pemail-err" hidden></span>
+      </div>
+      <div>
+        <div class="legend" id="seat-label">Seat preference</div>
+        <div class="stack" role="radiogroup" aria-labelledby="seat-label" id="seat">
+          <div class="chk" role="radio" aria-checked="true" tabindex="0" data-value="window"><span class="dot"></span>Window</div>
+          <div class="chk" role="radio" aria-checked="false" tabindex="-1" data-value="aisle"><span class="dot"></span>Aisle</div>
+          <div class="chk" role="radio" aria-checked="false" tabindex="-1" data-value="none"><span class="dot"></span>No preference</div>
+        </div>
+      </div>
+      <div>
+        <div class="legend" id="extras-label">Extras, per passenger</div>
+        <div class="stack" role="group" aria-labelledby="extras-label" id="extras"></div>
+      </div>
+      <div class="total" role="status" aria-atomic="true">
+        <span>Total for <span id="pax-count">1 passenger</span></span>
+        <span id="total" class="price"></span>
+      </div>
+      <div>
+        <div class="chk" role="checkbox" aria-checked="false" tabindex="0" id="terms"><span class="box"></span>I accept the fare rules and the Wyvernway terms</div>
+        <span class="field-error" id="terms-err" hidden></span>
+      </div>
+      <div class="row" style="justify-content: flex-end;">
+        <div class="btn btn-secondary" role="button" tabindex="0" id="book-cancel">Cancel</div>
+        <div class="btn btn-primary" role="button" tabindex="0" id="book-confirm">Confirm booking</div>
+      </div>
+    </div>
+    <div class="confirm" id="confirm" hidden>
+      <h2 id="confirm-h" tabindex="-1">Booking confirmed</h2>
+      <p>Your booking reference is</p>
+      <p class="ref" id="ref"></p>
+      <p id="confirm-text"></p>
+      <p><span class="btn btn-primary" role="button" tabindex="0" id="confirm-done">Done</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="backdrop" id="cookie-backdrop" hidden>
+  <div class="modal" id="cookie-dlg" role="dialog" aria-modal="true" aria-labelledby="cookie-dlg-h" aria-describedby="cookie-dlg-intro">
+    <div class="modal-head">
+      <h2 id="cookie-dlg-h" tabindex="-1">Cookie preferences</h2>
+      <div class="icon-btn" role="button" tabindex="0" id="cookie-dlg-close" aria-label="Close"><span aria-hidden="true">×</span></div>
+    </div>
+    <div class="modal-body">
+      <p id="cookie-dlg-intro">Choose which cookies Wyvernway can use. You can change this at any time.</p>
+      <div class="prefs">
+        <div class="pref">
+          <span class="label" id="ck-essential-l">Essential cookies</span>
+          <div class="chk" role="switch" aria-checked="true" aria-disabled="true" tabindex="0" id="ck-essential" aria-labelledby="ck-essential-l" aria-describedby="ck-essential-hint"><span class="switch-track"></span></div>
+          <span class="hint" id="ck-essential-hint">Needed for search and booking to work. These are always on.</span>
+        </div>
+        <div class="pref">
+          <span class="label" id="ck-analytics-l">Analytics cookies</span>
+          <div class="chk" role="switch" aria-checked="false" tabindex="0" id="ck-analytics" aria-labelledby="ck-analytics-l" aria-describedby="ck-analytics-hint"><span class="switch-track"></span></div>
+          <span class="hint" id="ck-analytics-hint">Help us count visits and see which pages people use.</span>
+        </div>
+        <div class="pref">
+          <span class="label" id="ck-marketing-l">Marketing cookies</span>
+          <div class="chk" role="switch" aria-checked="false" tabindex="0" id="ck-marketing" aria-labelledby="ck-marketing-l" aria-describedby="ck-marketing-hint"><span class="switch-track"></span></div>
+          <span class="hint" id="ck-marketing-hint">Show you Wyvernway offers on other websites.</span>
+        </div>
+        <div class="pref">
+          <span class="label" id="ck-personal-l">Personalised destinations</span>
+          <div class="chk" role="switch" aria-checked="false" tabindex="0" id="ck-personal" aria-labelledby="ck-personal-l" aria-describedby="ck-personal-hint"><span class="switch-track"></span></div>
+          <span class="hint" id="ck-personal-hint">Remember the places you search for, so we can suggest similar ones.</span>
+        </div>
+      </div>
+      <div class="row" style="justify-content: flex-end;">
+        <div class="btn btn-secondary" role="button" tabindex="0" id="cookie-dlg-cancel">Cancel</div>
+        <div class="btn btn-primary" role="button" tabindex="0" id="cookie-save">Save preferences</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  const W = WYV;
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const visible = el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+
+  const state = {
+    trip: 'return', flights: [], sort: 'best', search: null, cabin: 'economy', seat: 'window', saved: new Set(),
+    filters: { stops: new Set(['0', '1', '2']), airlines: new Set(W.airlines.map(a => a.code)), before: 24 }
+  };
+
+  /* ---------- Generic behaviours ---------- */
+  function activate(el, fn) {
+    el.addEventListener('click', fn);
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(e); } });
+  }
+  function makeCheckbox(el, onChange, keys) {
+    keys = keys || [' '];
+    const toggle = () => {
+      const v = el.getAttribute('aria-checked') !== 'true';
+      el.setAttribute('aria-checked', String(v));
+      if (onChange) onChange(v);
+    };
+    el.addEventListener('click', toggle);
+    el.addEventListener('keydown', e => { if (keys.includes(e.key)) { e.preventDefault(); toggle(); } });
+  }
+  function makeRadioGroup(group, onChange) {
+    const radios = $$('[role="radio"]', group);
+    function select(r) {
+      radios.forEach(x => { const on = x === r; x.setAttribute('aria-checked', String(on)); x.tabIndex = on ? 0 : -1; });
+      r.focus();
+      if (onChange) onChange(r.dataset.value);
+    }
+    radios.forEach((r, i) => {
+      r.addEventListener('click', () => select(r));
+      r.addEventListener('keydown', e => {
+        let n = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = radios[(i + 1) % radios.length];
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = radios[(i - 1 + radios.length) % radios.length];
+        else if (e.key === ' ') { e.preventDefault(); select(r); return; }
+        if (n) { e.preventDefault(); select(n); }
+      });
+    });
+    return { reset() { radios.forEach((x, i) => { x.setAttribute('aria-checked', String(i === 0)); x.tabIndex = i === 0 ? 0 : -1; }); } };
+  }
+  function makeAccordion(btn) {
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    activate(btn, () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    });
+  }
+  function trapTab(container, e) {
+    const items = $$('input, button:not([disabled]), [tabindex]:not([tabindex="-1"])', container).filter(visible);
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+  let statusTimer = null;
+  function announce(el, msg, delay) {
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(() => { el.textContent = msg; }, delay || 0);
+  }
+
+  /* ---------- Trip type ---------- */
+  makeRadioGroup($('#trip'), v => { state.trip = v; if (typeof showDates === 'function') showDates(); });
+
+  /* ---------- From / To comboboxes ---------- */
+  const comboStatus = $('#combo-status');
+  function setAirport(input, code) {
+    const a = W.airport(code);
+    input.value = a ? a.name + ' (' + a.code + ')' : '';
+    input.dataset.code = a ? a.code : '';
+  }
+  function makeCombo(input, list) {
+    let opts = [], active = -1;
+    function open() { list.hidden = false; input.setAttribute('aria-expanded', 'true'); }
+    function close() { list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; }
+    function build(q) {
+      const qq = (q || '').trim().toLowerCase();
+      opts = W.airports.filter(a => !qq || a.name.toLowerCase().includes(qq) || a.code.toLowerCase().startsWith(qq));
+      list.innerHTML = '';
+      opts.forEach((a, i) => {
+        const li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.id = list.id + '-' + a.code;
+        li.setAttribute('aria-selected', 'false');
+        li.innerHTML = '<span>' + a.name + '</span><span class="code">' + a.code + '</span>';
+        li.addEventListener('mousedown', e => e.preventDefault());
+        li.addEventListener('click', () => choose(i));
+        list.appendChild(li);
+      });
+    }
+    function setActive(i) {
+      const items = $$('[role="option"]', list);
+      items.forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected', 'false'); });
+      active = i;
+      if (i >= 0 && items[i]) {
+        items[i].classList.add('active');
+        items[i].setAttribute('aria-selected', 'true');
+        input.setAttribute('aria-activedescendant', items[i].id);
+        items[i].scrollIntoView({ block: 'nearest' });
+      } else input.removeAttribute('aria-activedescendant');
+    }
+    function choose(i) {
+      setAirport(input, opts[i].code);
+      close();
+      clearFieldError(input);
+    }
+    input.addEventListener('input', () => {
+      input.dataset.code = '';
+      build(input.value);
+      if (opts.length) open(); else close();
+      setActive(-1);
+      announce(comboStatus, opts.length ? opts.length + (opts.length === 1 ? ' suggestion' : ' suggestions') + ' available. Use the down arrow to choose.' : 'No matching destinations.', 400);
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (list.hidden) { build(input.dataset.code ? '' : input.value); open(); }
+        setActive(Math.min(active + 1, opts.length - 1));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!list.hidden) setActive(Math.max(active - 1, 0));
+      } else if (e.key === 'Enter') {
+        if (!list.hidden && active >= 0) { e.preventDefault(); choose(active); }
+      } else if (e.key === 'Escape') {
+        if (!list.hidden) { e.preventDefault(); close(); }
+        else { input.value = ''; input.dataset.code = ''; }
+      }
+    });
+    input.addEventListener('click', () => {
+      if (list.hidden) { build(input.dataset.code ? '' : input.value); open(); } else close();
+    });
+    input.addEventListener('blur', () => {
+      setTimeout(() => {
+        close();
+        if (!input.dataset.code) { const a = W.airportByName(input.value); if (a) setAirport(input, a.code); }
+      }, 150);
+    });
+  }
+  const fromIn = $('#from-input'), toIn = $('#to-input');
+  makeCombo(fromIn, $('#from-list'));
+  makeCombo(toIn, $('#to-list'));
+  setAirport(fromIn, 'CML'); setAirport(toIn, 'ATS');
+  activate($('#swap'), () => {
+    const a = fromIn.dataset.code, b = toIn.dataset.code;
+    setAirport(fromIn, b); setAirport(toIn, a);
+    announce(comboStatus, 'Swapped. From ' + (fromIn.value || 'empty') + ', to ' + (toIn.value || 'empty') + '.');
+  });
+
+  /* ---------- Travel dates: one button, one calendar, departure then return ---------- */
+  // Design goals: say the calendar has opened, move focus into it, give instructions that match the keys,
+  // read every day with its price band, change month with simple keys, confirm each step, and say what to do next.
+  const datesBtn = $('#dates-btn');
+  const t0 = W.today();
+  const dates = { dep: null, ret: null };
+  const thisYear = t0.getFullYear();
+  function spoken(isoStr) {
+    const d = W.parseISO(isoStr);
+    return W.fmtLong(isoStr).replace(d.getFullYear() === thisYear ? ' ' + thisYear : '\u0000', '');
+  }
+  function nights(a, b) { return Math.round((W.parseISO(b) - W.parseISO(a)) / 864e5); }
+  function showDates() {
+    const oneway = state.trip === 'oneway';
+    if (!dates.dep) { $('#dates-show').textContent = 'Choose dates'; $('#dates-say').textContent = 'not chosen'; return; }
+    if (oneway) { $('#dates-show').textContent = W.fmtShort(dates.dep) + ', one way'; $('#dates-say').textContent = 'Leaving ' + spoken(dates.dep) + ', one way'; return; }
+    if (!dates.ret) { $('#dates-show').textContent = W.fmtShort(dates.dep) + ' to …'; $('#dates-say').textContent = 'Leaving ' + spoken(dates.dep) + ', return date not chosen'; return; }
+    const n = nights(dates.dep, dates.ret);
+    $('#dates-show').textContent = W.fmtShort(dates.dep) + ' to ' + W.fmtShort(dates.ret);
+    $('#dates-say').textContent = 'Leaving ' + spoken(dates.dep) + ', returning ' + spoken(dates.ret) + ', ' + n + (n === 1 ? ' night' : ' nights');
+  }
+  showDates();
+
+  const cal = $('#cal'), grid = $('#cal-grid'), calTitle = $('#cal-title'), calStep = $('#cal-step'), calLive = $('#cal-live');
+  const calTarget = datesBtn;
+  let focusD = null, step = 'depart', draftDep = null, draftRet = null;
+  const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const mk = d => d.getFullYear() * 12 + d.getMonth();
+  function addMonths(d, n) {
+    const y = d.getFullYear(), m = d.getMonth() + n;
+    const max = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(d.getDate(), max));
+  }
+  function route() { return [fromIn.dataset.code || 'CML', toIn.dataset.code || 'ATS']; }
+  // You can always move back to today. In the return step, a date before your departure becomes your new departure date.
+  function minIso() { return W.iso(W.today()); }
+  let cheapList = [], cheapKey = '', cheapPos = -1;
+  // Touch screens (for example VoiceOver on iPhone) get touch instructions and no application region,
+  // because there is no keyboard and the application role gets in the way of swiping.
+  const TOUCH = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  // The application region and the first-open retry are JAWS and NVDA workarounds, so they only apply on Windows.
+  // In Safari with VoiceOver they make the cursor jump around the grid and can crash Safari.
+  const WINDOWS = /Windows/i.test(navigator.userAgent);
+  if (TOUCH || !WINDOWS) $('.cal-app').removeAttribute('role');
+  const HELP_TOUCH = {
+    depart: 'Swipe to move between days, then double-tap to choose your departure date. The buttons above the days change month or take you to the cheapest day.',
+    ret: 'Swipe to move between days, then double-tap to choose your return date. Choosing a date before your departure date changes your departure date instead. Use Change departure date to start again.'
+  };
+  const HELP_KEYS = {
+    depart: 'Use the arrow keys to move between days. Press N for the next month or P for the previous month. Press C for the next cheapest date. Press Enter to choose a date, or Escape to close. Press H to hear this again.',
+    ret: 'Use the arrow keys to move between days. Press N or P to change month, and C for the next cheapest date. Press Enter to choose your return date. Choosing a date before your departure date changes your departure date instead. Press D to choose a different departure date. Press Escape to close.'
+  };
+  const HELP = TOUCH ? HELP_TOUCH : HELP_KEYS;
+  function sayCal(msg, delay) { calLive.textContent = ''; setTimeout(() => { calLive.textContent = msg; }, delay || 150); }
+
+  function cellInfo(iso) {
+    const dis = iso < minIso();
+    const p = W.dayPrice(route()[0], route()[1], iso);
+    let label = spoken(iso);
+    if (dis) label += ', not available';
+    else label += ', ' + p.band + ' price, ' + W.money(p.price);
+    if (iso === draftDep) label += ', your departure date';
+    if (draftRet && iso === draftRet) label += ', your return date';
+    // Say the date first, then what choosing it will do
+    if (!dis) label += step === 'depart' ? ', select as departure date' : iso < draftDep ? ', select as new departure date' : ', select as return date';
+    return { dis, p, label, sel: iso === draftDep || (!!draftRet && iso === draftRet), inRange: !!(draftDep && draftRet && iso > draftDep && iso < draftRet) };
+  }
+  function paintCell(td) {
+    const i = cellInfo(td.dataset.date);
+    if (i.sel) td.setAttribute('aria-selected', 'true'); else td.removeAttribute('aria-selected');
+    if (i.dis) td.setAttribute('aria-disabled', 'true'); else td.removeAttribute('aria-disabled');
+    // On touch screens, skip past days entirely so VoiceOver users don't swipe through weeks of unavailable dates
+    if (TOUCH && i.dis) td.setAttribute('aria-hidden', 'true'); else td.removeAttribute('aria-hidden');
+    td.classList.toggle('in-range', i.inRange);
+    const dp = $('.dp', td);
+    dp.textContent = i.dis ? '' : W.money(i.p.price);
+    dp.className = 'dp ' + (i.dis ? '' : i.p.band);
+    // The spoken text is real text inside the day. Safari with VoiceOver on a Mac ignores aria-label on table cells,
+    // so a label alone left the days sounding blank. The day is position: relative, so on iPhone the hidden text sits
+    // inside the day and a double-tap still lands on it.
+    $('.sr', td).textContent = i.label;
+  }
+  function renderCal(focus) {
+    const y = focusD.getFullYear(), m = focusD.getMonth();
+    calTitle.textContent = W.fmtMonth(focusD);
+    $('#cal-prev').disabled = mk(focusD) <= mk(W.parseISO(minIso()));
+    const offset = (new Date(y, m, 1).getDay() + 6) % 7;
+    const days = new Date(y, m + 1, 0).getDate();
+    const todayIso = W.iso(W.today()), focusIso = W.iso(focusD);
+    let html = '<thead><tr>' + dayNames.map(d => '<th scope="col" abbr="' + d + '">' + d.slice(0, 2) + '</th>').join('') + '</tr></thead><tbody><tr>';
+    let col = 0;
+    for (let i = 0; i < offset; i++) { html += '<td></td>'; col++; }
+    for (let d = 1; d <= days; d++) {
+      const iso = W.iso(new Date(y, m, d));
+      html += '<td role="gridcell" data-date="' + iso + '" tabindex="' + (iso === focusIso ? 0 : -1) + '"' + (iso === todayIso ? ' aria-current="date"' : '') + '>' +
+        '<span class="dn" aria-hidden="true">' + d + '</span><span class="dp" aria-hidden="true"></span><span class="sr"></span></td>';
+      col++;
+      if (col === 7 && d < days) { html += '</tr><tr>'; col = 0; }
+    }
+    while (col > 0 && col < 7) { html += '<td></td>'; col++; }
+    grid.innerHTML = html + '</tr></tbody>';
+    $$('[role="gridcell"]', grid).forEach(paintCell);
+    updateExtras();
+    if (focus) { const c = $('[tabindex="0"]', grid); if (c) c.focus(); }
+  }
+  function setStep(s) {
+    step = s;
+    calStep.textContent = s === 'depart' ? 'Choose your departure date' : 'Now choose your return date';
+    $('#cal-help').textContent = s === 'depart' ? HELP.depart : HELP.ret;
+    $('#cal-redep').hidden = s !== 'return';
+    cheapKey = '';
+  }
+  function cheapestIn() {
+    const y = focusD.getFullYear(), m = focusD.getMonth(), days = new Date(y, m + 1, 0).getDate(), [f, t] = route();
+    const from = step === 'return' ? draftDep : minIso();
+    let best = null;
+    for (let d = 1; d <= days; d++) {
+      const iso = W.iso(new Date(y, m, d));
+      if (iso < from) continue;
+      const pr = W.dayPrice(f, t, iso).price;
+      if (!best || pr < best.price) best = { iso, price: pr };
+    }
+    return best;
+  }
+  // Cheapest-day shortcut above the days, plus extra detail VoiceOver on iPhone offers under More Content
+  function updateExtras() {
+    const best = cheapestIn(), month = H_MONTH(focusD), btn = $('#cal-cheap');
+    if (best) {
+      btn.hidden = false;
+      btn.textContent = 'Cheapest in ' + month + ': ' + W.fmtShort(best.iso) + ', ' + W.money(best.price);
+      btn.setAttribute('aria-label', 'Cheapest in ' + month + ': ' + spoken(best.iso) + ', ' + W.money(best.price));
+    } else btn.hidden = true;
+    if (!TOUCH) return;
+    let html = best ? '<span id="cal-d-cheap">Cheapest this month: ' + spoken(best.iso) + ', ' + W.money(best.price) + '.</span>' : '';
+    $$('[role="gridcell"]', grid).forEach(td => {
+      const iso = td.dataset.date, ids = [];
+      if (best) ids.push('cal-d-cheap');
+      if (step === 'return' && draftDep && iso >= draftDep) {
+        const n = nights(draftDep, iso);
+        html += '<span id="cal-d-' + iso + '">' + (n === 0 ? 'Same-day return.' : n + (n === 1 ? ' night.' : ' nights.')) + '</span>';
+        ids.unshift('cal-d-' + iso);
+      }
+      if (ids.length && td.getAttribute('aria-disabled') !== 'true') td.setAttribute('aria-describedby', ids.join(' '));
+      else td.removeAttribute('aria-describedby');
+    });
+    $('#cal-descs').innerHTML = html;
+  }
+  const H_MONTH = d => H_MONTHS[d.getMonth()];
+  const H_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  function repaint() { $$('[role="gridcell"]', grid).forEach(paintCell); updateExtras(); }
+  function changeDeparture() {
+    if (step !== 'return') return;
+    setStep('depart');
+    repaint();
+    const c = $('[tabindex="0"]', grid);
+    if (c && document.activeElement !== c) c.focus();
+    sayCal('Choose a new departure date.');
+  }
+  // Jump to the cheapest day in the month shown; each press goes to the next cheapest
+  function jumpCheapest() {
+    const y = focusD.getFullYear(), m = focusD.getMonth(), key = y + '-' + m + '-' + step + '-' + draftDep;
+    if (key !== cheapKey) {
+      const days = new Date(y, m + 1, 0).getDate(), [f, t] = route(), list = [];
+      const from = step === 'return' ? draftDep : minIso();
+      for (let d = 1; d <= days; d++) {
+        const iso = W.iso(new Date(y, m, d));
+        if (iso >= from) list.push({ iso, price: W.dayPrice(f, t, iso).price });
+      }
+      list.sort((a, b) => a.price - b.price || (a.iso < b.iso ? -1 : 1));
+      cheapList = list; cheapKey = key; cheapPos = -1;
+    }
+    if (!cheapList.length) { sayCal('No dates available this month.'); return; }
+    cheapPos = (cheapPos + 1) % cheapList.length;
+    moveTo(W.parseISO(cheapList[cheapPos].iso));
+  }
+  function openCal() {
+    draftDep = dates.dep;
+    draftRet = state.trip === 'oneway' ? null : dates.ret;
+    setStep('depart');
+    focusD = W.parseISO(draftDep && draftDep >= minIso() ? draftDep : minIso());
+    calLive.textContent = '';
+    cal.hidden = false;
+    datesBtn.setAttribute('aria-expanded', 'true');
+    renderCal(false);
+    // Give the screen reader a moment to register the newly shown calendar before focus moves into it.
+    // Focusing straight away can leave JAWS in the virtual cursor instead of switching to application mode.
+    calOpens++; calKeyed = false;
+    setTimeout(() => { const c = $('[tabindex="0"]', grid); if (c && !cal.hidden) c.focus(); }, 400);
+    // The first time the calendar opens, JAWS can miss the move into it and stay in the virtual cursor.
+    // If nothing has been pressed yet, focus the day again (on a freshly drawn grid) to give JAWS a second chance.
+    if (calOpens === 1 && WINDOWS && !TOUCH) {
+      setTimeout(() => { if (!cal.hidden && !calKeyed && cal.contains(document.activeElement)) renderCal(true); }, 1100);
+    }
+  }
+  let calOpens = 0, calKeyed = false;
+  function closeCal(returnFocus) {
+    if (cal.hidden) return;
+    // Take focus out of the application region before hiding it, then return focus to the button after a pause,
+    // so JAWS leaves application mode and goes back to the virtual cursor.
+    if (returnFocus && cal.contains(document.activeElement)) document.activeElement.blur();
+    cal.hidden = true;
+    datesBtn.setAttribute('aria-expanded', 'false');
+    if (returnFocus) setTimeout(() => datesBtn.focus(), 150);
+  }
+  function commit() {
+    dates.dep = draftDep;
+    dates.ret = draftRet;
+    showDates();
+    clearFieldError(datesBtn);
+    closeCal(true);
+  }
+  function pick(cell) {
+    if (cell.getAttribute('aria-disabled') === 'true') { sayCal('Not available. Choose another date.'); return; }
+    const iso = cell.dataset.date;
+    if (step === 'depart') {
+      draftDep = iso;
+      if (state.trip === 'oneway') { draftRet = null; commit(); return; }
+      if (draftRet && draftRet < draftDep) draftRet = null;
+      setStep('return');
+      repaint();
+      sayCal('Departure date ' + spoken(iso) + '. Now choose your return date.' + (TOUCH ? '' : ' To change your departure date, press D.'));
+    } else if (iso < draftDep) {
+      draftDep = iso;
+      repaint();
+      sayCal('Departure date changed to ' + spoken(iso) + '. Now choose your return date.');
+    } else {
+      draftRet = iso;
+      commit();
+    }
+  }
+  function moveTo(n) {
+    if (mk(n) < mk(W.parseISO(minIso()))) { sayCal('You cannot go back any further.'); return; }
+    const same = mk(n) === mk(focusD);
+    focusD = n;
+    if (same) {
+      $$('[role="gridcell"]', grid).forEach(c => { c.tabIndex = -1; });
+      const c = $('[data-date="' + W.iso(n) + '"]', grid);
+      c.tabIndex = 0; c.focus();
+    } else renderCal(true);
+  }
+  function changeMonth(dir, keepFocusOnButton) {
+    let n = addMonths(focusD, dir);
+    if (W.iso(n) < minIso()) n = W.parseISO(minIso());
+    if (mk(n) < mk(W.parseISO(minIso()))) { sayCal('You cannot go back any further.'); return; }
+    if (keepFocusOnButton) {
+      focusD = n; renderCal(false);
+      const best = cheapestIn();
+      sayCal(W.fmtMonth(n) + (best ? '. Cheapest day ' + spoken(best.iso) + ', ' + W.money(best.price) : ''));
+    }
+    else moveTo(n);
+  }
+  datesBtn.addEventListener('click', () => (cal.hidden ? openCal() : closeCal(true)));
+  grid.addEventListener('click', e => { const c = e.target.closest('[role="gridcell"]'); if (c) { c.focus(); pick(c); } });
+  cal.addEventListener('keydown', e => {
+    calKeyed = true;
+    const k = e.key, cell = e.target.closest('[role="gridcell"]');
+    if (k === 'Escape') { e.preventDefault(); closeCal(true); return; }
+    if (k === 'Tab') { trapTab(cal, e); return; }
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (k === 'PageDown' || k === 'n' || k === 'N') { e.preventDefault(); changeMonth(1, !cell); return; }
+    if (k === 'PageUp' || k === 'p' || k === 'P') { e.preventDefault(); changeMonth(-1, !cell); return; }
+    if (k === 'h' || k === 'H') { e.preventDefault(); sayCal($('#cal-help').textContent, 50); return; }
+    if (k === 'c' || k === 'C') { e.preventDefault(); jumpCheapest(); return; }
+    if (k === 'd' || k === 'D') { e.preventDefault(); changeDeparture(); return; }
+    if (!cell) return;
+    const d = W.parseISO(cell.dataset.date), wd = (d.getDay() + 6) % 7;
+    let n = null;
+    switch (k) {
+      case 'ArrowRight': n = W.addDays(d, 1); break;
+      case 'ArrowLeft': n = W.addDays(d, -1); break;
+      case 'ArrowDown': n = W.addDays(d, 7); break;
+      case 'ArrowUp': n = W.addDays(d, -7); break;
+      case 'Home': n = W.addDays(d, -wd); break;
+      case 'End': n = W.addDays(d, 6 - wd); break;
+      case 'Enter': case ' ': e.preventDefault(); pick(cell); return;
+    }
+    if (n) { e.preventDefault(); moveTo(n); }
+  });
+  $('#cal-prev').addEventListener('click', () => changeMonth(-1, true));
+  $('#cal-next').addEventListener('click', () => changeMonth(1, true));
+  $('#cal-cancel').addEventListener('click', () => closeCal(true));
+  $('#cal-cheap').addEventListener('click', () => { cheapKey = ''; jumpCheapest(); });
+  $('#cal-redep').addEventListener('click', changeDeparture);
+
+  /* ---------- Passengers popover ---------- */
+  const paxBtn = $('#pax-btn'), paxPop = $('#pax-pop');
+  function paxSummary() {
+    const a = +$('#adults').getAttribute('aria-valuenow'), c = +$('#children').getAttribute('aria-valuenow');
+    const parts = [a + (a === 1 ? ' adult' : ' adults')];
+    if (c) parts.push(c + (c === 1 ? ' child' : ' children'));
+    return parts.join(', ');
+  }
+  function updatePax() { $('#pax-val').textContent = paxSummary() + ', ' + W.cabin(state.cabin).label; }
+  function openPax() { paxPop.hidden = false; paxBtn.setAttribute('aria-expanded', 'true'); $('#adults').focus(); }
+  function closePax(focus) { closeCabin(); paxPop.hidden = true; paxBtn.setAttribute('aria-expanded', 'false'); if (focus) paxBtn.focus(); }
+  activate(paxBtn, () => (paxPop.hidden ? openPax() : closePax(true)));
+  activate($('#pax-done'), () => closePax(true));
+  paxPop.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); closePax(true); } });
+
+  function makeSpin(el) {
+    const min = +el.getAttribute('aria-valuemin'), max = +el.getAttribute('aria-valuemax');
+    function set(v) { v = Math.max(min, Math.min(max, v)); el.setAttribute('aria-valuenow', v); el.textContent = v; updatePax(); }
+    el.addEventListener('keydown', e => {
+      const v = +el.getAttribute('aria-valuenow');
+      const map = { ArrowUp: v + 1, ArrowRight: v + 1, ArrowDown: v - 1, ArrowLeft: v - 1, Home: min, End: max };
+      if (e.key in map) { e.preventDefault(); set(map[e.key]); }
+    });
+    $$('[data-for="' + el.id + '"]').forEach(b => activate(b, () => set(+el.getAttribute('aria-valuenow') + +b.dataset.step)));
+  }
+  makeSpin($('#adults')); makeSpin($('#children'));
+
+  // Cabin class: select-only combobox
+  const cab = $('#cabin'), cabList = $('#cabin-list');
+  let cabActive = 0;
+  W.cabins.forEach((c, i) => {
+    const li = document.createElement('li');
+    li.setAttribute('role', 'option'); li.id = 'cabin-opt-' + c.value;
+    li.setAttribute('aria-selected', String(i === 0));
+    li.textContent = c.label;
+    li.addEventListener('mousedown', e => e.preventDefault());
+    li.addEventListener('click', () => { selectCab(i); cab.focus(); });
+    cabList.appendChild(li);
+  });
+  const cabItems = $$('[role="option"]', cabList);
+  function setCabActive(i) {
+    cabActive = Math.max(0, Math.min(cabItems.length - 1, i));
+    cabItems.forEach((x, j) => x.classList.toggle('active', j === cabActive));
+    cab.setAttribute('aria-activedescendant', cabItems[cabActive].id);
+  }
+  function openCabin() { cabList.hidden = false; cab.setAttribute('aria-expanded', 'true'); setCabActive(W.cabins.findIndex(c => c.value === state.cabin)); }
+  function closeCabin() { cabList.hidden = true; cab.setAttribute('aria-expanded', 'false'); cab.removeAttribute('aria-activedescendant'); }
+  function selectCab(i) {
+    state.cabin = W.cabins[i].value;
+    cabItems.forEach((x, j) => x.setAttribute('aria-selected', String(j === i)));
+    $('#cabin-val').textContent = W.cabins[i].label;
+    closeCabin(); updatePax();
+  }
+  cab.addEventListener('click', () => (cabList.hidden ? openCabin() : closeCabin()));
+  cab.addEventListener('keydown', e => {
+    const isOpen = !cabList.hidden;
+    if (!isOpen && ['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(e.key)) { e.preventDefault(); openCabin(); return; }
+    if (!isOpen) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); setCabActive(cabActive + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setCabActive(cabActive - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); setCabActive(0); }
+    else if (e.key === 'End') { e.preventDefault(); setCabActive(cabItems.length - 1); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectCab(cabActive); }
+    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeCabin(); }
+    else if (e.key === 'Tab') closeCabin();
+  });
+
+  // Close popovers on outside click
+  document.addEventListener('mousedown', e => {
+    if (!paxPop.hidden && !paxPop.contains(e.target) && !paxBtn.contains(e.target)) closePax(false);
+    // Screen readers sometimes send a pretend click with no position (0, 0). Don't treat that as a click outside the calendar.
+    const synthetic = e.clientX === 0 && e.clientY === 0;
+    if (!cal.hidden && !synthetic && !cal.contains(e.target) && !calTarget.contains(e.target)) closeCal(false);
+  });
+
+  /* ---------- Options ---------- */
+  makeCheckbox($('#opt-direct'));
+  makeCheckbox($('#opt-nearby'));
+  makeCheckbox($('#opt-flex'), null, [' ', 'Enter']);
+
+  /* ---------- Validation ---------- */
+  function setFieldError(input, msg) {
+    const err = $('#' + input.id.replace('-input', '') + '-err');
+    err.textContent = msg; err.hidden = false;
+    input.setAttribute('aria-invalid', 'true');
+    input.setAttribute('aria-describedby', [input.dataset.hint, err.id].filter(Boolean).join(' '));
+  }
+  function clearFieldError(input) {
+    const err = $('#' + input.id.replace('-input', '') + '-err');
+    if (err) { err.hidden = true; err.textContent = ''; }
+    input.removeAttribute('aria-invalid');
+    if (input.dataset.hint) input.setAttribute('aria-describedby', input.dataset.hint); else input.removeAttribute('aria-describedby');
+  }
+
+  function validateSearch() {
+    [fromIn, toIn].forEach(clearFieldError);
+    const errs = [];
+    if (!fromIn.dataset.code) errs.push([fromIn, 'Choose where you are flying from.']);
+    if (!toIn.dataset.code) errs.push([toIn, 'Choose where you are flying to.']);
+    else if (fromIn.dataset.code && fromIn.dataset.code === toIn.dataset.code) errs.push([toIn, 'Choose a destination that is different from where you are flying from.']);
+    clearFieldError(datesBtn);
+    if (!dates.dep) errs.push([datesBtn, 'Choose your travel dates.']);
+    else if (state.trip !== 'oneway' && !dates.ret) errs.push([datesBtn, 'Choose your return date.']);
+    const box = $('#errors'), ul = $('#errors-list');
+    ul.innerHTML = '';
+    errs.forEach(([input, msg]) => {
+      setFieldError(input, msg);
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + input.id; a.textContent = msg;
+      a.addEventListener('click', e => { e.preventDefault(); input.focus(); });
+      li.appendChild(a); ul.appendChild(li);
+    });
+    box.hidden = errs.length === 0;
+    if (errs.length) box.focus();
+    return errs.length === 0;
+  }
+
+  /* ---------- Search and results ---------- */
+  activate($('#search-btn'), () => { if (validateSearch()) runSearch(true); });
+
+  function readSearch() {
+    return {
+      from: fromIn.dataset.code, to: toIn.dataset.code, depart: dates.dep,
+      ret: state.trip === 'oneway' ? null : dates.ret,
+      adults: +$('#adults').getAttribute('aria-valuenow'), children: +$('#children').getAttribute('aria-valuenow'),
+      cabin: state.cabin, direct: $('#opt-direct').getAttribute('aria-checked') === 'true'
+    };
+  }
+  function setStops(vals) {
+    state.filters.stops = new Set(vals);
+    $$('[data-stops]').forEach(c => c.setAttribute('aria-checked', String(state.filters.stops.has(c.dataset.stops))));
+  }
+  function runSearch(fromUser) {
+    const s = readSearch();
+    state.search = s;
+    state.flights = W.flights(s.from, s.to, s.depart, s.cabin);
+    if (s.direct) setStops(['0']); else if (fromUser) setStops(['0', '1', '2']);
+    const first = $('#results').hidden;
+    $('#results').hidden = false;
+    render(fromUser && !first);
+    if (first) $('#results-h').focus();
+  }
+
+  // Filters
+  $$('[data-stops]').forEach(c => makeCheckbox(c, v => { v ? state.filters.stops.add(c.dataset.stops) : state.filters.stops.delete(c.dataset.stops); render(true); }));
+  const af = $('#airline-filters');
+  W.airlines.forEach(a => {
+    const d = document.createElement('div');
+    d.className = 'chk'; d.setAttribute('role', 'checkbox'); d.setAttribute('aria-checked', 'true'); d.tabIndex = 0; d.dataset.airline = a.code;
+    d.innerHTML = '<span class="box"></span>' + a.name;
+    af.appendChild(d);
+    makeCheckbox(d, v => { v ? state.filters.airlines.add(a.code) : state.filters.airlines.delete(a.code); render(true); });
+  });
+  $$('.acc-btn').forEach(makeAccordion);
+
+  // Slider
+  const thumb = $('#before'), slider = $('#slider');
+  function setBefore(v) {
+    v = Math.max(7, Math.min(24, v));
+    if (v === state.filters.before && thumb.getAttribute('aria-valuenow') === String(v)) return;
+    const pct = (v - 7) / 17 * 100;
+    thumb.setAttribute('aria-valuenow', v);
+    thumb.setAttribute('aria-valuetext', W.beforeText(v));
+    thumb.style.left = pct + '%';
+    $('#slider-fill').style.width = pct + '%';
+    $('#before-out').textContent = W.beforeText(v);
+    state.filters.before = v;
+    render(true);
+  }
+  thumb.addEventListener('keydown', e => {
+    const v = +thumb.getAttribute('aria-valuenow');
+    const map = { ArrowRight: v + 1, ArrowUp: v + 1, ArrowLeft: v - 1, ArrowDown: v - 1, PageUp: v + 3, PageDown: v - 3, Home: 7, End: 24 };
+    if (e.key in map) { e.preventDefault(); setBefore(map[e.key]); }
+  });
+  function fromPointer(e) { const r = slider.getBoundingClientRect(); setBefore(Math.round(7 + Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * 17)); }
+  slider.addEventListener('pointerdown', e => { slider.setPointerCapture(e.pointerId); thumb.focus(); fromPointer(e); });
+  slider.addEventListener('pointermove', e => { if (slider.hasPointerCapture(e.pointerId)) fromPointer(e); });
+
+  function resetFilters() {
+    setStops(['0', '1', '2']);
+    state.filters.airlines = new Set(W.airlines.map(a => a.code));
+    $$('[data-airline]').forEach(c => c.setAttribute('aria-checked', 'true'));
+    state.filters.before = 23; setBefore(24);
+  }
+  activate($('#reset'), resetFilters);
+  activate($('#reset2'), resetFilters);
+
+  // Tabs
+  const tabs = $$('[role="tab"]'), panel = $('#panel');
+  function selectTab(t) {
+    tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; });
+    panel.setAttribute('aria-labelledby', t.id);
+    t.focus();
+    state.sort = t.dataset.value;
+    render(true);
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => selectTab(t));
+    t.addEventListener('keydown', e => {
+      let n = null;
+      if (e.key === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+      else if (e.key === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+      else if (e.key === 'Home') n = tabs[0];
+      else if (e.key === 'End') n = tabs[tabs.length - 1];
+      if (n) { e.preventDefault(); selectTab(n); }
+    });
+  });
+
+  function paxText(s) {
+    const parts = [s.adults + (s.adults === 1 ? ' adult' : ' adults')];
+    if (s.children) parts.push(s.children + (s.children === 1 ? ' child' : ' children'));
+    return parts.join(', ');
+  }
+  function render(doAnnounce) {
+    const s = state.search;
+    const fromA = W.airport(s.from), toA = W.airport(s.to);
+    $('#results-h').textContent = 'Flights from ' + fromA.name + ' to ' + toA.name;
+    $('#results-meta').textContent = W.fmtLong(s.depart) + (s.ret ? ', returning ' + W.fmtLong(s.ret) : ', one way') + '. ' + paxText(s) + ', ' + W.cabin(s.cabin).label + '.';
+    const filtered = W.filterFlights(state.flights, state.filters);
+    ['best', 'cheapest', 'fastest'].forEach(m => {
+      const top = W.sortFlights(filtered, m)[0];
+      $('#sub-' + m).textContent = top ? W.money(top.price) + ' · ' + W.fmtDur(top.dur) : 'No flights';
+    });
+    const list = W.sortFlights(filtered, state.sort);
+    const ul = $('#list');
+    ul.innerHTML = '';
+    list.forEach(f => ul.appendChild(card(f, s)));
+    $('#empty').hidden = list.length > 0;
+    const msg = 'Showing ' + list.length + ' of ' + state.flights.length + ' flights, sorted by ' + state.sort + '.';
+    if (doAnnounce) announce($('#status'), msg, 500); else $('#status').textContent = msg;
+  }
+
+  function card(f, s) {
+    const li = document.createElement('li');
+    const fromA = W.airport(s.from), toA = W.airport(s.to), hid = 'h-' + f.id;
+    li.innerHTML =
+      '<article class="card" aria-labelledby="' + hid + '">' +
+        '<div class="card-main">' +
+          '<div class="carrier"><img src="' + W.logo(f.airline) + '" alt=""><div><h3 id="' + hid + '">' + f.airline.name + '</h3><span class="fno">Flight ' + f.flightNo + '</span></div></div>' +
+          '<div class="leg">' +
+            '<div><span class="vh">Departs </span><span class="t">' + W.fmtTime(f.dep) + '</span><div class="ap">' + fromA.code + '<span class="vh"> ' + fromA.name + '</span></div></div>' +
+            '<div class="mid"><span><span class="vh">Journey time </span>' + W.fmtDur(f.dur) + '</span><span class="line' + (f.stops ? ' stops' : '') + '"></span><span class="' + (f.stops ? '' : 'direct') + '">' + W.stopsText(f) + '</span></div>' +
+            '<div><span class="vh">Arrives </span><span class="t">' + W.fmtTime(f.arr) + (W.nextDay(f) ? '<span class="plus1">+1<span class="vh"> day</span></span>' : '') + '</span><div class="ap">' + toA.code + '<span class="vh"> ' + toA.name + '</span></div></div>' +
+          '</div>' +
+          '<div class="more"><div class="more-btn" role="button" tabindex="0" aria-expanded="false" aria-controls="more-' + f.id + '">Flight details</div>' +
+          '<div class="more-body" id="more-' + f.id + '" hidden><dl>' +
+            '<dt>Flight number</dt><dd>' + f.flightNo + '</dd>' +
+            '<dt>Stops</dt><dd>' + (f.stops ? 'Via ' + f.via.join(' and ') : 'Non-stop') + '</dd>' +
+            '<dt>Cabin bag</dt><dd>1 bag, up to 10 kg</dd>' +
+            '<dt>Changes</dt><dd>£25 per passenger</dd>' +
+          '</dl></div></div>' +
+        '</div>' +
+        '<div class="card-side">' +
+          '<div><div class="price">' + W.money(f.price) + '</div><div class="price-note">per person</div></div>' +
+          '<div class="card-actions">' +
+            '<div class="save-btn" role="button" tabindex="0" aria-pressed="' + state.saved.has(f.id) + '" aria-label="Save ' + f.airline.name + ' ' + W.fmtTime(f.dep) + ' flight"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div>' +
+            '<div class="btn btn-primary sel" role="button" tabindex="0" aria-label="Select ' + f.airline.name + ' ' + W.fmtTime(f.dep) + ' flight, ' + W.money(f.price) + '">Select</div>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+    makeAccordion($('.more-btn', li));
+    const sel = $('.sel', li);
+    activate(sel, () => openBooking(f, sel));
+    const sv = $('.save-btn', li);
+    activate(sv, () => {
+      const on = !state.saved.has(f.id);
+      on ? state.saved.add(f.id) : state.saved.delete(f.id);
+      sv.setAttribute('aria-pressed', String(on));
+      announce($('#save-status'), on ? 'Saved to your trips.' : 'Removed from your trips.', 100);
+    });
+    return li;
+  }
+
+  /* ---------- Booking dialog ---------- */
+  const page = $('#page'), backdrop = $('#book-backdrop'), modal = $('#book');
+  let opener = null, current = null;
+  const seatGroup = makeRadioGroup($('#seat'), v => { state.seat = v; });
+  const ex = $('#extras');
+  W.extras.forEach(e => {
+    const d = document.createElement('div');
+    d.className = 'chk'; d.setAttribute('role', 'checkbox'); d.setAttribute('aria-checked', 'false'); d.tabIndex = 0; d.dataset.extra = e.value;
+    d.innerHTML = '<span class="box"></span>' + e.label + ', ' + W.money(e.price);
+    ex.appendChild(d);
+    makeCheckbox(d, updateTotal);
+  });
+  makeCheckbox($('#terms'), v => { if (v) clearBookError($('#terms')); });
+  $('#pemail').dataset.hint = 'pemail-hint';
+
+  function paxCount() { return state.search.adults + state.search.children; }
+  function updateTotal() {
+    if (!current) return;
+    const extras = $$('[data-extra][aria-checked="true"]').reduce((sum, c) => sum + W.extras.find(e => e.value === c.dataset.extra).price, 0);
+    $('#total').textContent = W.money((current.price + extras) * paxCount());
+  }
+  function bookError(el, msg) {
+    const err = $('#' + el.id + '-err');
+    err.textContent = msg; err.hidden = false;
+    el.setAttribute('aria-invalid', 'true');
+    el.setAttribute('aria-describedby', [el.dataset.hint, err.id].filter(Boolean).join(' '));
+  }
+  function clearBookError(el) {
+    const err = $('#' + el.id + '-err');
+    err.hidden = true; err.textContent = '';
+    el.removeAttribute('aria-invalid');
+    if (el.dataset.hint) el.setAttribute('aria-describedby', el.dataset.hint); else el.removeAttribute('aria-describedby');
+  }
+  function openBooking(f, btn) {
+    opener = btn; current = f;
+    const s = state.search;
+    $('#pname').value = ''; $('#pemail').value = '';
+    [$('#pname'), $('#pemail'), $('#terms')].forEach(clearBookError);
+    $('#terms').setAttribute('aria-checked', 'false');
+    $$('[data-extra]').forEach(c => c.setAttribute('aria-checked', 'false'));
+    seatGroup.reset();
+    $('#book-body').hidden = false; $('#confirm').hidden = true;
+    $('#trip-sum').innerHTML = '<strong>' + f.airline.name + ', flight ' + f.flightNo + '</strong>' +
+      '<span>' + W.airport(s.from).name + ' to ' + W.airport(s.to).name + ', ' + W.fmtLong(s.depart) + '</span>' +
+      '<span>Departs ' + W.fmtTime(f.dep) + ', arrives ' + W.fmtTime(f.arr) + (W.nextDay(f) ? ' the next day' : '') + '. ' + W.stopsText(f) + '.</span>';
+    const n = paxCount();
+    $('#pax-count').textContent = n + (n === 1 ? ' passenger' : ' passengers');
+    updateTotal();
+    backdrop.hidden = false;
+    page.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = 'hidden';
+    $('#book-h').focus();
+  }
+  function closeBooking() {
+    backdrop.hidden = true;
+    page.removeAttribute('aria-hidden');
+    document.body.style.overflow = '';
+    if (opener && document.body.contains(opener)) opener.focus(); else $('#results-h').focus();
+  }
+  activate($('#book-close'), closeBooking);
+  activate($('#book-cancel'), closeBooking);
+  activate($('#confirm-done'), closeBooking);
+  modal.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { e.preventDefault(); closeBooking(); }
+    if (e.key === 'Tab') trapTab(modal, e);
+  });
+  backdrop.addEventListener('mousedown', e => { if (e.target === backdrop) closeBooking(); });
+  ['pname', 'pemail'].forEach(id => $('#' + id).addEventListener('input', e => clearBookError(e.target)));
+  activate($('#book-confirm'), () => {
+    const name = $('#pname'), email = $('#pemail'), terms = $('#terms');
+    [name, email, terms].forEach(clearBookError);
+    const bad = [];
+    if (!name.value.trim()) { bookError(name, 'Enter your full name.'); bad.push(name); }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { bookError(email, 'Enter an email address in the format name@example.com.'); bad.push(email); }
+    if (terms.getAttribute('aria-checked') !== 'true') { bookError(terms, 'Accept the fare rules to continue.'); bad.push(terms); }
+    if (bad.length) { bad[0].focus(); return; }
+    $('#ref').textContent = W.bookingRef();
+    $('#confirm-text').textContent = 'We have sent your e-ticket to ' + email.value.trim() + '. Have a legendary trip.';
+    $('#book-body').hidden = true;
+    $('#confirm').hidden = false;
+    $('#confirm-h').focus();
+  });
+
+  /* ---------- Tooltip (APG tooltip pattern) ---------- */
+  const tipBtn = $('#tip-nearby-btn'), tipEl = $('#tip-nearby');
+  let tipTimer = null;
+  function showTip() { clearTimeout(tipTimer); tipEl.hidden = false; }
+  function hideTip(delay) { clearTimeout(tipTimer); tipTimer = setTimeout(() => { tipEl.hidden = true; }, delay || 0); }
+  tipBtn.addEventListener('focus', showTip);
+  tipBtn.addEventListener('blur', () => hideTip(0));
+  tipBtn.addEventListener('mouseenter', showTip);
+  tipBtn.addEventListener('mouseleave', () => hideTip(400));
+  tipEl.addEventListener('mouseenter', showTip);
+  tipEl.addEventListener('mouseleave', () => hideTip(400));
+  activate(tipBtn, () => (tipEl.hidden ? showTip() : hideTip(0)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !tipEl.hidden) tipEl.hidden = true; });
+
+  /* ---------- Popular destinations carousel (APG carousel pattern) ---------- */
+  const destEl = $('#dest'), slidesEl = $('#dest-slides'), rotBtn = $('#dest-rotate'), D = W.destinations;
+  D.forEach((d, i) => {
+    const a = W.airport(d.code);
+    const s = document.createElement('div');
+    s.className = 'dest-slide';
+    s.setAttribute('role', 'group');
+    s.setAttribute('aria-roledescription', 'slide');
+    s.setAttribute('aria-label', (i + 1) + ' of ' + D.length);
+    s.hidden = i !== 0;
+    s.innerHTML = '<div class="dest-card"><img src="' + d.img + '" alt="' + d.alt + '" width="320" height="180">' +
+      '<div class="dest-body"><p class="dest-region">' + d.region + '</p><h3>' + a.name + '</h3><p>' + d.blurb + '</p>' +
+      '<p class="dest-price">Return flights from <strong>' + W.money(d.price) + '</strong></p>' +
+      '<div class="btn btn-secondary" role="button" tabindex="0" data-dest="' + d.code + '">Search flights to ' + a.name + '</div></div></div>';
+    slidesEl.appendChild(s);
+    activate($('[data-dest]', s), () => {
+      setAirport(toIn, d.code);
+      if (fromIn.dataset.code === d.code) setAirport(fromIn, d.code === 'CML' ? 'AVN' : 'CML');
+      clearFieldError(toIn);
+      toIn.focus();
+    });
+  });
+  let cur = 0, rotTimer = null, userPaused = false, hovering = false, focusedIn = false;
+  function showSlide(i) {
+    cur = (i + D.length) % D.length;
+    $$('.dest-slide', slidesEl).forEach((s, j) => { s.hidden = j !== cur; });
+    $('#dest-count').textContent = (cur + 1) + ' of ' + D.length;
+  }
+  function startRotation() {
+    if (rotTimer || userPaused || hovering || focusedIn) return;
+    slidesEl.setAttribute('aria-live', 'off');
+    rotTimer = setInterval(() => showSlide(cur + 1), 6000);
+  }
+  function stopRotation() { clearInterval(rotTimer); rotTimer = null; slidesEl.setAttribute('aria-live', 'polite'); }
+  activate(rotBtn, () => {
+    userPaused = !userPaused;
+    rotBtn.textContent = userPaused ? 'Start slide rotation' : 'Stop slide rotation';
+    if (userPaused) stopRotation(); else startRotation();
+  });
+  activate($('#dest-prev'), () => showSlide(cur - 1));
+  activate($('#dest-next'), () => showSlide(cur + 1));
+  destEl.addEventListener('focusin', () => { focusedIn = true; stopRotation(); });
+  destEl.addEventListener('focusout', e => { if (!destEl.contains(e.relatedTarget)) { focusedIn = false; startRotation(); } });
+  destEl.addEventListener('mouseenter', () => { hovering = true; stopRotation(); });
+  destEl.addEventListener('mouseleave', () => { hovering = false; startRotation(); });
+  showSlide(0);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    userPaused = true; rotBtn.textContent = 'Start slide rotation'; stopRotation();
+  } else startRotation();
+
+  /* ---------- Cookie banner and preferences dialog ---------- */
+  const ckBack = $('#cookie-backdrop'), ckDlg = $('#cookie-dlg');
+  const ckIds = ['ck-analytics', 'ck-marketing', 'ck-personal'];
+  let ckOpener = null, ckSnapshot = [];
+  ckIds.forEach(id => makeCheckbox($('#' + id), null, [' ', 'Enter']));
+  function cookieDone(msg) {
+    $('#cookie-ask').hidden = true; $('#cookie-btns').hidden = true;
+    $('#cookie-done-text').textContent = msg;
+    $('#cookie-done').hidden = false; $('#cookie-done-btns').hidden = false;
+    $('#cookie-done').focus();
+  }
+  $$('[data-cookie]').forEach(b => activate(b, () => {
+    const all = b.dataset.cookie === 'all';
+    ckIds.forEach(id => $('#' + id).setAttribute('aria-checked', String(all)));
+    cookieDone(all ? 'You have accepted all cookies. You can change your cookie settings at any time.' : 'You have rejected optional cookies. You can change your cookie settings at any time.');
+  }));
+  function openCookie() {
+    ckOpener = document.activeElement;
+    ckSnapshot = ckIds.map(id => $('#' + id).getAttribute('aria-checked'));
+    ckBack.hidden = false;
+    page.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = 'hidden';
+    $('#cookie-dlg-h').focus();
+  }
+  function closeCookie(restore) {
+    if (restore) ckIds.forEach((id, i) => $('#' + id).setAttribute('aria-checked', ckSnapshot[i]));
+    ckBack.hidden = true;
+    page.removeAttribute('aria-hidden');
+    document.body.style.overflow = '';
+    if (restore && ckOpener) ckOpener.focus();
+  }
+  activate($('#cookie-manage'), openCookie);
+  activate($('#cookie-change'), openCookie);
+  activate($('#cookie-dlg-close'), () => closeCookie(true));
+  activate($('#cookie-dlg-cancel'), () => closeCookie(true));
+  activate($('#cookie-save'), () => {
+    closeCookie(false);
+    const on = ckIds.filter(id => $('#' + id).getAttribute('aria-checked') === 'true').length;
+    cookieDone('Your cookie preferences have been saved. ' + (on ? on + ' optional ' + (on === 1 ? 'type is' : 'types are') + ' turned on.' : 'Only essential cookies are turned on.'));
+  });
+  ckDlg.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { e.preventDefault(); closeCookie(true); }
+    if (e.key === 'Tab') trapTab(ckDlg, e);
+  });
+  ckBack.addEventListener('mousedown', e => { if (e.target === ckBack) closeCookie(true); });
+  activate($('#cookie-hide'), () => { $('#cookie').hidden = true; $('#main').focus(); });
+
+})();
+</script>
+</body>
+</html>

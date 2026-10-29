@@ -85,8 +85,7 @@
         <div class="route">
           <div class="field">
             <label for="from-input">From</label>
-            <input id="from-input" class="control" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="from-list" autocomplete="off" spellcheck="false">
-            <ul id="from-list" class="pop listbox" role="listbox" aria-label="From suggestions" hidden></ul>
+            <select id="from-input" class="control"></select>
             <span class="field-error" id="from-err" hidden></span>
           </div>
           <div class="swap" role="button" tabindex="0" id="swap" aria-label="Swap From and To">
@@ -94,8 +93,7 @@
           </div>
           <div class="field">
             <label for="to-input">To</label>
-            <input id="to-input" class="control" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="to-list" autocomplete="off" spellcheck="false">
-            <ul id="to-list" class="pop listbox" role="listbox" aria-label="To suggestions" hidden></ul>
+            <select id="to-input" class="control"></select>
             <span class="field-error" id="to-err" hidden></span>
           </div>
         </div>
@@ -447,111 +445,26 @@
   /* ---------- Trip type ---------- */
   makeRadioGroup($('#trip'), v => { state.trip = v; if (typeof showDates === 'function') showDates(); });
 
-  /* ---------- From / To comboboxes ---------- */
+  /* ---------- From / To: plain native drop-downs ---------- */
   const comboStatus = $('#combo-status');
-  function setAirport(input, code) {
-    const a = W.airport(code);
-    input.value = a ? a.name + ' (' + a.code + ')' : '';
-    input.dataset.code = a ? a.code : '';
+  function setAirport(sel, code) {
+    sel.value = code || '';
+    sel.dataset.code = sel.value;
   }
-  function makeCombo(input, list) {
-    let opts = [], active = -1;
-    function open() { list.hidden = false; input.setAttribute('aria-expanded', 'true'); }
-    function close() { list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; }
-    function build(q) {
-      const qq = (q || '').trim().toLowerCase();
-      opts = W.airports.filter(a => !qq || a.name.toLowerCase().includes(qq) || a.code.toLowerCase().startsWith(qq));
-      list.innerHTML = '';
-      opts.forEach((a, i) => {
-        const li = document.createElement('li');
-        li.setAttribute('role', 'option');
-        li.id = list.id + '-' + a.code;
-        li.setAttribute('aria-selected', 'false');
-        li.tabIndex = -1;
-        li.innerHTML = '<span>' + a.name + '</span><span class="code">' + a.code + '</span>';
-        li.addEventListener('mousedown', e => e.preventDefault());
-        li.addEventListener('click', () => choose(i));
-        li.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(i); }
-          else if (e.key === 'Escape') { e.preventDefault(); close(); input.focus(); }
-          else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-            e.preventDefault();
-            const sib = e.key === 'ArrowDown' ? li.nextElementSibling : li.previousElementSibling;
-            if (sib) sib.focus();
-          }
-        });
-        list.appendChild(li);
-      });
-    }
-    function setActive(i) {
-      const items = $$('[role="option"]', list);
-      items.forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected', 'false'); });
-      active = i;
-      if (i >= 0 && items[i]) {
-        items[i].classList.add('active');
-        items[i].setAttribute('aria-selected', 'true');
-        input.setAttribute('aria-activedescendant', items[i].id);
-        items[i].scrollIntoView({ block: 'nearest' });
-      } else input.removeAttribute('aria-activedescendant');
-    }
-    function choose(i) {
-      setAirport(input, opts[i].code);
-      close();
-      clearFieldError(input);
-      if (document.activeElement !== input) input.focus();
-    }
-    function settle() {
-      close();
-      if (!input.dataset.code) { const a = W.airportByName(input.value); if (a) setAirport(input, a.code); }
-    }
-    input.addEventListener('input', () => {
-      input.dataset.code = '';
-      build(input.value);
-      if (opts.length) open(); else close();
-      setActive(-1);
-      announce(comboStatus, opts.length ? opts.length + (opts.length === 1 ? ' suggestion' : ' suggestions') + ' available. Use the down arrow to choose.' : 'No matching destinations.', 400);
-    });
-    input.addEventListener('keydown', e => {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (list.hidden) {
-          // Show the list first, then point at the first option a moment later,
-          // so Safari has the options ready before VoiceOver is told about them.
-          build(input.dataset.code ? '' : input.value); open();
-          setTimeout(() => setActive(0), 60);
-        } else setActive(Math.min(active + 1, opts.length - 1));
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (!list.hidden) setActive(Math.max(active - 1, 0));
-      } else if (e.key === 'Enter') {
-        if (!list.hidden && active >= 0) { e.preventDefault(); choose(active); }
-      } else if (e.key === 'Escape') {
-        if (!list.hidden) { e.preventDefault(); close(); }
-        else { input.value = ''; input.dataset.code = ''; }
-      }
-    });
-    input.addEventListener('click', () => {
-      if (list.hidden) { build(input.dataset.code ? '' : input.value); open(); } else close();
-    });
-    // Close only when focus or a click goes somewhere else on the page. Not on blur:
-    // on a Mac, moving the VoiceOver cursor into the list takes focus off the box,
-    // and closing then made the list vanish before it could be used.
-    document.addEventListener('focusin', e => {
-      if (!list.hidden && e.target !== input && !list.contains(e.target)) settle();
-    });
-    document.addEventListener('mousedown', e => {
-      if (!list.hidden && e.target !== input && !list.contains(e.target)) settle();
-    });
-    input.addEventListener('change', () => { if (list.hidden && !input.dataset.code) settle(); });
+  function makeSelect(sel) {
+    sel.innerHTML = '<option value="">Choose a place</option>' +
+      W.airports.map(a => '<option value="' + a.code + '">' + a.name + ' (' + a.code + ')</option>').join('');
+    sel.addEventListener('change', () => { sel.dataset.code = sel.value; if (sel.value) clearFieldError(sel); });
   }
   const fromIn = $('#from-input'), toIn = $('#to-input');
-  makeCombo(fromIn, $('#from-list'));
-  makeCombo(toIn, $('#to-list'));
+  makeSelect(fromIn);
+  makeSelect(toIn);
   setAirport(fromIn, 'CML'); setAirport(toIn, 'ATS');
   activate($('#swap'), () => {
     const a = fromIn.dataset.code, b = toIn.dataset.code;
     setAirport(fromIn, b); setAirport(toIn, a);
-    announce(comboStatus, 'Swapped. From ' + (fromIn.value || 'empty') + ', to ' + (toIn.value || 'empty') + '.');
+    const nm = c => { const a = W.airport(c); return a ? a.name : 'empty'; };
+    announce(comboStatus, 'Swapped. From ' + nm(fromIn.value) + ', to ' + nm(toIn.value) + '.');
   });
 
   /* ---------- Travel dates: a plain calendar ----------

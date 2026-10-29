@@ -70,7 +70,7 @@
         <li class="version">
           <span class="tag">Version 1</span>
           <h3><a href="custom.html">Accessible</a></h3>
-          <p>Built from custom widgets that follow the ARIA Authoring Practices: comboboxes, a plain calendar made of real buttons that read out the day, month and price, spinbuttons, tabs, switches, a slider, a tooltip, a carousel and modal dialogs. Use this one to compare VoiceOver on Mac with JAWS on Windows.</p>
+          <p>Built from custom widgets that follow the ARIA Authoring Practices, plus plain native controls where they work better: native drop-downs for From and To, a cabin class combobox, a plain calendar made of real buttons that read out the day, month and price, spinbuttons, tabs, switches, a slider, a tooltip, a carousel and modal dialogs. Use this one to compare VoiceOver on Mac with JAWS on Windows.</p>
           <span class="pill good">Accessible</span>
         </li>
         <li class="version">
@@ -91,7 +91,7 @@
         <li>Read the page title, then find the main heading and list the landmarks.</li>
         <li>Find the cookie message. Open the cookie settings, turn on Analytics cookies only, and save. How were you told it worked, and where did your focus go?</li>
         <li>Change the trip type to One way, then back to Return.</li>
-        <li>Search for flights from Avalon to Xanadu by typing part of each name.</li>
+        <li>Search for flights from Avalon to Xanadu using the From and To drop-downs.</li>
         <li>Open the calendar from Travel dates. Go to next month, use the Cheapest button to find the cheapest day, then choose it. Then, still in the calendar, choose a return date a week later. When the calendar closes, where are you, and do you know what to do next?</li>
         <li>Add one child and change the cabin class to Business.</li>
         <li>Find out what "Include nearby airports" means, using the help button next to it.</li>
@@ -121,7 +121,7 @@
           </thead>
           <tbody>
             <tr><th scope="row">Trip type</th><td><code>radiogroup</code> with roving focus</td><td>Clickable <code>div</code>s</td></tr>
-            <tr><th scope="row">From and To</th><td>Editable <code>combobox</code> with suggestion list and a count message</td><td>Unlabelled text box, suggestions mouse-only</td></tr>
+            <tr><th scope="row">From and To</th><td>Native <code>select</code> drop-down</td><td>Unlabelled text box, suggestions mouse-only</td></tr>
             <tr><th scope="row">Swap button</th><td><code>role="button"</code> with <code>aria-label</code></td><td>Icon in a <code>div</code></td></tr>
             <tr><th scope="row">Dates</th><td>A plain calendar: the browser's own <code>dialog</code>, an ordinary table, and a real <code>button</code> for each day you can choose. Each button reads its date, whether the price is low, average or high, and what choosing it does. Previous month, Next month and Cheapest buttons. No custom keys</td><td>Mouse-only calendar of <code>div</code>s. Nothing says whether you are choosing departure or return, and cheap or expensive days are shown only by a coloured line</td></tr>
             <tr><th scope="row">Passengers</th><td>Disclosure popover with <code>spinbutton</code>s</td><td>Popover with unlabelled + and − symbols</td></tr>
@@ -160,8 +160,7 @@
         <div>
           <h3>Comboboxes</h3>
           <ul>
-            <li>From and To: is each highlighted suggestion read as you arrow through it?</li>
-            <li>Is the "5 suggestions available" message read?</li>
+            <li>From and To: does VO+Space open a pop-up menu? Can you type a letter to jump to a place?</li>
             <li>Cabin class: is it announced as a combobox, a pop-up button or something else?</li>
           </ul>
         </div>

@@ -625,7 +625,7 @@
     for (let d = 1; d <= days; d++) {
       const iso = W.iso(new Date(y, m, d));
       html += '<td role="gridcell" data-date="' + iso + '" tabindex="' + (iso === focusIso ? 0 : -1) + '"' + (iso === todayIso ? ' aria-current="date"' : '') + '>' +
-        '<span class="dn" aria-hidden="true">' + d + '</span><span class="dp" aria-hidden="true"></span><span class="sr"></span></td>';
+        '<div class="cell"><span class="dn" aria-hidden="true">' + d + '</span><span class="dp" aria-hidden="true"></span><span class="sr"></span></div></td>';
       col++;
       if (col === 7 && d < days) { html += '</tr><tr>'; col = 0; }
     }

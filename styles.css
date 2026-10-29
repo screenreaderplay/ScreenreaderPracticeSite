@@ -281,6 +281,8 @@ dialog.modal::backdrop { background: rgba(10, 16, 32, .6); }
 .cal-month-btn:disabled { opacity: .45; cursor: not-allowed; }
 .cal-foot { justify-content: flex-end; flex-wrap: wrap; }
 /* Spoken text for each day: invisible but covering the whole day, so VoiceOver's cursor and clicks land on the day itself */
+/* Safari does not reliably let a table cell anchor positioned content, so each day has its own positioned box */
+.cal .cell { position: relative; display: block; }
 .cal .sr { position: absolute; inset: 0; overflow: hidden; opacity: 0; white-space: nowrap; font-size: 1rem; color: transparent; pointer-events: none; }
 .cal td[role="gridcell"] { position: relative; height: 50px; padding: 3px 0; line-height: 1.15; vertical-align: middle; }
 .cal .dn { display: block; font-weight: 700; }

@@ -355,3 +355,22 @@ dialog.modal::backdrop { background: rgba(10, 16, 32, .6); }
 .dest-price strong { color: var(--gold); font-family: var(--font-display); font-size: 1.3rem; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* Plain calendar: browser dialog, ordinary table, a real button for each day */
+.cal-dialog { width: min(440px, calc(100vw - 16px)); }
+.cal-plain { gap: 12px; }
+.cal-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-variant-numeric: tabular-nums; }
+.cal-table th { font-size: .78rem; color: var(--muted); font-weight: 700; padding: 4px 0; text-align: center; }
+.cal-table td { padding: 2px; text-align: center; }
+.cal-table .day { position: relative; width: 100%; min-height: 50px; display: grid; place-items: center; align-content: center; border: 0; border-radius: 8px; background: none; color: var(--ink); font: inherit; padding: 4px 0; line-height: 1.15; }
+.cal-table button.day { cursor: pointer; }
+.cal-table button.day:hover { background: var(--accent-soft); }
+.cal-table .day .dn { font-weight: 700; }
+.cal-table .day .dp { font-size: .7rem; color: var(--muted); }
+.cal-table .day.low .dp { color: var(--ok); font-weight: 700; }
+.cal-table .day.high .dp { color: var(--danger); }
+.cal-table .day.in-range { background: var(--accent-soft); }
+.cal-table .day.sel { background: var(--accent); color: var(--accent-ink); }
+.cal-table .day.sel .dp { color: var(--accent-ink); }
+.cal-table .day.past { color: var(--faint); }
+.cal-table .day.past .dn { font-weight: 400; text-decoration: line-through; }

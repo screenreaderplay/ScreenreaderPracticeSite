@@ -156,26 +156,27 @@
     </section>
   </div>
 
-  <div class="cal" id="cal" role="dialog" aria-modal="true" aria-labelledby="cal-step" aria-describedby="cal-help" hidden>
-    <div class="cal-app" role="application" aria-labelledby="cal-step">
-    <h2 class="cal-step" id="cal-step">Choose your departure date</h2>
-    <p class="cal-keys" id="cal-help"></p>
-    <h3 class="h3 cal-month-h" id="cal-title"></h3>
-    <div class="cal-jumps">
-      <button type="button" class="btn btn-secondary cal-month-btn" id="cal-prev">Previous month</button>
-      <button type="button" class="btn btn-secondary cal-month-btn" id="cal-next">Next month</button>
-      <button type="button" class="btn btn-secondary cal-cheap-btn" id="cal-cheap"></button>
-    </div>
-    <table role="grid" id="cal-grid" aria-labelledby="cal-title"></table>
-    <div hidden id="cal-descs"></div>
-    <div class="cal-legend" aria-hidden="true"><span class="lg low">Low price</span><span class="lg high">High price</span></div>
-    <div class="vh" id="cal-live" aria-live="assertive" aria-atomic="true"></div>
-    <div class="cal-foot">
-      <button type="button" class="btn btn-secondary" id="cal-redep" hidden>Change departure date</button>
+  <dialog class="modal cal-dialog" id="cal" aria-labelledby="cal-step">
+    <div class="modal-head">
+      <h2 id="cal-step">Choose your departure date</h2>
       <button type="button" class="btn btn-secondary" id="cal-cancel">Cancel</button>
     </div>
+    <div class="modal-body cal-plain">
+      <h3 class="cal-month-h" id="cal-title"></h3>
+      <div class="cal-jumps">
+        <button type="button" class="btn btn-secondary cal-month-btn" id="cal-prev">Previous month</button>
+        <button type="button" class="btn btn-secondary cal-month-btn" id="cal-next">Next month</button>
+        <button type="button" class="btn btn-secondary cal-cheap-btn" id="cal-cheap"></button>
+      </div>
+      <table class="cal-table" aria-labelledby="cal-title">
+        <thead><tr><th scope="col" abbr="Monday">Mo</th><th scope="col" abbr="Tuesday">Tu</th><th scope="col" abbr="Wednesday">We</th><th scope="col" abbr="Thursday">Th</th><th scope="col" abbr="Friday">Fr</th><th scope="col" abbr="Saturday">Sa</th><th scope="col" abbr="Sunday">Su</th></tr></thead>
+        <tbody id="cal-body"></tbody>
+      </table>
+      <div class="cal-legend" aria-hidden="true"><span class="lg low">Low price</span><span class="lg high">High price</span></div>
+      <p><button type="button" class="btn btn-secondary" id="cal-redep" hidden>Change departure date</button></p>
+      <p class="vh" role="status" id="cal-live"></p>
     </div>
-  </div>
+  </dialog>
   </div>
 
   <section class="results wrap" id="results" aria-labelledby="results-h" hidden>
@@ -530,9 +531,10 @@
     announce(comboStatus, 'Swapped. From ' + (fromIn.value || 'empty') + ', to ' + (toIn.value || 'empty') + '.');
   });
 
-  /* ---------- Travel dates: one button, one calendar, departure then return ---------- */
-  // Design goals: say the calendar has opened, move focus into it, give instructions that match the keys,
-  // read every day with its price band, change month with simple keys, confirm each step, and say what to do next.
+  /* ---------- Travel dates: a plain calendar ----------
+     Built only from standard parts every screen reader already knows:
+     the browser's own <dialog>, an ordinary table, and a real <button> for each day you can choose.
+     No grid role, no application region, no custom keys, no device checks. */
   const datesBtn = $('#dates-btn');
   const t0 = W.today();
   const dates = { dep: null, ret: null };
@@ -553,98 +555,22 @@
   }
   showDates();
 
-  const cal = $('#cal'), grid = $('#cal-grid'), calTitle = $('#cal-title'), calStep = $('#cal-step'), calLive = $('#cal-live');
+  const cal = $('#cal'), calBody = $('#cal-body'), calTitle = $('#cal-title'), calStep = $('#cal-step'), calLive = $('#cal-live');
   const calTarget = datesBtn;
-  let focusD = null, step = 'depart', draftDep = null, draftRet = null;
-  const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  let view = null, step = 'depart';
   const mk = d => d.getFullYear() * 12 + d.getMonth();
-  function addMonths(d, n) {
-    const y = d.getFullYear(), m = d.getMonth() + n;
-    const max = new Date(y, m + 1, 0).getDate();
-    return new Date(y, m, Math.min(d.getDate(), max));
-  }
+  const todayIso = () => W.iso(W.today());
   function route() { return [fromIn.dataset.code || 'CML', toIn.dataset.code || 'ATS']; }
-  // You can always move back to today. In the return step, a date before your departure becomes your new departure date.
-  function minIso() { return W.iso(W.today()); }
-  let cheapList = [], cheapKey = '', cheapPos = -1;
-  // Touch screens (for example VoiceOver on iPhone) get touch instructions and no application region,
-  // because there is no keyboard and the application role gets in the way of swiping.
-  const TOUCH = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-  // The application region and the first-open retry are JAWS and NVDA workarounds, so they only apply on Windows.
-  // In Safari with VoiceOver they make the cursor jump around the grid and can crash Safari.
-  const WINDOWS = /Windows/i.test(navigator.userAgent);
-  if (TOUCH || !WINDOWS) $('.cal-app').removeAttribute('role');
-  const HELP_TOUCH = {
-    depart: 'Swipe to move between days, then double-tap to choose your departure date. The buttons above the days change month or take you to the cheapest day.',
-    ret: 'Swipe to move between days, then double-tap to choose your return date. Choosing a date before your departure date changes your departure date instead. Use Change departure date to start again.'
-  };
-  const HELP_KEYS = {
-    depart: 'Use the arrow keys to move between days. Press N for the next month or P for the previous month. Press C for the next cheapest date. Press Enter to choose a date, or Escape to close. Press H to hear this again.',
-    ret: 'Use the arrow keys to move between days. Press N or P to change month, and C for the next cheapest date. Press Enter to choose your return date. Choosing a date before your departure date changes your departure date instead. Press D to choose a different departure date. Press Escape to close.'
-  };
-  const HELP = TOUCH ? HELP_TOUCH : HELP_KEYS;
-  function sayCal(msg, delay) { calLive.textContent = ''; setTimeout(() => { calLive.textContent = msg; }, delay || 150); }
+  function say(msg) { calLive.textContent = ''; setTimeout(() => { calLive.textContent = msg; }, 100); }
 
-  function cellInfo(iso) {
-    const dis = iso < minIso();
-    const p = W.dayPrice(route()[0], route()[1], iso);
-    let label = spoken(iso);
-    if (dis) label += ', not available';
-    else label += ', ' + p.band + ' price, ' + W.money(p.price);
-    if (iso === draftDep) label += ', your departure date';
-    if (draftRet && iso === draftRet) label += ', your return date';
-    // Say the date first, then what choosing it will do
-    if (!dis) label += step === 'depart' ? ', select as departure date' : iso < draftDep ? ', select as new departure date' : ', select as return date';
-    return { dis, p, label, sel: iso === draftDep || (!!draftRet && iso === draftRet), inRange: !!(draftDep && draftRet && iso > draftDep && iso < draftRet) };
-  }
-  function paintCell(td) {
-    const i = cellInfo(td.dataset.date);
-    if (i.sel) td.setAttribute('aria-selected', 'true'); else td.removeAttribute('aria-selected');
-    if (i.dis) td.setAttribute('aria-disabled', 'true'); else td.removeAttribute('aria-disabled');
-    // On touch screens, skip past days entirely so VoiceOver users don't swipe through weeks of unavailable dates
-    if (TOUCH && i.dis) td.setAttribute('aria-hidden', 'true'); else td.removeAttribute('aria-hidden');
-    td.classList.toggle('in-range', i.inRange);
-    const dp = $('.dp', td);
-    dp.textContent = i.dis ? '' : W.money(i.p.price);
-    dp.className = 'dp ' + (i.dis ? '' : i.p.band);
-    // The spoken text is real text inside the day. Safari with VoiceOver on a Mac ignores aria-label on table cells,
-    // so a label alone left the days sounding blank. The day is position: relative, so on iPhone the hidden text sits
-    // inside the day and a double-tap still lands on it.
-    $('.sr', td).textContent = i.label;
-  }
-  function renderCal(focus) {
-    const y = focusD.getFullYear(), m = focusD.getMonth();
-    calTitle.textContent = W.fmtMonth(focusD);
-    $('#cal-prev').disabled = mk(focusD) <= mk(W.parseISO(minIso()));
-    const offset = (new Date(y, m, 1).getDay() + 6) % 7;
-    const days = new Date(y, m + 1, 0).getDate();
-    const todayIso = W.iso(W.today()), focusIso = W.iso(focusD);
-    let html = '<thead><tr>' + dayNames.map(d => '<th scope="col" abbr="' + d + '">' + d.slice(0, 2) + '</th>').join('') + '</tr></thead><tbody><tr>';
-    let col = 0;
-    for (let i = 0; i < offset; i++) { html += '<td></td>'; col++; }
-    for (let d = 1; d <= days; d++) {
-      const iso = W.iso(new Date(y, m, d));
-      html += '<td role="gridcell" data-date="' + iso + '" tabindex="' + (iso === focusIso ? 0 : -1) + '"' + (iso === todayIso ? ' aria-current="date"' : '') + '>' +
-        '<div class="cell"><span class="dn" aria-hidden="true">' + d + '</span><span class="dp" aria-hidden="true"></span><span class="sr"></span></div></td>';
-      col++;
-      if (col === 7 && d < days) { html += '</tr><tr>'; col = 0; }
-    }
-    while (col > 0 && col < 7) { html += '<td></td>'; col++; }
-    grid.innerHTML = html + '</tr></tbody>';
-    $$('[role="gridcell"]', grid).forEach(paintCell);
-    updateExtras();
-    if (focus) { const c = $('[tabindex="0"]', grid); if (c) c.focus(); }
-  }
   function setStep(s) {
     step = s;
     calStep.textContent = s === 'depart' ? 'Choose your departure date' : 'Now choose your return date';
-    $('#cal-help').textContent = s === 'depart' ? HELP.depart : HELP.ret;
     $('#cal-redep').hidden = s !== 'return';
-    cheapKey = '';
   }
-  function cheapestIn() {
-    const y = focusD.getFullYear(), m = focusD.getMonth(), days = new Date(y, m + 1, 0).getDate(), [f, t] = route();
-    const from = step === 'return' ? draftDep : minIso();
+  function cheapest() {
+    const y = view.getFullYear(), m = view.getMonth(), days = new Date(y, m + 1, 0).getDate(), [f, t] = route();
+    const from = step === 'return' ? dates.dep : todayIso();
     let best = null;
     for (let d = 1; d <= days; d++) {
       const iso = W.iso(new Date(y, m, d));
@@ -654,176 +580,95 @@
     }
     return best;
   }
-  // Cheapest-day shortcut above the days, plus extra detail VoiceOver on iPhone offers under More Content
-  function updateExtras() {
-    const best = cheapestIn(), month = H_MONTH(focusD), btn = $('#cal-cheap');
-    if (best) {
-      btn.hidden = false;
-      btn.textContent = 'Cheapest in ' + month + ': ' + W.fmtShort(best.iso) + ', ' + W.money(best.price);
-      btn.setAttribute('aria-label', 'Cheapest in ' + month + ': ' + spoken(best.iso) + ', ' + W.money(best.price));
-    } else btn.hidden = true;
-    if (!TOUCH) return;
-    let html = best ? '<span id="cal-d-cheap">Cheapest this month: ' + spoken(best.iso) + ', ' + W.money(best.price) + '.</span>' : '';
-    $$('[role="gridcell"]', grid).forEach(td => {
-      const iso = td.dataset.date, ids = [];
-      if (best) ids.push('cal-d-cheap');
-      if (step === 'return' && draftDep && iso >= draftDep) {
-        const n = nights(draftDep, iso);
-        html += '<span id="cal-d-' + iso + '">' + (n === 0 ? 'Same-day return.' : n + (n === 1 ? ' night.' : ' nights.')) + '</span>';
-        ids.unshift('cal-d-' + iso);
+  // Draw the month. Days you can choose are buttons; past days are plain text.
+  function renderMonth(focusIso) {
+    const y = view.getFullYear(), m = view.getMonth(), [f, t] = route();
+    calTitle.textContent = W.fmtMonth(view);
+    $('#cal-prev').disabled = mk(view) <= mk(W.today());
+    const offset = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
+    let html = '<tr>', col = 0;
+    for (let i = 0; i < offset; i++) { html += '<td></td>'; col++; }
+    for (let d = 1; d <= days; d++) {
+      const iso = W.iso(new Date(y, m, d));
+      if (iso < todayIso()) {
+        html += '<td><span class="day past"><span class="dn" aria-hidden="true">' + d + '</span><span class="vh">' + spoken(iso) + ', not available</span></span></td>';
+      } else {
+        const p = W.dayPrice(f, t, iso);
+        let what = step === 'depart' ? 'select as departure date' : iso < dates.dep ? 'select as new departure date' : 'select as return date';
+        let state_ = '';
+        if (iso === dates.dep) state_ = ', your departure date';
+        if (iso === dates.ret && step === 'depart') state_ += ', your return date';
+        const cls = 'day ' + p.band + (iso === dates.dep || (iso === dates.ret && step === 'depart') ? ' sel' : '') +
+          (step === 'depart' && dates.dep && dates.ret && iso > dates.dep && iso < dates.ret ? ' in-range' : '');
+        html += '<td><button type="button" class="' + cls + '" data-date="' + iso + '">' +
+          '<span class="dn" aria-hidden="true">' + d + '</span><span class="dp" aria-hidden="true">' + W.money(p.price) + '</span>' +
+          '<span class="vh">' + spoken(iso) + ', ' + p.band + ' price, ' + W.money(p.price) + state_ + ', ' + what + '</span></button></td>';
       }
-      if (ids.length && td.getAttribute('aria-disabled') !== 'true') td.setAttribute('aria-describedby', ids.join(' '));
-      else td.removeAttribute('aria-describedby');
-    });
-    $('#cal-descs').innerHTML = html;
+      col++;
+      if (col === 7 && d < days) { html += '</tr><tr>'; col = 0; }
+    }
+    while (col > 0 && col < 7) { html += '<td></td>'; col++; }
+    calBody.innerHTML = html + '</tr>';
+    const best = cheapest(), cb = $('#cal-cheap');
+    cb.hidden = !best;
+    if (best) cb.textContent = 'Cheapest in ' + H_MONTHS[view.getMonth()] + ': ' + W.fmtShort(best.iso) + ', ' + W.money(best.price);
+    if (focusIso) { const b = $('[data-date="' + focusIso + '"]', calBody); if (b) b.focus(); }
   }
-  const H_MONTH = d => H_MONTHS[d.getMonth()];
   const H_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  function repaint() { $$('[role="gridcell"]', grid).forEach(paintCell); updateExtras(); }
-  function changeDeparture() {
-    if (step !== 'return') return;
-    setStep('depart');
-    repaint();
-    const c = $('[tabindex="0"]', grid);
-    if (c && document.activeElement !== c) c.focus();
-    sayCal('Choose a new departure date.');
-  }
-  // Jump to the cheapest day in the month shown; each press goes to the next cheapest
-  function jumpCheapest() {
-    const y = focusD.getFullYear(), m = focusD.getMonth(), key = y + '-' + m + '-' + step + '-' + draftDep;
-    if (key !== cheapKey) {
-      const days = new Date(y, m + 1, 0).getDate(), [f, t] = route(), list = [];
-      const from = step === 'return' ? draftDep : minIso();
-      for (let d = 1; d <= days; d++) {
-        const iso = W.iso(new Date(y, m, d));
-        if (iso >= from) list.push({ iso, price: W.dayPrice(f, t, iso).price });
-      }
-      list.sort((a, b) => a.price - b.price || (a.iso < b.iso ? -1 : 1));
-      cheapList = list; cheapKey = key; cheapPos = -1;
-    }
-    if (!cheapList.length) { sayCal('No dates available this month.'); return; }
-    cheapPos = (cheapPos + 1) % cheapList.length;
-    moveTo(W.parseISO(cheapList[cheapPos].iso));
-  }
-  // Keep the departure date even if the calendar closes before a return date is chosen
-  function saveDeparture() {
-    dates.dep = draftDep;
-    if (dates.ret && dates.ret < dates.dep) dates.ret = null;
-    if (!draftRet) dates.ret = null;
-    showDates();
-    clearFieldError(datesBtn);
-  }
+
   function openCal() {
-    draftDep = dates.dep;
-    draftRet = state.trip === 'oneway' ? null : dates.ret;
-    // If a departure date is saved but no return date yet, carry on from choosing the return date
     setStep(state.trip !== 'oneway' && dates.dep && !dates.ret ? 'return' : 'depart');
-    focusD = W.parseISO(draftDep && draftDep >= minIso() ? draftDep : minIso());
+    const start = dates.dep && dates.dep >= todayIso() ? dates.dep : todayIso();
+    view = W.parseISO(start); view.setDate(1);
     calLive.textContent = '';
-    cal.hidden = false;
+    cal.showModal();
     datesBtn.setAttribute('aria-expanded', 'true');
-    renderCal(false);
-    // Give the screen reader a moment to register the newly shown calendar before focus moves into it.
-    // Focusing straight away can leave JAWS in the virtual cursor instead of switching to application mode.
-    calOpens++; calKeyed = false;
-    setTimeout(() => { const c = $('[tabindex="0"]', grid); if (c && !cal.hidden) c.focus(); }, 400);
-    // The first time the calendar opens, JAWS can miss the move into it and stay in the virtual cursor.
-    // If nothing has been pressed yet, focus the day again (on a freshly drawn grid) to give JAWS a second chance.
-    if (calOpens === 1 && WINDOWS && !TOUCH) {
-      setTimeout(() => { if (!cal.hidden && !calKeyed && cal.contains(document.activeElement)) renderCal(true); }, 1100);
-    }
+    renderMonth(start);
   }
-  let calOpens = 0, calKeyed = false;
-  function closeCal(returnFocus) {
-    if (cal.hidden) return;
-    // Take focus out of the application region before hiding it, then return focus to the button after a pause,
-    // so JAWS leaves application mode and goes back to the virtual cursor.
-    if (returnFocus && cal.contains(document.activeElement)) document.activeElement.blur();
-    cal.hidden = true;
+  function closeCal() { if (cal.open) cal.close(); }
+  cal.addEventListener('close', () => {
     datesBtn.setAttribute('aria-expanded', 'false');
-    if (returnFocus) setTimeout(() => datesBtn.focus(), 150);
-  }
-  function commit() {
-    dates.dep = draftDep;
-    dates.ret = draftRet;
     showDates();
-    clearFieldError(datesBtn);
-    closeCal(true);
-  }
-  function pick(cell) {
-    if (cell.getAttribute('aria-disabled') === 'true') { sayCal('Not available. Choose another date.'); return; }
-    const iso = cell.dataset.date;
-    if (step === 'depart') {
-      draftDep = iso;
-      if (state.trip === 'oneway') { draftRet = null; commit(); return; }
-      if (draftRet && draftRet < draftDep) draftRet = null;
-      saveDeparture();
-      setStep('return');
-      repaint();
-      sayCal('Departure date ' + spoken(iso) + '. Now choose your return date.' + (TOUCH ? '' : ' To change your departure date, press D.'));
-    } else if (iso < draftDep) {
-      draftDep = iso;
-      saveDeparture();
-      repaint();
-      sayCal('Departure date changed to ' + spoken(iso) + '. Now choose your return date.');
-    } else {
-      draftRet = iso;
-      commit();
-    }
-  }
-  function moveTo(n) {
-    if (mk(n) < mk(W.parseISO(minIso()))) { sayCal('You cannot go back any further.'); return; }
-    const same = mk(n) === mk(focusD);
-    focusD = n;
-    if (same) {
-      $$('[role="gridcell"]', grid).forEach(c => { c.tabIndex = -1; });
-      const c = $('[data-date="' + W.iso(n) + '"]', grid);
-      c.tabIndex = 0; c.focus();
-    } else renderCal(true);
-  }
-  function changeMonth(dir, keepFocusOnButton) {
-    let n = addMonths(focusD, dir);
-    if (W.iso(n) < minIso()) n = W.parseISO(minIso());
-    if (mk(n) < mk(W.parseISO(minIso()))) { sayCal('You cannot go back any further.'); return; }
-    if (keepFocusOnButton) {
-      focusD = n; renderCal(false);
-      const best = cheapestIn();
-      sayCal(W.fmtMonth(n) + (best ? '. Cheapest day ' + spoken(best.iso) + ', ' + W.money(best.price) : ''));
-    }
-    else moveTo(n);
-  }
-  datesBtn.addEventListener('click', () => (cal.hidden ? openCal() : closeCal(true)));
-  grid.addEventListener('click', e => { const c = e.target.closest('[role="gridcell"]'); if (c) { c.focus(); pick(c); } });
-  cal.addEventListener('keydown', e => {
-    calKeyed = true;
-    const k = e.key, cell = e.target.closest('[role="gridcell"]');
-    if (k === 'Escape') { e.preventDefault(); closeCal(true); return; }
-    if (k === 'Tab') { trapTab(cal, e); return; }
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
-    if (k === 'PageDown' || k === 'n' || k === 'N') { e.preventDefault(); changeMonth(1, !cell); return; }
-    if (k === 'PageUp' || k === 'p' || k === 'P') { e.preventDefault(); changeMonth(-1, !cell); return; }
-    if (k === 'h' || k === 'H') { e.preventDefault(); sayCal($('#cal-help').textContent, 50); return; }
-    if (k === 'c' || k === 'C') { e.preventDefault(); jumpCheapest(); return; }
-    if (k === 'd' || k === 'D') { e.preventDefault(); changeDeparture(); return; }
-    if (!cell) return;
-    const d = W.parseISO(cell.dataset.date), wd = (d.getDay() + 6) % 7;
-    let n = null;
-    switch (k) {
-      case 'ArrowRight': n = W.addDays(d, 1); break;
-      case 'ArrowLeft': n = W.addDays(d, -1); break;
-      case 'ArrowDown': n = W.addDays(d, 7); break;
-      case 'ArrowUp': n = W.addDays(d, -7); break;
-      case 'Home': n = W.addDays(d, -wd); break;
-      case 'End': n = W.addDays(d, 6 - wd); break;
-      case 'Enter': case ' ': e.preventDefault(); pick(cell); return;
-    }
-    if (n) { e.preventDefault(); moveTo(n); }
+    datesBtn.focus();
   });
-  $('#cal-prev').addEventListener('click', () => changeMonth(-1, true));
-  $('#cal-next').addEventListener('click', () => changeMonth(1, true));
-  $('#cal-cancel').addEventListener('click', () => closeCal(true));
-  $('#cal-cheap').addEventListener('click', () => { cheapKey = ''; jumpCheapest(); });
-  $('#cal-redep').addEventListener('click', changeDeparture);
+  datesBtn.addEventListener('click', openCal);
+  $('#cal-cancel').addEventListener('click', closeCal);
+
+  calBody.addEventListener('click', e => {
+    const b = e.target.closest('button[data-date]');
+    if (!b) return;
+    const iso = b.dataset.date;
+    if (step === 'depart' || iso < dates.dep) {
+      const changed = step === 'return';
+      dates.dep = iso;
+      if (dates.ret && dates.ret < iso) dates.ret = null;
+      clearFieldError(datesBtn);
+      if (state.trip === 'oneway') { dates.ret = null; closeCal(); return; }
+      dates.ret = null;
+      setStep('return');
+      renderMonth(iso);
+      say((changed ? 'Departure date changed to ' : 'Departure date ') + spoken(iso) + '. Now choose your return date.');
+    } else {
+      dates.ret = iso;
+      clearFieldError(datesBtn);
+      closeCal();
+    }
+  });
+  function changeMonth(dir) {
+    const n = new Date(view.getFullYear(), view.getMonth() + dir, 1);
+    if (mk(n) < mk(W.today())) return;
+    view = n; renderMonth(null);
+    const best = cheapest();
+    say(W.fmtMonth(n) + (best ? '. Cheapest day ' + spoken(best.iso) + ', ' + W.money(best.price) : ''));
+  }
+  $('#cal-prev').addEventListener('click', () => changeMonth(-1));
+  $('#cal-next').addEventListener('click', () => changeMonth(1));
+  $('#cal-cheap').addEventListener('click', () => { const best = cheapest(); if (best) renderMonth(best.iso); });
+  $('#cal-redep').addEventListener('click', () => {
+    setStep('depart');
+    renderMonth(dates.dep);
+    say('Choose a new departure date.');
+  });
 
   /* ---------- Passengers popover ---------- */
   const paxBtn = $('#pax-btn'), paxPop = $('#pax-pop');
@@ -893,12 +738,8 @@
   });
 
   // Close popovers on outside click
-  // Escape still closes the calendar if focus has wandered outside it
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !cal.hidden && !cal.contains(document.activeElement)) closeCal(true); });
   document.addEventListener('mousedown', e => {
     if (!paxPop.hidden && !paxPop.contains(e.target) && !paxBtn.contains(e.target)) closePax(false);
-    // The calendar does not close on clicks elsewhere. VoiceOver's simulated clicks can land outside it,
-    // which used to close it and lose the dates. It closes with Cancel, Escape, or after choosing dates.
   });
 
   /* ---------- Options ---------- */

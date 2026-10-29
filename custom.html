@@ -580,6 +580,24 @@
     }
     return best;
   }
+  // What a day says and how it looks, for the current step
+  function dayInfo(iso) {
+    const [f, t] = route(), p = W.dayPrice(f, t, iso);
+    const what = step === 'depart' ? 'select as departure date' : iso < dates.dep ? 'select as new departure date' : 'select as return date';
+    let mark = '';
+    if (iso === dates.dep) mark = ', your departure date';
+    if (iso === dates.ret && step === 'depart') mark += ', your return date';
+    const cls = 'day ' + p.band + (iso === dates.dep || (iso === dates.ret && step === 'depart') ? ' sel' : '') +
+      (step === 'depart' && dates.dep && dates.ret && iso > dates.dep && iso < dates.ret ? ' in-range' : '');
+    return { price: p.price, cls, text: spoken(iso) + ', ' + p.band + ' price, ' + W.money(p.price) + mark + ', ' + what };
+  }
+  // Update the existing day buttons in place, so focus and the VoiceOver cursor stay where they are
+  function refreshDays() {
+    $$('button[data-date]', calBody).forEach(b => { const i = dayInfo(b.dataset.date); b.className = i.cls; $('.vh', b).textContent = i.text; });
+    const best = cheapest(), cb = $('#cal-cheap');
+    cb.hidden = !best;
+    if (best) cb.textContent = 'Cheapest in ' + H_MONTHS[view.getMonth()] + ': ' + W.fmtShort(best.iso) + ', ' + W.money(best.price);
+  }
   // Draw the month. Days you can choose are buttons; past days are plain text.
   function renderMonth(focusIso) {
     const y = view.getFullYear(), m = view.getMonth(), [f, t] = route();
@@ -593,16 +611,10 @@
       if (iso < todayIso()) {
         html += '<td><span class="day past"><span class="dn" aria-hidden="true">' + d + '</span><span class="vh">' + spoken(iso) + ', not available</span></span></td>';
       } else {
-        const p = W.dayPrice(f, t, iso);
-        let what = step === 'depart' ? 'select as departure date' : iso < dates.dep ? 'select as new departure date' : 'select as return date';
-        let state_ = '';
-        if (iso === dates.dep) state_ = ', your departure date';
-        if (iso === dates.ret && step === 'depart') state_ += ', your return date';
-        const cls = 'day ' + p.band + (iso === dates.dep || (iso === dates.ret && step === 'depart') ? ' sel' : '') +
-          (step === 'depart' && dates.dep && dates.ret && iso > dates.dep && iso < dates.ret ? ' in-range' : '');
-        html += '<td><button type="button" class="' + cls + '" data-date="' + iso + '">' +
-          '<span class="dn" aria-hidden="true">' + d + '</span><span class="dp" aria-hidden="true">' + W.money(p.price) + '</span>' +
-          '<span class="vh">' + spoken(iso) + ', ' + p.band + ' price, ' + W.money(p.price) + state_ + ', ' + what + '</span></button></td>';
+        const i = dayInfo(iso);
+        html += '<td><button type="button" class="' + i.cls + '" data-date="' + iso + '">' +
+          '<span class="dn" aria-hidden="true">' + d + '</span><span class="dp" aria-hidden="true">' + W.money(i.price) + '</span>' +
+          '<span class="vh">' + i.text + '</span></button></td>';
       }
       col++;
       if (col === 7 && d < days) { html += '</tr><tr>'; col = 0; }
@@ -621,15 +633,21 @@
     const start = dates.dep && dates.dep >= todayIso() ? dates.dep : todayIso();
     view = W.parseISO(start); view.setDate(1);
     calLive.textContent = '';
+    // Draw the days first and mark the starting day with autofocus, so the dialog opens straight onto it
+    // instead of landing on Cancel and then jumping
+    renderMonth(null);
+    const first = $('[data-date="' + start + '"]', calBody);
+    if (first) first.autofocus = true;
     cal.showModal();
+    if (first) first.autofocus = false;
     datesBtn.setAttribute('aria-expanded', 'true');
-    renderMonth(start);
   }
   function closeCal() { if (cal.open) cal.close(); }
   cal.addEventListener('close', () => {
     datesBtn.setAttribute('aria-expanded', 'false');
     showDates();
-    datesBtn.focus();
+    // A short pause lets Safari and VoiceOver finish closing the dialog before focus returns to Travel dates
+    setTimeout(() => datesBtn.focus(), 100);
   });
   datesBtn.addEventListener('click', openCal);
   $('#cal-cancel').addEventListener('click', closeCal);
@@ -646,11 +664,12 @@
       if (state.trip === 'oneway') { dates.ret = null; closeCal(); return; }
       dates.ret = null;
       setStep('return');
-      renderMonth(iso);
+      refreshDays();
       say((changed ? 'Departure date changed to ' : 'Departure date ') + spoken(iso) + '. Now choose your return date.');
     } else {
       dates.ret = iso;
       clearFieldError(datesBtn);
+      showDates();
       closeCal();
     }
   });

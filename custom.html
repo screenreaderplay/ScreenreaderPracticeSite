@@ -85,7 +85,9 @@
         <div class="route">
           <div class="field">
             <label for="from-input">From</label>
-            <select id="from-input" class="control"></select>
+            <input id="from-input" class="control" type="text" autocomplete="off" spellcheck="false" aria-describedby="from-hint" data-hint="from-hint">
+            <span class="vh" id="from-hint">Type to search places, then press Down arrow to reach the results.</span>
+            <div class="pop place-results" id="from-results" hidden><ul class="listbox" aria-label="From results"></ul></div>
             <span class="field-error" id="from-err" hidden></span>
           </div>
           <div class="swap" role="button" tabindex="0" id="swap" aria-label="Swap From and To">
@@ -93,7 +95,9 @@
           </div>
           <div class="field">
             <label for="to-input">To</label>
-            <select id="to-input" class="control"></select>
+            <input id="to-input" class="control" type="text" autocomplete="off" spellcheck="false" aria-describedby="to-hint" data-hint="to-hint">
+            <span class="vh" id="to-hint">Type to search places, then press Down arrow to reach the results.</span>
+            <div class="pop place-results" id="to-results" hidden><ul class="listbox" aria-label="To results"></ul></div>
             <span class="field-error" id="to-err" hidden></span>
           </div>
         </div>
@@ -439,32 +443,103 @@
   let statusTimer = null;
   function announce(el, msg, delay) {
     clearTimeout(statusTimer);
-    statusTimer = setTimeout(() => { el.textContent = msg; }, delay || 0);
+    el.textContent = '';
+    statusTimer = setTimeout(() => { el.textContent = msg; }, Math.max(delay || 0, 50));
   }
 
   /* ---------- Trip type ---------- */
   makeRadioGroup($('#trip'), v => { state.trip = v; if (typeof showDates === 'function') showDates(); });
 
-  /* ---------- From / To: plain native drop-downs ---------- */
+  /* ---------- From / To: type to search, results are plain buttons ----------
+     No combobox role and no aria-activedescendant: the text box is a text box,
+     the results are a list of real buttons straight after it, and a status
+     message says how many there are. This holds up in VoiceOver on Mac and iPhone. */
   const comboStatus = $('#combo-status');
-  function setAirport(sel, code) {
-    sel.value = code || '';
-    sel.dataset.code = sel.value;
+  function setAirport(input, code) {
+    const a = W.airport(code);
+    input.value = a ? a.name + ' (' + a.code + ')' : '';
+    input.dataset.code = a ? a.code : '';
   }
-  function makeSelect(sel) {
-    sel.innerHTML = '<option value="">Choose a place</option>' +
-      W.airports.map(a => '<option value="' + a.code + '">' + a.name + ' (' + a.code + ')</option>').join('');
-    sel.addEventListener('change', () => { sel.dataset.code = sel.value; if (sel.value) clearFieldError(sel); });
+  function matches(q) {
+    q = (q || '').trim().toLowerCase();
+    if (!q) return W.airports.slice();
+    return W.airports.filter(a =>
+      a.name.toLowerCase().split(/[\s-]+/).some(w => w.startsWith(q)) ||
+      a.name.toLowerCase().startsWith(q) || a.code.toLowerCase().startsWith(q));
+  }
+  function makePlace(input) {
+    const box = $('#' + input.id.replace('-input', '-results'));
+    const ul = $('ul', box);
+    const field = input.closest('.field');
+    const label = input.id.startsWith('from') ? 'From' : 'To';
+    let found = [];
+    function hide() { box.hidden = true; }
+    function show(q, speak) {
+      found = matches(q);
+      ul.innerHTML = '';
+      found.forEach(a => {
+        const li = document.createElement('li');
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'optrow'; b.dataset.code = a.code;
+        b.innerHTML = '<span>' + a.name + '</span><span class="code">' + a.code + '</span>';
+        b.setAttribute('aria-label', a.name + ' (' + a.code + ')');
+        li.appendChild(b); ul.appendChild(li);
+      });
+      box.hidden = !found.length;
+      if (speak) announce(comboStatus, found.length
+        ? found.length + (found.length === 1 ? ' result' : ' results') + ' available. Press Down arrow to reach them.'
+        : 'No places match.', 500);
+    }
+    function pick(code) {
+      setAirport(input, code);
+      hide();
+      clearFieldError(input);
+      input.focus();
+      announce(comboStatus, label + ': ' + W.airport(code).name + ' selected.', 150);
+    }
+    function settle() {
+      hide();
+      if (!input.dataset.code) { const a = W.airportByName(input.value); if (a) setAirport(input, a.code); }
+    }
+    function buttons() { return $$('button', ul); }
+    input.addEventListener('input', () => {
+      input.dataset.code = '';
+      if (input.value.trim()) show(input.value, true);
+      else { hide(); comboStatus.textContent = ''; }
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (box.hidden) show(input.dataset.code ? '' : input.value, false);
+        const b = buttons()[0]; if (b) b.focus();
+      } else if (e.key === 'Escape') {
+        if (!box.hidden) { e.preventDefault(); hide(); }
+      } else if (e.key === 'Enter' && !box.hidden && found.length === 1) {
+        e.preventDefault(); pick(found[0].code);
+      }
+    });
+    ul.addEventListener('click', e => { const b = e.target.closest('button'); if (b) pick(b.dataset.code); });
+    ul.addEventListener('keydown', e => {
+      const list = buttons(), i = list.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); if (list[i + 1]) list[i + 1].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); if (i > 0) list[i - 1].focus(); else input.focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); hide(); input.focus(); }
+    });
+    // Close when focus or a click goes outside this field (not on blur: VoiceOver
+    // moving into the results takes focus off the box, and that must not close them).
+    document.addEventListener('focusin', e => { if (!box.hidden && !field.contains(e.target)) settle(); });
+    document.addEventListener('mousedown', e => { if (!box.hidden && !field.contains(e.target)) settle(); });
+    input.addEventListener('change', () => { if (box.hidden) settle(); });
   }
   const fromIn = $('#from-input'), toIn = $('#to-input');
-  makeSelect(fromIn);
-  makeSelect(toIn);
+  makePlace(fromIn);
+  makePlace(toIn);
   setAirport(fromIn, 'CML'); setAirport(toIn, 'ATS');
   activate($('#swap'), () => {
     const a = fromIn.dataset.code, b = toIn.dataset.code;
     setAirport(fromIn, b); setAirport(toIn, a);
     const nm = c => { const a = W.airport(c); return a ? a.name : 'empty'; };
-    announce(comboStatus, 'Swapped. From ' + nm(fromIn.value) + ', to ' + nm(toIn.value) + '.');
+    announce(comboStatus, 'Swapped. From ' + nm(fromIn.dataset.code) + ', to ' + nm(toIn.dataset.code) + '.');
   });
 
   /* ---------- Travel dates: a plain calendar ----------

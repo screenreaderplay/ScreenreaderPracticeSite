@@ -705,10 +705,19 @@
     cheapPos = (cheapPos + 1) % cheapList.length;
     moveTo(W.parseISO(cheapList[cheapPos].iso));
   }
+  // Keep the departure date even if the calendar closes before a return date is chosen
+  function saveDeparture() {
+    dates.dep = draftDep;
+    if (dates.ret && dates.ret < dates.dep) dates.ret = null;
+    if (!draftRet) dates.ret = null;
+    showDates();
+    clearFieldError(datesBtn);
+  }
   function openCal() {
     draftDep = dates.dep;
     draftRet = state.trip === 'oneway' ? null : dates.ret;
-    setStep('depart');
+    // If a departure date is saved but no return date yet, carry on from choosing the return date
+    setStep(state.trip !== 'oneway' && dates.dep && !dates.ret ? 'return' : 'depart');
     focusD = W.parseISO(draftDep && draftDep >= minIso() ? draftDep : minIso());
     calLive.textContent = '';
     cal.hidden = false;
@@ -748,11 +757,13 @@
       draftDep = iso;
       if (state.trip === 'oneway') { draftRet = null; commit(); return; }
       if (draftRet && draftRet < draftDep) draftRet = null;
+      saveDeparture();
       setStep('return');
       repaint();
       sayCal('Departure date ' + spoken(iso) + '. Now choose your return date.' + (TOUCH ? '' : ' To change your departure date, press D.'));
     } else if (iso < draftDep) {
       draftDep = iso;
+      saveDeparture();
       repaint();
       sayCal('Departure date changed to ' + spoken(iso) + '. Now choose your return date.');
     } else {
@@ -882,11 +893,12 @@
   });
 
   // Close popovers on outside click
+  // Escape still closes the calendar if focus has wandered outside it
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !cal.hidden && !cal.contains(document.activeElement)) closeCal(true); });
   document.addEventListener('mousedown', e => {
     if (!paxPop.hidden && !paxPop.contains(e.target) && !paxBtn.contains(e.target)) closePax(false);
-    // Screen readers sometimes send a pretend click with no position (0, 0). Don't treat that as a click outside the calendar.
-    const synthetic = e.clientX === 0 && e.clientY === 0;
-    if (!cal.hidden && !synthetic && !cal.contains(e.target) && !calTarget.contains(e.target)) closeCal(false);
+    // The calendar does not close on clicks elsewhere. VoiceOver's simulated clicks can land outside it,
+    // which used to close it and lose the dates. It closes with Cancel, Escape, or after choosing dates.
   });
 
   /* ---------- Options ---------- */

@@ -467,9 +467,19 @@
         li.setAttribute('role', 'option');
         li.id = list.id + '-' + a.code;
         li.setAttribute('aria-selected', 'false');
+        li.tabIndex = -1;
         li.innerHTML = '<span>' + a.name + '</span><span class="code">' + a.code + '</span>';
         li.addEventListener('mousedown', e => e.preventDefault());
         li.addEventListener('click', () => choose(i));
+        li.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(i); }
+          else if (e.key === 'Escape') { e.preventDefault(); close(); input.focus(); }
+          else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            const sib = e.key === 'ArrowDown' ? li.nextElementSibling : li.previousElementSibling;
+            if (sib) sib.focus();
+          }
+        });
         list.appendChild(li);
       });
     }
@@ -488,6 +498,11 @@
       setAirport(input, opts[i].code);
       close();
       clearFieldError(input);
+      if (document.activeElement !== input) input.focus();
+    }
+    function settle() {
+      close();
+      if (!input.dataset.code) { const a = W.airportByName(input.value); if (a) setAirport(input, a.code); }
     }
     input.addEventListener('input', () => {
       input.dataset.code = '';
@@ -499,8 +514,12 @@
     input.addEventListener('keydown', e => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        if (list.hidden) { build(input.dataset.code ? '' : input.value); open(); }
-        setActive(Math.min(active + 1, opts.length - 1));
+        if (list.hidden) {
+          // Show the list first, then point at the first option a moment later,
+          // so Safari has the options ready before VoiceOver is told about them.
+          build(input.dataset.code ? '' : input.value); open();
+          setTimeout(() => setActive(0), 60);
+        } else setActive(Math.min(active + 1, opts.length - 1));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         if (!list.hidden) setActive(Math.max(active - 1, 0));
@@ -514,12 +533,16 @@
     input.addEventListener('click', () => {
       if (list.hidden) { build(input.dataset.code ? '' : input.value); open(); } else close();
     });
-    input.addEventListener('blur', () => {
-      setTimeout(() => {
-        close();
-        if (!input.dataset.code) { const a = W.airportByName(input.value); if (a) setAirport(input, a.code); }
-      }, 150);
+    // Close only when focus or a click goes somewhere else on the page. Not on blur:
+    // on a Mac, moving the VoiceOver cursor into the list takes focus off the box,
+    // and closing then made the list vanish before it could be used.
+    document.addEventListener('focusin', e => {
+      if (!list.hidden && e.target !== input && !list.contains(e.target)) settle();
     });
+    document.addEventListener('mousedown', e => {
+      if (!list.hidden && e.target !== input && !list.contains(e.target)) settle();
+    });
+    input.addEventListener('change', () => { if (list.hidden && !input.dataset.code) settle(); });
   }
   const fromIn = $('#from-input'), toIn = $('#to-input');
   makeCombo(fromIn, $('#from-list'));

@@ -515,14 +515,21 @@
     // clears it, so you start a fresh search instead of adding to "Camelot (CML)".
     input.addEventListener('beforeinput', e => {
       if (!input.dataset.code) return;
-      if (e.inputType.startsWith('insert')) { input.value = ''; }
+      if (e.inputType === 'insertText' && e.data) {
+        // Put the letter in ourselves: Safari drops it if we only empty the box.
+        e.preventDefault();
+        input.value = e.data;
+        input.setSelectionRange(input.value.length, input.value.length);
+        onTyped();
+      } else if (e.inputType.startsWith('insert')) { input.value = ''; }
       else if (e.inputType.startsWith('delete')) { e.preventDefault(); input.value = ''; input.dataset.code = ''; hide(); sayPlace('Cleared. Type to search places.'); }
     });
-    input.addEventListener('input', () => {
+    function onTyped() {
       input.dataset.code = '';
       if (input.value.trim()) show(input.value, true);
       else { hide(); clearTimeout(placeTimer); placeStatus.textContent = ''; }
-    });
+    }
+    input.addEventListener('input', onTyped);
     input.addEventListener('keydown', e => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();

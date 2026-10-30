@@ -1,309 +1,378 @@
 <!doctype html>
-<html>
+<html lang="en-GB">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<title>Untitled</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Search flights – Wyvernway (inaccessible version)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
 <link rel="stylesheet" href="styles.css">
-<style>
-  .cal .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
-  .cal .dow { font-size: .78rem; color: var(--faint); font-weight: 700; padding: 4px 0; }
-  .promo { background: var(--gold); color: var(--surface); font-size: .85rem; font-weight: 700; }
-  .promo .wrap { padding-block: 6px; }
-  .foot-form { display: flex; gap: 8px; flex-wrap: wrap; }
-  .foot-form input { font: inherit; padding: 8px 10px; border-radius: 8px; border: 0; }
-</style>
 </head>
-<body class="no-focus">
+<body>
+<div id="page">
+<a class="skip" href="#main">Skip to main content</a>
 
 <div class="practice">
   <div class="wrap">
-    <div><strong>Practice site.</strong> Version 2 of 2: deliberately inaccessible. Wyvernway is not a real company.</div>
-    <div>For all versions <a href="index.html">click here</a></div>
+    <p><strong>Practice site.</strong> Version 2 of 2: inaccessible. It looks the same as version 1 but has hidden faults. Wyvernway is not a real company.</p>
+    <a href="index.html">All versions and practice tasks</a>
   </div>
 </div>
 
-<div class="promo"><div class="wrap" id="promo">Flash sale: 20% off flights to Valhalla. Ends in 0:45</div></div>
-
-<div class="site-header">
+<header class="site-header">
   <div class="wrap">
-    <div class="brand" onclick="location.href='broken.html'" style="cursor:pointer">
-      <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'%3E%3Cpath d='M3 22c6-1 10-5 12-12 2 6 6 9 16 9-6 3-11 3-14 1-2 4-8 6-14 2z' fill='%23f4f6fa'/%3E%3Ccircle cx='24' cy='10' r='2.4' fill='%234fd1c5'/%3E%3C/svg%3E" width="34" height="34">
+    <a class="brand" href="broken.html">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true" focusable="false"><path d="M3 22c6-1 10-5 12-12 2 6 6 9 16 9-6 3-11 3-14 1-2 4-8 6-14 2z" fill="currentColor"/><circle cx="24" cy="10" r="2.4" fill="#4fd1c5"/></svg>
       Wyvernway
-    </div>
-    <div class="site-nav">
-      <div class="navlist">
-        <div class="navitem current" onclick="location.href='broken.html'">Flights</div>
-        <div class="navitem">Hotels</div>
-        <div class="navitem">Car hire</div>
-        <div class="navitem">Help</div>
-      </div>
-    </div>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="broken.html" class="navitem current">Flights</a></li>
+        <li><a href="#main">Hotels</a></li>
+        <li><a href="#main">Car hire</a></li>
+        <li><a href="#faq-h">Help</a></li>
+      </ul>
+    </nav>
   </div>
-</div>
+</header>
 
-<div>
+<main id="main" tabindex="-1">
   <div class="hero">
     <div class="wrap">
-      <div class="eyebrow">Flights to places that never existed</div>
-      <div class="h1">Search flights to legendary places</div>
-      <div class="lede">Compare fares from six imaginary airlines to fifteen mythical destinations, from Camelot to Valhalla.</div>
+      <p class="eyebrow">Flights to places that never existed</p>
+      <h1>Search flights to legendary places</h1>
+      <p class="lede">Compare fares from six imaginary airlines to fifteen mythical destinations, from Camelot to Valhalla.</p>
     </div>
   </div>
 
   <div class="wrap search-wrap">
-    <div class="search-card">
-      <div class="vague-error" id="errors" hidden>Please check the highlighted fields</div>
+    <section class="search-card" aria-labelledby="search-h">
+      <h2 id="search-h" class="vh">Flight search</h2>
+
+      <div class="error-summary" id="errors" tabindex="-1" hidden>
+        <h3 id="errors-h">There is a problem with your search</h3>
+        <ul id="errors-list"></ul>
+      </div>
 
       <div class="row row-top">
-        <div class="seg" id="trip">
-          <div class="opt on" data-value="return"><span class="dot"></span>Return</div>
-          <div class="opt" data-value="oneway"><span class="dot"></span>One way</div>
+        <div>
+          <div class="legend" id="trip-label">Trip type</div>
+          <div class="seg" role="radiogroup" aria-labelledby="trip-label" id="trip">
+            <div class="opt on" role="radio" tabindex="0" data-value="return"><span class="dot"></span>Return</div>
+            <div class="opt" role="radio" tabindex="-1" data-value="oneway"><span class="dot"></span>One way</div>
+          </div>
         </div>
       </div>
 
       <div class="row">
         <div class="route">
           <div class="field">
-            <div class="label">From</div>
-            <input id="from-input" class="control" type="text" autocomplete="off">
-            <div id="from-list" class="pop listbox" hidden></div>
+            <label for="from-input">From</label>
+            <input id="from-input" class="control" type="text" autocomplete="off" spellcheck="false" aria-describedby="from-hint" data-hint="from-hint">
+            <span class="vh" id="from-hint">Type to search places, then press Down arrow to reach the results.</span>
+            <div class="pop place-results" id="from-results" aria-hidden="true" hidden><ul class="listbox" aria-label="From results"></ul></div>
+            <span class="field-error" id="from-err" hidden></span>
           </div>
-          <div class="swap" id="swap">
-            <svg width="20" height="20" viewBox="0 0 20 20"><path d="M6 3 2 7l4 4M2 7h12M14 17l4-4-4-4M18 13H6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="swap" role="button" tabindex="0" id="swap">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 3 2 7l4 4M2 7h12M14 17l4-4-4-4M18 13H6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div class="field">
-            <div class="label">To</div>
-            <input id="to-input" class="control" type="text" autocomplete="off">
-            <div id="to-list" class="pop listbox" hidden></div>
+            <label for="to-input">To</label>
+            <input id="to-input" class="control" type="text" autocomplete="off" spellcheck="false" aria-describedby="to-hint" data-hint="to-hint">
+            <span class="vh" id="to-hint">Type to search places, then press Down arrow to reach the results.</span>
+            <div class="pop place-results" id="to-results" aria-hidden="true" hidden><ul class="listbox" aria-label="To results"></ul></div>
+            <span class="field-error" id="to-err" hidden></span>
           </div>
         </div>
-        <div class="field" style="flex: 1 1 320px;">
-          <div class="label">Travel dates</div>
-          <div class="control btnlike cal-btn" id="dates-btn"><span id="dates-val"></span>
-            <svg width="18" height="18" viewBox="0 0 18 18"><rect x="2" y="3.5" width="14" height="12.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 7.5h14M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.6"/></svg>
-          </div>
-        </div>
+        <div class="field" id="dates-field" style="flex: 1 1 320px;">
+          <div class="label" id="dates-label">Travel dates</div>
+          <button type="button" class="control btnlike cal-btn" id="dates-btn" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="dates-label dates-val"><span id="dates-val"><span id="dates-show" aria-hidden="true"></span><span class="vh" id="dates-say"></span></span>
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" focusable="false"><rect x="2" y="3.5" width="14" height="12.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 7.5h14M6 2v3M12 2v3" stroke="currentColor" stroke-width="1.6"/></svg>
+          </button>
+          <span class="field-error" id="dates-btn-err" hidden></span>
         </div>
       </div>
 
       <div class="row">
         <div class="field" style="flex: 0 1 340px;">
-          <div class="label">Passengers and cabin</div>
-          <div class="control btnlike" id="pax-btn"><span id="pax-val">1 adult, Economy</span></div>
-          <div class="pop pax-pop" id="pax-pop" hidden>
+          <div class="label" id="pax-label">Passengers and cabin</div>
+          <div class="control btnlike" role="button" tabindex="0" id="pax-btn" aria-expanded="false" aria-controls="pax-pop" aria-labelledby="pax-label pax-val"><span id="pax-val">1 adult, Economy</span></div>
+          <div class="pop pax-pop" id="pax-pop" role="group" aria-labelledby="pax-label" hidden>
             <div class="counter">
-              <div class="who"><span>Adults</span><span class="hint lowc">16 or over</span></div>
+              <div class="who"><span id="ad-label">Adults</span><span class="hint">16 or over</span></div>
               <div class="stepper">
-                <span class="step-btn" data-for="adults" data-step="-1">−</span>
-                <span class="step-val" id="adults" data-min="1" data-max="9">1</span>
-                <span class="step-btn" data-for="adults" data-step="1">+</span>
+                <span class="step-btn" role="button" tabindex="-1" aria-label="Fewer adults" data-for="adults" data-step="-1">−</span>
+                <span class="step-val" role="spinbutton" tabindex="0" id="adults" aria-labelledby="ad-label" aria-valuemin="1" aria-valuemax="9" aria-valuenow="1">1</span>
+                <span class="step-btn" role="button" tabindex="-1" aria-label="More adults" data-for="adults" data-step="1">+</span>
               </div>
             </div>
             <div class="counter">
-              <div class="who"><span>Children</span><span class="hint lowc">2 to 15</span></div>
+              <div class="who"><span id="ch-label">Children</span><span class="hint">2 to 15</span></div>
               <div class="stepper">
-                <span class="step-btn" data-for="children" data-step="-1">−</span>
-                <span class="step-val" id="children" data-min="0" data-max="8">0</span>
-                <span class="step-btn" data-for="children" data-step="1">+</span>
+                <span class="step-btn" role="button" tabindex="-1" aria-label="Fewer children" data-for="children" data-step="-1">−</span>
+                <span class="step-val" role="spinbutton" tabindex="0" id="children" aria-labelledby="ch-label" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0">0</span>
+                <span class="step-btn" role="button" tabindex="-1" aria-label="More children" data-for="children" data-step="1">+</span>
               </div>
             </div>
             <div class="field">
-              <div class="label">Cabin class</div>
-              <div class="control btnlike" id="cabin"><span id="cabin-val">Economy</span></div>
-              <div class="pop listbox" id="cabin-list" hidden></div>
+              <div class="label" id="cabin-label">Cabin class</div>
+              <div class="control btnlike" role="combobox" tabindex="0" id="cabin" aria-haspopup="listbox" aria-expanded="false" aria-controls="cabin-list" aria-labelledby="cabin-label"><span id="cabin-val">Economy</span></div>
+              <ul class="pop listbox" id="cabin-list" role="listbox" aria-labelledby="cabin-label" tabindex="-1" hidden></ul>
             </div>
-            <div class="btn btn-primary" id="pax-done">Done</div>
+            <div class="btn btn-primary" role="button" tabindex="0" id="pax-done">Done</div>
           </div>
         </div>
       </div>
 
       <div class="row" style="justify-content: space-between; align-items: center;">
         <div class="options">
-          <div class="chk" id="opt-direct"><span class="box"></span><span>Direct flights only</span></div>
-          <span class="tip-wrap">
-            <div class="chk" id="opt-nearby"><span class="box"></span><span>Include nearby airports</span></div>
-            <span class="tip-btn" id="tip-btn"><svg viewBox="0 0 16 16"><circle cx="8" cy="4" r="1.3" fill="currentColor"/><path d="M8 7v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-            <div class="tip" id="tip" hidden>Adds airports within 150 miles. For example, Lyonesse when you fly to Avalon.</div>
+          <div class="chk" role="checkbox" aria-checked="false" tabindex="0" id="opt-direct"><span class="box"></span>Direct flights only</div>
+          <span class="tip-wrap" id="tip-wrap">
+            <div class="chk" role="checkbox" aria-checked="false" tabindex="0" id="opt-nearby"><span class="box"></span>Include nearby airports</div>
+            <div class="tip-btn" role="button" tabindex="0" id="tip-nearby-btn" aria-label="About nearby airports" aria-describedby="tip-nearby">?</div>
+            <div class="tip" role="tooltip" id="tip-nearby" hidden>Adds airports within 150 miles. For example, Lyonesse when you fly to Avalon.</div>
           </span>
-          <div class="chk" id="opt-flex"><span class="switch-track"></span><span>Flexible dates (3 days either side)</span></div>
+          <div class="chk" role="switch" aria-checked="false" tabindex="0" id="opt-flex"><span class="switch-track"></span>Flexible dates (3 days either side)</div>
         </div>
-        <div class="btn btn-primary btn-search" id="search-btn">Search</div>
+        <div class="btn btn-primary btn-search" role="button" tabindex="0" id="search-btn">Search flights</div>
       </div>
-    </div>
+      <div id="combo-status" class="vh" role="status"></div>
+      <div id="place-status" class="vh" aria-live="assertive" aria-atomic="true"></div>
+    </section>
   </div>
 
-  <div class="cal" id="cal" hidden>
-    <div class="cal-head">
-      <div class="cal-nav" id="cal-prev">‹</div>
-      <div class="h3" id="cal-title"></div>
-      <div class="cal-nav" id="cal-next">›</div>
+  <dialog class="modal cal-dialog cal-float" id="cal" aria-labelledby="cal-step">
+    <div class="modal-head">
+      <h2 id="cal-step">Choose your departure date</h2>
+      <button type="button" class="btn btn-secondary" id="cal-cancel">Cancel</button>
     </div>
-    <div class="days" id="cal-grid"></div>
+    <div class="modal-body cal-plain">
+      <div class="cal-jumps">
+        <button type="button" class="btn btn-secondary cal-month-btn" id="cal-prev">Previous month</button>
+        <button type="button" class="btn btn-secondary cal-month-btn" id="cal-next">Next month</button>
+        <button type="button" class="btn btn-secondary cal-cheap-btn" id="cal-cheap"></button>
+      </div>
+      <div class="cal-months" id="cal-months"></div>
+      <div class="cal-legend" aria-hidden="true"><span class="lg low">Low price</span><span class="lg high">High price</span></div>
+      <p><button type="button" class="btn btn-secondary" id="cal-redep" hidden>Change departure date</button></p>
+      <p class="vh" role="status" id="cal-live"></p>
+    </div>
+  </dialog>
   </div>
 
-  <div class="results wrap" id="results" hidden>
+  <section class="results wrap" id="results" aria-labelledby="results-h" hidden>
     <div class="results-head">
       <div>
-        <div class="h2" id="results-h">Flights</div>
-        <div class="hint lowc" id="results-meta"></div>
+        <h2 id="results-h" tabindex="-1">Flights</h2>
+        <p class="hint" id="results-meta"></p>
       </div>
-      <div id="status" class="status"></div>
+      <div id="status" class="status" role="status"></div>
+      <div id="save-status" class="vh" role="status"></div>
     </div>
 
     <div class="layout">
-      <div class="filters">
-        <div class="h2">Filter results</div>
+      <aside class="filters" aria-labelledby="filters-h">
+        <h2 id="filters-h">Filter results</h2>
         <div class="facet">
-          <div class="acc-btn open" data-target="f-stops">Stops</div>
-          <div class="facet-body" id="f-stops">
-            <div class="chk on" data-stops="0"><span class="box"></span><span>Direct</span></div>
-            <div class="chk on" data-stops="1"><span class="box"></span><span>1 stop</span></div>
-            <div class="chk on" data-stops="2"><span class="box"></span><span>2 or more stops</span></div>
+          <h3><div class="acc-btn" role="button" tabindex="0" id="f-stops-btn" aria-expanded="true" aria-controls="f-stops">Stops</div></h3>
+          <div class="facet-body" id="f-stops" role="region" aria-labelledby="f-stops-btn">
+            <div role="group" aria-labelledby="f-stops-btn" class="stack">
+              <div class="chk" role="checkbox" aria-checked="true" tabindex="0" data-stops="0"><span class="box"></span>Direct</div>
+              <div class="chk" role="checkbox" aria-checked="true" tabindex="0" data-stops="1"><span class="box"></span>1 stop</div>
+              <div class="chk" role="checkbox" aria-checked="true" tabindex="0" data-stops="2"><span class="box"></span>2 or more stops</div>
+            </div>
           </div>
         </div>
         <div class="facet">
-          <div class="acc-btn open" data-target="f-air">Airlines</div>
-          <div class="facet-body" id="f-air"></div>
+          <h3><div class="acc-btn" role="button" tabindex="0" id="f-air-btn" aria-expanded="true" aria-controls="f-air">Airlines</div></h3>
+          <div class="facet-body" id="f-air" role="region" aria-labelledby="f-air-btn">
+            <div role="group" aria-labelledby="f-air-btn" class="stack" id="airline-filters"></div>
+          </div>
         </div>
         <div class="facet">
-          <div class="acc-btn" data-target="f-time">Departure time</div>
-          <div class="facet-body range-row" id="f-time" hidden>
-            <div class="lowc">Departs before</div>
+          <h3><div class="acc-btn" role="button" tabindex="0" id="f-time-btn" aria-expanded="false" aria-controls="f-time">Departure time</div></h3>
+          <div class="facet-body range-row" id="f-time" role="region" aria-labelledby="f-time-btn" hidden>
+            <div id="before-label">Departs before</div>
             <div class="slider" id="slider">
               <div class="slider-track"></div>
               <div class="slider-fill" id="slider-fill" style="width: 100%;"></div>
-              <div class="slider-thumb" id="before" style="left: 100%;"></div>
+              <div class="slider-thumb" role="slider" tabindex="0" id="before" aria-labelledby="before-label" aria-valuemin="7" aria-valuemax="24" aria-valuenow="24" aria-valuetext="Any time" style="left: 100%;"></div>
             </div>
-            <div class="value-out" id="before-out">Any time</div>
+            <div class="value-out" id="before-out" aria-hidden="true">Any time</div>
           </div>
         </div>
         <div class="facet facet-body" style="padding-top: 14px;">
-          <div class="btn btn-secondary" id="reset">Reset</div>
+          <div class="btn btn-secondary" role="button" tabindex="0" id="reset">Reset filters</div>
         </div>
-      </div>
+      </aside>
 
       <div>
-        <div class="sort">
-          <div class="tab on" data-value="best"><span class="t">Best</span><span class="s" id="sub-best"></span></div>
-          <div class="tab" data-value="cheapest"><span class="t">Cheapest</span><span class="s" id="sub-cheapest"></span></div>
-          <div class="tab" data-value="fastest"><span class="t">Fastest</span><span class="s" id="sub-fastest"></span></div>
+        <div class="sort" role="tablist" aria-label="Sort results">
+          <div class="tab" role="tab" id="tab-best" data-value="best" aria-selected="true" aria-controls="panel" tabindex="0"><span class="t">Best</span><span class="s" id="sub-best"></span></div>
+          <div class="tab" role="tab" id="tab-cheapest" data-value="cheapest" aria-selected="false" aria-controls="panel" tabindex="-1"><span class="t">Cheapest</span><span class="s" id="sub-cheapest"></span></div>
+          <div class="tab" role="tab" id="tab-fastest" data-value="fastest" aria-selected="false" aria-controls="panel" tabindex="-1"><span class="t">Fastest</span><span class="s" id="sub-fastest"></span></div>
         </div>
-        <div class="flist" id="list"></div>
-        <div class="empty" id="empty" hidden>
-          <div class="h3">Nothing here</div>
+        <div role="tabpanel" id="panel" aria-labelledby="tab-best" tabindex="0">
+          <ul class="flist" id="list"></ul>
+          <div class="empty" id="empty" hidden>
+            <h3>No flights match your filters</h3>
+            <p>Try allowing more stops, more airlines or a later departure time.</p>
+            <p><span class="btn btn-secondary" role="button" tabindex="0" id="reset2">Reset filters</span></p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="dest wrap">
+  <section class="dest wrap" aria-roledescription="carousel" aria-labelledby="dest-h" id="dest">
     <div class="dest-head">
-      <div><div class="h2">Popular destinations</div></div>
+      <div>
+        <h2 id="dest-h">Popular destinations</h2>
+        <p class="dest-count" id="dest-count" aria-hidden="true"></p>
+      </div>
       <div class="dest-controls">
-        <div class="cal-nav" id="dest-prev">‹</div>
-        <div class="cal-nav" id="dest-next">›</div>
+        <div class="btn btn-secondary" role="button" tabindex="0" id="dest-rotate">Stop slide rotation</div>
+        <div class="cal-nav" role="button" tabindex="0" id="dest-prev" aria-controls="dest-slides" aria-label="Previous slide">‹</div>
+        <div class="cal-nav" role="button" tabindex="0" id="dest-next" aria-controls="dest-slides" aria-label="Next slide">›</div>
       </div>
     </div>
-    <div class="dest-stack fade" id="dest-slides"></div>
-  </div>
+    <div class="dest-stack" id="dest-slides"></div>
+    <div class="vh" aria-live="assertive" id="dest-live"></div>
+  </section>
 
-  <div class="faq wrap">
-    <div class="h2">Questions before you fly</div>
+  <section class="faq wrap" aria-labelledby="faq-h">
+    <h2 id="faq-h">Questions before you fly</h2>
     <div class="faq-list">
-      <div class="faq-item"><div class="acc-btn" data-target="a1">Can I take a pet dragon in the cabin?</div><div class="faq-body" id="a1" hidden>Dragons under 8 kg can travel in the cabin in a fireproof carrier. Larger dragons travel in the hold, which is heated to their liking.</div></div>
-      <div class="faq-item"><div class="acc-btn" data-target="a2">How much luggage is included?</div><div class="faq-body" id="a2" hidden>Every fare includes one cabin bag up to 10 kg. You can add a 23 kg checked bag when you book, for £35 each way.</div></div>
-      <div class="faq-item"><div class="acc-btn" data-target="a3">Can I change my dates after booking?</div><div class="faq-body" id="a3" hidden>Yes. Changes cost £25 per passenger, plus any difference in fare. Changes close 3 hours before departure.</div></div>
-      <div class="faq-item"><div class="acc-btn" data-target="a4">What happens if Atlantis sinks before my flight?</div><div class="faq-body" id="a4" hidden>We rebook you to Lemuria or Hy-Brasil at no extra cost, or give you a full refund.</div></div>
-      <div class="faq-item"><div class="acc-btn" data-target="a5">Is there step-free access at Mount Olympus airport?</div><div class="faq-body" id="a5" hidden>Yes. Every Wyvernway gate has step-free boarding. You can book assistance up to 48 hours before you fly, including help for guide dog owners.</div></div>
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q1" aria-expanded="false" aria-controls="a1">Can I take a pet dragon in the cabin?</div></h3><div class="faq-body" id="a1" role="region" aria-labelledby="q1" hidden><p>Dragons under 8 kg can travel in the cabin in a fireproof carrier. Larger dragons travel in the hold, which is heated to their liking.</p></div></div>
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q2" aria-expanded="false" aria-controls="a2">How much luggage is included?</div></h3><div class="faq-body" id="a2" role="region" aria-labelledby="q2" hidden><p>Every fare includes one cabin bag up to 10 kg. You can add a 23 kg checked bag when you book, for £35 each way.</p></div></div>
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q3" aria-expanded="false" aria-controls="a3">Can I change my dates after booking?</div></h3><div class="faq-body" id="a3" role="region" aria-labelledby="q3" hidden><p>Yes. Changes cost £25 per passenger, plus any difference in fare. Changes close 3 hours before departure.</p></div></div>
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q4" aria-expanded="false" aria-controls="a4">What happens if Atlantis sinks before my flight?</div></h3><div class="faq-body" id="a4" role="region" aria-labelledby="q4" hidden><p>We rebook you to Lemuria or Hy-Brasil at no extra cost, or give you a full refund.</p></div></div>
+      <div class="faq-item"><h3><div class="acc-btn" role="button" tabindex="0" id="q5" aria-expanded="false" aria-controls="a5">Is there step-free access at Mount Olympus airport?</div></h3><div class="faq-body" id="a5" role="region" aria-labelledby="q5" hidden><p>Yes. Every Wyvernway gate has step-free boarding. You can book assistance up to 48 hours before you fly, including help for guide dog owners.</p></div></div>
     </div>
-  </div>
-</div>
+  </section>
+</main>
 
-<div class="site-footer">
+<footer class="site-footer">
   <div class="wrap">
-    <div>Wyvernway is a fictional company made for screen reader practice. No real flights are sold.</div>
-    <div class="foot-form">
-      <input type="text" placeholder="Email for deals" tabindex="1">
-      <div class="btn btn-primary" id="deals">Go</div>
-    </div>
-    <div class="foot-links">
-      <span class="link" onclick="location.href='index.html'">About</span>
-      <span class="link">Help</span>
-      <span class="link">Accessibility</span>
-    </div>
+    <p>Wyvernway is a fictional company made for screen reader practice. No real flights are sold.</p>
+    <nav aria-label="Footer">
+      <ul class="foot-links">
+        <li><a href="index.html">About this practice site</a></li>
+        <li><a href="#faq-h">Help</a></li>
+        <li><a href="#main">Accessibility</a></li>
+      </ul>
+    </nav>
   </div>
+</footer>
 </div>
 
 <div class="backdrop" id="book-backdrop" hidden>
-  <div class="modal" id="book">
+  <div class="modal" id="book" role="dialog" aria-modal="true" aria-labelledby="book-h">
     <div class="modal-head">
-      <div class="h2">Book your flight</div>
-      <div class="icon-btn" id="book-close">×</div>
+      <h2 id="book-h" tabindex="-1">Book your flight</h2>
+      <div class="icon-btn" role="button" tabindex="0" id="book-close" aria-label="Close"><span aria-hidden="true">×</span></div>
     </div>
     <div class="modal-body" id="book-body">
       <div class="trip-sum" id="trip-sum"></div>
-      <input type="text" id="pname" class="control" placeholder="Full name">
-      <input type="text" id="pemail" class="control" placeholder="Email">
+      <div class="field">
+        <label for="pname">Full name, as on your passport</label>
+        <input type="text" id="pname" class="control" autocomplete="name">
+        <span class="field-error" id="pname-err" hidden></span>
+      </div>
+      <div class="field">
+        <label for="pemail">Email address</label>
+        <input type="text" inputmode="email" id="pemail" class="control" autocomplete="email" aria-describedby="pemail-hint">
+        <span class="hint" id="pemail-hint">We send your e-ticket here.</span>
+        <span class="field-error" id="pemail-err" hidden></span>
+      </div>
       <div>
-        <div class="legend">Seat</div>
-        <div class="stack" id="seat">
-          <div class="chk on" data-value="window"><span class="dot"></span>Window</div>
-          <div class="chk" data-value="aisle"><span class="dot"></span>Aisle</div>
-          <div class="chk" data-value="none"><span class="dot"></span>No preference</div>
+        <div class="legend" id="seat-label">Seat preference</div>
+        <div class="stack" role="radiogroup" aria-labelledby="seat-label" id="seat">
+          <div class="chk" role="radio" aria-checked="true" tabindex="0" data-value="window"><span class="dot"></span>Window</div>
+          <div class="chk" role="radio" aria-checked="false" tabindex="-1" data-value="aisle"><span class="dot"></span>Aisle</div>
+          <div class="chk" role="radio" aria-checked="false" tabindex="-1" data-value="none"><span class="dot"></span>No preference</div>
         </div>
       </div>
       <div>
-        <div class="legend">Extras</div>
-        <div class="stack" id="extras"></div>
+        <div class="legend" id="extras-label">Extras, per passenger</div>
+        <div class="stack" role="group" aria-labelledby="extras-label" id="extras"></div>
       </div>
-      <div class="total">
-        <span>Total</span>
+      <div class="total" role="status" aria-atomic="true">
+        <span>Total for <span id="pax-count">1 passenger</span></span>
         <span id="total" class="price"></span>
       </div>
-      <div class="chk" id="terms"><span class="box"></span><span class="lowc">I accept the fare rules and the Wyvernway terms</span></div>
+      <div>
+        <div class="chk" role="checkbox" aria-checked="false" tabindex="0" id="terms"><span class="box"></span>I accept the fare rules and the Wyvernway terms</div>
+        <span class="field-error" id="terms-err" hidden></span>
+      </div>
       <div class="row" style="justify-content: flex-end;">
-        <div class="btn btn-secondary" id="book-cancel">Cancel</div>
-        <div class="btn btn-primary" id="book-confirm">Confirm</div>
+        <div class="btn btn-secondary" role="button" tabindex="0" id="book-cancel">Cancel</div>
+        <div class="btn btn-primary" role="button" tabindex="0" id="book-confirm">Confirm booking</div>
       </div>
     </div>
     <div class="confirm" id="confirm" hidden>
-      <div class="h2">Done!</div>
-      <div class="ref" id="ref"></div>
+      <h2 id="confirm-h" tabindex="-1">Booking confirmed</h2>
+      <p>Your booking reference is</p>
+      <p class="ref" id="ref"></p>
+      <p id="confirm-text"></p>
+      <p><span class="btn btn-primary" role="button" tabindex="0" id="confirm-done">Done</span></p>
     </div>
   </div>
 </div>
 
-<div class="cookie" id="cookie">
-  <div class="wrap">
-    <div>We use cookies to make your journey magical. <span class="lowc">By continuing you agree to our policy.</span></div>
-    <div class="cookie-actions">
-      <span class="link lowc" id="cookie-settings" style="cursor:pointer; text-decoration: underline;">Settings</span>
-      <div class="btn btn-primary" id="cookie-ok">OK</div>
-    </div>
-  </div>
-</div>
-
-<div class="backdrop" id="ck-backdrop" hidden>
-  <div class="modal">
+<div class="backdrop" id="cookie-backdrop" hidden>
+  <div class="modal" id="cookie-dlg" role="dialog" aria-modal="true" aria-labelledby="cookie-dlg-h" aria-describedby="cookie-dlg-intro">
     <div class="modal-head">
-      <div class="h2">Cookie settings</div>
-      <div class="icon-btn" id="ck-x">×</div>
+      <h2 id="cookie-dlg-h" tabindex="-1">Cookie preferences</h2>
+      <div class="icon-btn" role="button" tabindex="0" id="cookie-dlg-close" aria-label="Close"><span aria-hidden="true">×</span></div>
     </div>
     <div class="modal-body">
+      <p id="cookie-dlg-intro">Choose which cookies Wyvernway can use. You can change this at any time.</p>
       <div class="prefs">
-        <div class="pref"><div class="label">Essential</div><div class="chk sw on locked"><span class="switch-track"></span></div></div>
-        <div class="pref"><div class="label">Analytics</div><div class="chk sw on" data-ck><span class="switch-track"></span></div></div>
-        <div class="pref"><div class="label">Marketing</div><div class="chk sw on" data-ck><span class="switch-track"></span></div></div>
-        <div class="pref"><div class="label">Personalisation</div><div class="chk sw on" data-ck><span class="switch-track"></span></div></div>
+        <div class="pref">
+          <span class="label" id="ck-essential-l">Essential cookies</span>
+          <div class="chk" role="switch" aria-checked="true" aria-disabled="true" tabindex="0" id="ck-essential" aria-labelledby="ck-essential-l" aria-describedby="ck-essential-hint"><span class="switch-track"></span></div>
+          <span class="hint" id="ck-essential-hint">Needed for search and booking to work. These are always on.</span>
+        </div>
+        <div class="pref">
+          <span class="label" id="ck-analytics-l">Analytics cookies</span>
+          <div class="chk" role="switch" aria-checked="false" tabindex="0" id="ck-analytics" aria-labelledby="ck-analytics-l" aria-describedby="ck-analytics-hint"><span class="switch-track"></span></div>
+          <span class="hint" id="ck-analytics-hint">Help us count visits and see which pages people use.</span>
+        </div>
+        <div class="pref">
+          <span class="label" id="ck-marketing-l">Marketing cookies</span>
+          <div class="chk" role="switch" aria-checked="false" tabindex="0" id="ck-marketing" aria-labelledby="ck-marketing-l" aria-describedby="ck-marketing-hint"><span class="switch-track"></span></div>
+          <span class="hint" id="ck-marketing-hint">Show you Wyvernway offers on other websites.</span>
+        </div>
+        <div class="pref">
+          <span class="label" id="ck-personal-l">Personalised destinations</span>
+          <div class="chk" role="switch" aria-checked="false" tabindex="0" id="ck-personal" aria-labelledby="ck-personal-l" aria-describedby="ck-personal-hint"><span class="switch-track"></span></div>
+          <span class="hint" id="ck-personal-hint">Remember the places you search for, so we can suggest similar ones.</span>
+        </div>
       </div>
       <div class="row" style="justify-content: flex-end;">
-        <div class="btn btn-primary" id="ck-save">Save</div>
+        <div class="btn btn-secondary" role="button" tabindex="0" id="cookie-dlg-cancel">Cancel</div>
+        <div class="btn btn-primary" role="button" tabindex="0" id="cookie-save">Save preferences</div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- FAULT: the cookie banner is last in the page, though it shows at the bottom of the screen straight away -->
+<div class="cookie" id="cookie" role="region" aria-labelledby="cookie-h">
+  <div class="wrap">
+    <div class="cookie-text" id="cookie-ask">
+      <h2 class="h3" id="cookie-h">Cookies on Wyvernway</h2>
+      <p>We use essential cookies to make this site work. We would also like to use analytics and marketing cookies, but only if you agree.</p>
+    </div>
+    <div class="cookie-actions" id="cookie-btns">
+      <div class="btn btn-primary" role="button" tabindex="0" data-cookie="all">Accept all cookies</div>
+      <div class="btn btn-secondary" role="button" tabindex="0" data-cookie="none">Reject optional cookies</div>
+      <div class="btn btn-secondary" role="button" tabindex="0" id="cookie-manage" aria-haspopup="dialog">Manage cookies</div>
+    </div>
+    <div class="cookie-text" id="cookie-done" tabindex="-1" hidden><p id="cookie-done-text"></p></div>
+    <div class="cookie-actions" id="cookie-done-btns" hidden><div class="btn btn-secondary" role="button" tabindex="0" id="cookie-change" aria-haspopup="dialog">Change cookie settings</div><div class="btn btn-secondary" role="button" tabindex="0" id="cookie-hide">Hide cookie message</div></div>
   </div>
 </div>
 
@@ -313,294 +382,867 @@
   const W = WYV;
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const visible = el => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+
   const state = {
-    trip: 'return', flights: [], sort: 'best', search: null, cabin: 'economy', saved: new Set(),
+    trip: 'return', flights: [], sort: 'best', search: null, cabin: 'economy', seat: 'window', saved: new Set(),
     filters: { stops: new Set(['0', '1', '2']), airlines: new Set(W.airlines.map(a => a.code)), before: 24 }
   };
-  const isOn = el => el.classList.contains('on');
-  const toggle = el => el.classList.toggle('on');
 
-  // Countdown that never pauses and silently restarts
-  let secs = 45;
-  setInterval(() => { secs = secs <= 0 ? 45 : secs - 1; $('#promo').textContent = 'Flash sale: 20% off flights to Valhalla. Ends in 0:' + String(secs).padStart(2, '0'); }, 1000);
+  /* ---------- Generic behaviours ---------- */
+  function activate(el, fn) {
+    el.addEventListener('click', fn);
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(e); } });
+  }
+  function makeCheckbox(el, onChange, keys) {
+    keys = keys || [' '];
+    const toggle = () => {
+      const v = el.getAttribute('aria-checked') !== 'true';
+      el.setAttribute('aria-checked', String(v));
+      if (onChange) onChange(v);
+    };
+    el.addEventListener('click', toggle);
+    el.addEventListener('keydown', e => { if (keys.includes(e.key)) { e.preventDefault(); toggle(); } });
+  }
+  function makeRadioGroup(group, onChange) {
+    const radios = $$('[role="radio"]', group);
+    function select(r) {
+      radios.forEach(x => { const on = x === r; x.setAttribute('aria-checked', String(on)); x.tabIndex = on ? 0 : -1; });
+      r.focus();
+      if (onChange) onChange(r.dataset.value);
+    }
+    radios.forEach((r, i) => {
+      r.addEventListener('click', () => select(r));
+      r.addEventListener('keydown', e => {
+        let n = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = radios[(i + 1) % radios.length];
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = radios[(i - 1 + radios.length) % radios.length];
+        else if (e.key === ' ') { e.preventDefault(); select(r); return; }
+        if (n) { e.preventDefault(); select(n); }
+      });
+    });
+    return { reset() { radios.forEach((x, i) => { x.setAttribute('aria-checked', String(i === 0)); x.tabIndex = i === 0 ? 0 : -1; }); } };
+  }
+  function makeAccordion(btn) {
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    activate(btn, () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    });
+  }
+  function trapTab(container, e) {
+    const items = $$('input, button:not([disabled]), [tabindex]:not([tabindex="-1"])', container).filter(visible);
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+  let statusTimer = null;
+  function announce(el, msg, delay) {
+    clearTimeout(statusTimer);
+    el.textContent = '';
+    statusTimer = setTimeout(() => { el.textContent = msg; }, Math.max(delay || 0, 50));
+  }
 
-  $('#cookie-ok').onclick = () => { $('#cookie').hidden = true; };
+  /* ---------- Trip type ---------- */
+  // FAULT: the selected option is only shown with a CSS class; aria-checked is never set
+  (function () {
+    const radios = $$('[role="radio"]', $('#trip'));
+    function select(r) {
+      radios.forEach(x => { x.classList.toggle('on', x === r); x.tabIndex = x === r ? 0 : -1; });
+      r.focus();
+      state.trip = r.dataset.value; if (typeof showDates === 'function') showDates();
+    }
+    radios.forEach((r, i) => {
+      r.addEventListener('click', () => select(r));
+      r.addEventListener('keydown', e => {
+        let n = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = radios[(i + 1) % radios.length];
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = radios[(i - 1 + radios.length) % radios.length];
+        else if (e.key === ' ') { e.preventDefault(); select(r); return; }
+        if (n) { e.preventDefault(); select(n); }
+      });
+    });
+  })();
 
-  // Cookie settings overlay: no dialog role, focus stays behind it, state shown only by colour and position
-  $('#cookie-settings').onclick = () => { $('#ck-backdrop').hidden = false; };
-  $$('[data-ck]').forEach(s => s.onclick = () => toggle(s));
-  $('#ck-x').onclick = () => { $('#ck-backdrop').hidden = true; };
-  $('#ck-save').onclick = () => { $('#ck-backdrop').hidden = true; $('#cookie').hidden = true; };
-
-  // Tooltip: only appears on mouse hover and vanishes as soon as the pointer moves off the icon
-  $('#tip-btn').onmouseenter = () => { $('#tip').hidden = false; };
-  $('#tip-btn').onmouseleave = () => { $('#tip').hidden = true; };
-
-  // Carousel: rotates every 4 seconds with no way to pause. Hidden slides are only transparent, so screen readers read all of them
-  const slides = $('#dest-slides');
-  W.destinations.forEach((d, i) => {
-    const s = document.createElement('div');
-    s.className = 'dest-slide' + (i === 0 ? ' on' : '');
-    s.innerHTML = '<div class="dest-card"><img src="' + d.img + '" width="320" height="180">' +
-      '<div class="dest-body"><div class="dest-region lowc">' + d.region + '</div><div class="h3">' + W.airport(d.code).name + '</div><div>' + d.blurb + '</div>' +
-      '<div class="dest-price">from <strong>' + W.money(d.price) + '</strong></div><span class="read-more" style="color: var(--accent); font-weight: 700; cursor: pointer; text-decoration: underline;">Read more</span></div></div>';
-    $('.read-more', s).onclick = () => { setAirport(toIn, d.code); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-    slides.appendChild(s);
-  });
-  let slide = 0;
-  function go(n) { slide = (n + W.destinations.length) % W.destinations.length; $$('.dest-slide', slides).forEach((s, j) => s.classList.toggle('on', j === slide)); }
-  setInterval(() => go(slide + 1), 4000);
-  $('#dest-prev').onclick = () => go(slide - 1);
-  $('#dest-next').onclick = () => go(slide + 1);
-
-  // Trip type
-  $$('#trip .opt').forEach(o => o.onclick = () => {
-    $$('#trip .opt').forEach(x => x.classList.toggle('on', x === o));
-    state.trip = o.dataset.value;
-    showDates();
-  });
-
-  // From / To: suggestions can only be chosen with a mouse
+  /* ---------- From / To: type to search, results are plain buttons ----------
+     No combobox role and no aria-activedescendant: the text box is a text box,
+     the results are a list of real buttons straight after it, and a status
+     message says how many there are. This holds up in VoiceOver on Mac and iPhone. */
+  const comboStatus = $('#combo-status');
   function setAirport(input, code) {
     const a = W.airport(code);
-    input.value = a ? a.name : '';
+    input.value = a ? a.name + ' (' + a.code + ')' : '';
     input.dataset.code = a ? a.code : '';
   }
-  function suggest(input, list) {
-    input.oninput = () => {
-      input.dataset.code = '';
-      const q = input.value.trim().toLowerCase();
-      const opts = W.airports.filter(a => q && a.name.toLowerCase().includes(q));
-      list.innerHTML = '';
-      opts.forEach(a => {
-        const d = document.createElement('div');
-        d.className = 'optrow';
-        d.innerHTML = '<span>' + a.name + '</span><span class="code">' + a.code + '</span>';
-        d.onmousedown = e => { e.preventDefault(); setAirport(input, a.code); list.hidden = true; input.classList.remove('bad'); };
-        list.appendChild(d);
+  function matches(q) {
+    q = (q || '').trim().toLowerCase();
+    if (!q) return W.airports.slice();
+    return W.airports.filter(a =>
+      a.name.toLowerCase().split(/[\s-]+/).some(w => w.startsWith(q)) ||
+      a.name.toLowerCase().startsWith(q) || a.code.toLowerCase().startsWith(q));
+  }
+  // Results count: assertive and quick, so you know straight away that the list changed.
+  const placeStatus = $('#place-status');
+  let placeTimer;
+  function sayPlace(msg) {
+    clearTimeout(placeTimer);
+    placeStatus.textContent = '';
+    placeTimer = setTimeout(() => { placeStatus.textContent = msg; }, 200);
+  }
+  function makePlace(input) {
+    const box = $('#' + input.id.replace('-input', '-results'));
+    const ul = $('ul', box);
+    const field = input.closest('.field');
+    const label = input.id.startsWith('from') ? 'From' : 'To';
+    let found = [];
+    function hide() { box.hidden = true; }
+    function show(q, speak) {
+      found = matches(q);
+      ul.innerHTML = '';
+      found.forEach(a => {
+        const li = document.createElement('li');
+        // FAULT: results are plain divs, hidden from screen readers and mouse-only
+        const b = document.createElement('div');
+        b.className = 'optrow'; b.dataset.code = a.code;
+        b.addEventListener('mousedown', e => e.preventDefault());
+        b.innerHTML = '<span>' + a.name + '</span><span class="code">' + a.code + '</span>';
+        li.appendChild(b); ul.appendChild(li);
       });
-      list.hidden = !opts.length;
-    };
-    input.onblur = () => setTimeout(() => { list.hidden = true; }, 150);
+      box.hidden = !found.length;
+      if (speak) sayPlace(found.length
+        ? found.length + (found.length === 1 ? ' result' : ' results') + ' available.'
+        : 'No places match.');
+    }
+    function pick(code) {
+      setAirport(input, code);
+      hide();
+      clearFieldError(input);
+      input.focus();
+    }
+    function settle() {
+      hide();
+      if (!input.dataset.code) { const a = W.airportByName(input.value); if (a) setAirport(input, a.code); }
+    }
+    function buttons() { return $$('button', ul); }
+    // When a place is already chosen, the first letter you type (or Backspace)
+    // clears it, so you start a fresh search instead of adding to "Camelot (CML)".
+    input.addEventListener('beforeinput', e => {
+      if (!input.dataset.code) return;
+      if (e.inputType === 'insertText' && e.data) {
+        // Put the letter in ourselves: Safari drops it if we only empty the box.
+        e.preventDefault();
+        input.value = e.data;
+        input.setSelectionRange(input.value.length, input.value.length);
+        onTyped();
+      } else if (e.inputType.startsWith('insert')) { input.value = ''; }
+      else if (e.inputType.startsWith('delete')) { e.preventDefault(); input.value = ''; input.dataset.code = ''; hide(); sayPlace('Cleared. Type to search places.'); }
+    });
+    function onTyped() {
+      input.dataset.code = '';
+      if (input.value.trim()) show(input.value, true);
+      else { hide(); clearTimeout(placeTimer); placeStatus.textContent = ''; }
+    }
+    input.addEventListener('input', onTyped);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        // FAULT: Down arrow does nothing useful; the results can't take focus
+        if (box.hidden) show(input.dataset.code ? '' : input.value, false);
+      } else if (e.key === 'Escape') {
+        if (!box.hidden) { e.preventDefault(); hide(); }
+      } else if (e.key === 'Enter' && !box.hidden && found.length === 1) {
+        e.preventDefault(); pick(found[0].code);
+      }
+    });
+    ul.addEventListener('click', e => { const b = e.target.closest('[data-code]'); if (b) pick(b.dataset.code); });
+    ul.addEventListener('keydown', e => {
+      const list = buttons(), i = list.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); if (list[i + 1]) list[i + 1].focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); if (i > 0) list[i - 1].focus(); else input.focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); hide(); input.focus(); }
+    });
+    // Close when focus or a click goes outside this field (not on blur: VoiceOver
+    // moving into the results takes focus off the box, and that must not close them).
+    document.addEventListener('focusin', e => { if (!box.hidden && !field.contains(e.target)) settle(); });
+    document.addEventListener('mousedown', e => { if (!box.hidden && !field.contains(e.target)) settle(); });
+    input.addEventListener('change', () => { if (box.hidden) settle(); });
   }
   const fromIn = $('#from-input'), toIn = $('#to-input');
-  suggest(fromIn, $('#from-list')); suggest(toIn, $('#to-list'));
+  makePlace(fromIn);
+  makePlace(toIn);
   setAirport(fromIn, 'CML'); setAirport(toIn, 'ATS');
-  $('#swap').onclick = () => { const a = fromIn.dataset.code, b = toIn.dataset.code; setAirport(fromIn, b); setAirport(toIn, a); };
+  activate($('#swap'), () => {
+    const a = fromIn.dataset.code, b = toIn.dataset.code;
+    setAirport(fromIn, b); setAirport(toIn, a);
+    const nm = c => { const a = W.airport(c); return a ? a.name : 'empty'; };
+    announce(comboStatus, 'Swapped. From ' + nm(fromIn.dataset.code) + ', to ' + nm(toIn.dataset.code) + '.');
+  });
 
-  // Dates: mouse-only calendar made of divs. First click picks departure, second click picks return.
-  // Nothing tells you which one you are choosing, and cheap or expensive days are shown only by a coloured line.
+  /* ---------- Travel dates: a plain calendar ----------
+     Built only from standard parts every screen reader already knows:
+     the browser's own <dialog>, an ordinary table, and a real <button> for each day you can choose.
+     No grid role, no application region, no custom keys, no device checks. */
   const datesBtn = $('#dates-btn');
   const t0 = W.today();
   const dates = { dep: null, ret: null };
-  function showDates() { $('#dates-val').textContent = dates.dep ? W.fmtShort(dates.dep) + (state.trip === 'oneway' || !dates.ret ? '' : ' – ' + W.fmtShort(dates.ret)) : ''; }
+  const thisYear = t0.getFullYear();
+  function spoken(isoStr) {
+    const d = W.parseISO(isoStr);
+    return W.fmtLong(isoStr).replace(d.getFullYear() === thisYear ? ' ' + thisYear : '\u0000', '');
+  }
+  function nights(a, b) { return Math.round((W.parseISO(b) - W.parseISO(a)) / 864e5); }
+  function showDates() {
+    const oneway = state.trip === 'oneway';
+    if (!dates.dep) { $('#dates-show').textContent = 'Choose dates'; $('#dates-say').textContent = 'not chosen'; return; }
+    if (oneway) { $('#dates-show').textContent = W.fmtShort(dates.dep) + ', one way'; $('#dates-say').textContent = 'Leaving ' + spoken(dates.dep) + ', one way'; return; }
+    if (!dates.ret) { $('#dates-show').textContent = W.fmtShort(dates.dep) + ' to …'; $('#dates-say').textContent = 'Leaving ' + spoken(dates.dep) + ', return date not chosen'; return; }
+    const n = nights(dates.dep, dates.ret);
+    $('#dates-show').textContent = W.fmtShort(dates.dep) + ' to ' + W.fmtShort(dates.ret);
+    $('#dates-say').textContent = 'Leaving ' + spoken(dates.dep) + ', returning ' + spoken(dates.ret) + ', ' + n + (n === 1 ? ' night' : ' nights');
+  }
   showDates();
-  const cal = $('#cal');
-  let view = null, picking = 'dep';
-  function renderCal() {
-    const y = view.getFullYear(), m = view.getMonth();
-    $('#cal-title').textContent = W.fmtMonth(view);
-    const min = picking === 'ret' ? W.parseISO(dates.dep) : W.today();
-    const offset = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
-    let html = ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(d => '<div class="dow">' + d + '</div>').join('');
-    for (let i = 0; i < offset; i++) html += '<div></div>';
+
+  const cal = $('#cal'), calBody = $('#cal-months'), calStep = $('#cal-step'), calLive = $('#cal-live');
+  const calTarget = datesBtn;
+  let view = null, step = 'depart';
+  const mk = d => d.getFullYear() * 12 + d.getMonth();
+  const todayIso = () => W.iso(W.today());
+  function route() { return [fromIn.dataset.code || 'CML', toIn.dataset.code || 'ATS']; }
+  function say(msg) { calLive.textContent = ''; setTimeout(() => { calLive.textContent = msg; }, 100); }
+
+  function setStep(s) {
+    step = s;
+    calStep.textContent = s === 'depart' ? 'Choose your departure date' : 'Now choose your return date';
+    $('#cal-redep').hidden = s !== 'return';
+  }
+  // The two months on show: the one in view and the one after it
+  function shown() { return [view, new Date(view.getFullYear(), view.getMonth() + 1, 1)]; }
+  function bothMonths() {
+    const [a, b] = shown();
+    return a.getFullYear() === b.getFullYear()
+      ? H_MONTHS[a.getMonth()] + ' and ' + W.fmtMonth(b)
+      : W.fmtMonth(a) + ' and ' + W.fmtMonth(b);
+  }
+  function cheapest() {
+    const [f, t] = route(), from = step === 'return' ? dates.dep : todayIso();
+    let best = null;
+    shown().forEach(mo => {
+      const y = mo.getFullYear(), m = mo.getMonth(), days = new Date(y, m + 1, 0).getDate();
+      for (let d = 1; d <= days; d++) {
+        const iso = W.iso(new Date(y, m, d));
+        if (iso < from || (step === 'return' && iso === from)) continue;
+        const pr = W.dayPrice(f, t, iso).price;
+        if (!best || pr < best.price) best = { iso, price: pr };
+      }
+    });
+    return best;
+  }
+  // Cheapest day or days in one month (from today, or from the departure date when choosing the return)
+  function monthCheapest(mo) {
+    const [f, t] = route(), from = step === 'return' ? dates.dep : todayIso();
+    const y = mo.getFullYear(), m = mo.getMonth(), days = new Date(y, m + 1, 0).getDate();
+    let price = null, list = [];
     for (let d = 1; d <= days; d++) {
-      const date = new Date(y, m, d), iso = W.iso(date);
-      const band = date < min ? '' : ' ' + W.dayPrice(fromIn.dataset.code || 'CML', toIn.dataset.code || 'ATS', iso).band;
-      const sel = iso === dates.dep || (state.trip !== 'oneway' && iso === dates.ret);
-      html += '<div class="day' + (sel ? ' sel' : '') + (date < min ? ' off' : '') + (iso === W.iso(W.today()) ? ' today' : '') + band + '" data-date="' + iso + '">' + d + '</div>';
+      const iso = W.iso(new Date(y, m, d));
+      if (iso < from || (step === 'return' && iso === from)) continue;
+      const pr = W.dayPrice(f, t, iso).price;
+      if (price === null || pr < price) { price = pr; list = [iso]; }
+      else if (pr === price) list.push(iso);
     }
-    $('#cal-grid').innerHTML = html;
+    return price === null ? null : { price, list };
   }
-  datesBtn.onclick = () => {
-    if (!cal.hidden) { cal.hidden = true; return; }
-    picking = 'dep'; view = dates.dep ? W.parseISO(dates.dep) : W.today(); datesBtn.parentElement.appendChild(cal); cal.hidden = false; renderCal();
-  };
-  $('#cal-prev').onclick = () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); renderCal(); };
-  $('#cal-next').onclick = () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); renderCal(); };
-  $('#cal-grid').onclick = e => {
-    const d = e.target.closest('.day');
-    if (!d || d.classList.contains('off')) return;
-    if (picking === 'dep') {
-      dates.dep = d.dataset.date;
+  // The line under each month heading: "Cheapest, £81:" then a button for each cheapest day
+  function cheapLine(mo) {
+    const c = monthCheapest(mo);
+    if (!c) return step === 'return' ? 'No return dates this month.' : 'No dates available this month.';
+    return 'Cheapest ' + (c.list.length > 1 ? 'days' : 'day') + ', ' + W.money(c.price) + ': ' +
+      c.list.map(iso => '<button type="button" class="linkish cal-go" data-go="' + iso + '">' + spoken(iso) + '</button>').join(' ');
+  }
+  function setCheapBtn() {
+    const best = cheapest(), cb = $('#cal-cheap');
+    cb.hidden = !best;
+    if (best) cb.textContent = 'Cheapest day: ' + W.fmtShort(best.iso) + ', ' + W.money(best.price);
+  }
+  // What a day says and how it looks, for the current step
+  function dayInfo(iso) {
+    const [f, t] = route(), p = W.dayPrice(f, t, iso);
+    const what = step === 'depart' ? 'select as departure date' : iso < dates.dep ? 'select as new departure date' : 'select as return date';
+    let mark = '';
+    if (iso === dates.dep) mark = ', your departure date';
+    if (iso === dates.ret && step === 'depart') mark += ', your return date';
+    const cls = 'day ' + p.band + (iso === dates.dep || (iso === dates.ret && step === 'depart') ? ' sel' : '') +
+      (step === 'depart' && dates.dep && dates.ret && iso > dates.dep && iso < dates.ret ? ' in-range' : '');
+    return { price: p.price, cls, text: spoken(iso) + ', ' + p.band + ' price, ' + W.money(p.price) + mark + ', ' + what };
+  }
+  // Update the existing day buttons in place, so focus and the VoiceOver cursor stay where they are
+  function refreshDays() {
+    $$('button[data-date]', calBody).forEach(b => { const i = dayInfo(b.dataset.date); b.className = i.cls; });
+    const mos = shown();
+    $$('.cal-month-cheap', calBody).forEach(p => { p.innerHTML = cheapLine(mos[+p.dataset.month]); });
+    setCheapBtn();
+  }
+  // Draw two months, each with its own heading and table. Days you can choose are buttons; past days are plain text.
+  // The headings let screen reader users jump between months (H key in JAWS, the rotor in VoiceOver).
+  // The day-name row and the blank cells before the 1st and after the last day are hidden from screen readers:
+  // each day button already says its weekday, so they only add noise.
+  const DAY_HEAD = '<thead aria-hidden="true"><tr><th scope="col" abbr="Monday">Mo</th><th scope="col" abbr="Tuesday">Tu</th><th scope="col" abbr="Wednesday">We</th><th scope="col" abbr="Thursday">Th</th><th scope="col" abbr="Friday">Fr</th><th scope="col" abbr="Saturday">Sa</th><th scope="col" abbr="Sunday">Su</th></tr></thead>';
+  function monthTable(mo, n) {
+    const y = mo.getFullYear(), m = mo.getMonth();
+    const offset = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
+    let html = '<div class="cal-month"><h3 class="cal-month-h" id="cal-m' + n + '">' + W.fmtMonth(mo) + '</h3>' +
+      '<p class="cal-month-cheap" data-month="' + n + '">' + cheapLine(mo) + '</p>' +
+      '<table class="cal-table" aria-labelledby="cal-m' + n + '">' + DAY_HEAD + '<tbody><tr>', col = 0;
+    for (let i = 0; i < offset; i++) { html += '<td aria-hidden="true"></td>'; col++; }
+    for (let d = 1; d <= days; d++) {
+      const iso = W.iso(new Date(y, m, d));
+      if (iso < todayIso()) {
+        html += '<td><span class="day past"><span class="dn">' + d + '</span></span></td>';
+      } else {
+        const i = dayInfo(iso);
+        // FAULT: the button only says the day number and price
+        html += '<td><button type="button" class="' + i.cls + '" data-date="' + iso + '">' +
+          '<span class="dn">' + d + '</span><span class="dp">' + W.money(i.price) + '</span>' +
+          '<span class="vh"></span></button></td>';
+      }
+      col++;
+      if (col === 7 && d < days) { html += '</tr><tr>'; col = 0; }
+    }
+    while (col > 0 && col < 7) { html += '<td aria-hidden="true"></td>'; col++; }
+    return html + '</tr></tbody></table></div>';
+  }
+  function renderMonth(focusIso) {
+    $('#cal-prev').disabled = mk(view) <= mk(W.today());
+    calBody.innerHTML = shown().map(monthTable).join('');
+    setCheapBtn();
+    if (focusIso) { const b = $('[data-date="' + focusIso + '"]', calBody); if (b) b.focus(); }
+  }
+  const H_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  function openCal() {
+    setStep(state.trip !== 'oneway' && dates.dep && !dates.ret ? 'return' : 'depart');
+    const start = dates.dep && dates.dep >= todayIso() ? dates.dep : todayIso();
+    view = W.parseISO(start); view.setDate(1);
+    calLive.textContent = '';
+    // Draw the days first and mark the starting day with autofocus, so the dialog opens straight onto it
+    // instead of landing on Cancel and then jumping
+    renderMonth(null);
+    // FAULT: opened as a non-modal pop-up and focus is left on the Travel dates button
+    cal.show();
+    datesBtn.focus();
+    datesBtn.setAttribute('aria-expanded', 'true');
+  }
+  function closeCal() { if (cal.open) cal.close(); }
+  cal.addEventListener('close', () => {
+    datesBtn.setAttribute('aria-expanded', 'false');
+    showDates();
+    // A short pause lets Safari and VoiceOver finish closing the dialog before focus returns to Travel dates
+    setTimeout(() => datesBtn.focus(), 100);
+  });
+  datesBtn.addEventListener('click', openCal);
+  $('#cal-cancel').addEventListener('click', closeCal);
+
+  calBody.addEventListener('click', e => {
+    const go = e.target.closest('button[data-go]');
+    if (go) { const d = $('[data-date="' + go.dataset.go + '"]', calBody); if (d) d.focus(); return; }
+    const b = e.target.closest('button[data-date]');
+    if (!b) return;
+    const iso = b.dataset.date;
+    if (step === 'depart' || iso < dates.dep) {
+      const changed = step === 'return';
+      dates.dep = iso;
+      if (dates.ret && dates.ret < iso) dates.ret = null;
+      clearFieldError(datesBtn);
+      if (state.trip === 'oneway') { dates.ret = null; closeCal(); return; }
       dates.ret = null;
+      setStep('return');
+      refreshDays();
+      // FAULT: focus is thrown out of the calendar to the top of the page, with no message
+      document.body.tabIndex = -1; document.body.focus();
+    } else {
+      dates.ret = iso;
+      clearFieldError(datesBtn);
       showDates();
-      if (state.trip === 'oneway') { cal.hidden = true; return; }
-      picking = 'ret'; renderCal(); return;
+      closeCal();
     }
-    dates.ret = d.dataset.date; showDates(); cal.hidden = true;
-  };
-
-  // Passengers
-  const paxPop = $('#pax-pop');
-  function updatePax() {
-    const a = +$('#adults').textContent, c = +$('#children').textContent;
-    $('#pax-val').textContent = a + (a === 1 ? ' adult' : ' adults') + (c ? ', ' + c + (c === 1 ? ' child' : ' children') : '') + ', ' + W.cabin(state.cabin).label;
+  });
+  function changeMonth(dir) {
+    const n = new Date(view.getFullYear(), view.getMonth() + dir, 1);
+    if (mk(n) < mk(W.today())) return;
+    view = n; renderMonth(null);
+    const best = cheapest();
+    say('Showing ' + bothMonths() + (best ? '. Cheapest day ' + spoken(best.iso) + ', ' + W.money(best.price) : ''));
   }
-  $('#pax-btn').onclick = () => { paxPop.hidden = !paxPop.hidden; };
-  $('#pax-done').onclick = () => { paxPop.hidden = true; };
-  $$('.step-btn').forEach(b => b.onclick = () => {
-    const el = $('#' + b.dataset.for);
-    el.textContent = Math.max(+el.dataset.min, Math.min(+el.dataset.max, +el.textContent + +b.dataset.step));
-    updatePax();
+  $('#cal-prev').addEventListener('click', () => changeMonth(-1));
+  $('#cal-next').addEventListener('click', () => changeMonth(1));
+  $('#cal-cheap').addEventListener('click', () => { const best = cheapest(); if (best) renderMonth(best.iso); });
+  $('#cal-redep').addEventListener('click', () => {
+    setStep('depart');
+    renderMonth(dates.dep);
+    say('Choose a new departure date.');
   });
-  const cabList = $('#cabin-list');
-  W.cabins.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'optrow'; d.textContent = c.label;
-    d.onclick = () => { state.cabin = c.value; $('#cabin-val').textContent = c.label; cabList.hidden = true; updatePax(); };
-    cabList.appendChild(d);
+
+  /* ---------- Passengers popover ---------- */
+  const paxBtn = $('#pax-btn'), paxPop = $('#pax-pop');
+  function paxSummary() {
+    const a = +$('#adults').getAttribute('aria-valuenow'), c = +$('#children').getAttribute('aria-valuenow');
+    const parts = [a + (a === 1 ? ' adult' : ' adults')];
+    if (c) parts.push(c + (c === 1 ? ' child' : ' children'));
+    return parts.join(', ');
+  }
+  function updatePax() { $('#pax-val').textContent = paxSummary() + ', ' + W.cabin(state.cabin).label; }
+  function openPax() { paxPop.hidden = false; paxBtn.setAttribute('aria-expanded', 'true'); $('#adults').focus(); }
+  function closePax(focus) { closeCabin(); paxPop.hidden = true; paxBtn.setAttribute('aria-expanded', 'false'); if (focus) paxBtn.focus(); }
+  activate(paxBtn, () => (paxPop.hidden ? openPax() : closePax(true)));
+  activate($('#pax-done'), () => closePax(true));
+  paxPop.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); closePax(true); } });
+
+  function makeSpin(el) {
+    const min = +el.getAttribute('aria-valuemin'), max = +el.getAttribute('aria-valuemax');
+    function set(v) { v = Math.max(min, Math.min(max, v)); el.setAttribute('aria-valuenow', v); el.textContent = v; updatePax(); }
+    el.addEventListener('keydown', e => {
+      const v = +el.getAttribute('aria-valuenow');
+      const map = { ArrowUp: v + 1, ArrowRight: v + 1, ArrowDown: v - 1, ArrowLeft: v - 1, Home: min, End: max };
+      if (e.key in map) { e.preventDefault(); set(map[e.key]); }
+    });
+    $$('[data-for="' + el.id + '"]').forEach(b => activate(b, () => set(+el.getAttribute('aria-valuenow') + +b.dataset.step)));
+  }
+  makeSpin($('#adults')); makeSpin($('#children'));
+
+  // Cabin class: select-only combobox
+  const cab = $('#cabin'), cabList = $('#cabin-list');
+  let cabActive = 0;
+  W.cabins.forEach((c, i) => {
+    const li = document.createElement('li');
+    li.setAttribute('role', 'option'); li.id = 'cabin-opt-' + c.value;
+    li.setAttribute('aria-selected', String(i === 0));
+    li.textContent = c.label;
+    li.addEventListener('mousedown', e => e.preventDefault());
+    li.addEventListener('click', () => { selectCab(i); cab.focus(); });
+    cabList.appendChild(li);
   });
-  $('#cabin').onclick = () => { cabList.hidden = !cabList.hidden; };
+  const cabItems = $$('[role="option"]', cabList);
+  function setCabActive(i) {
+    cabActive = Math.max(0, Math.min(cabItems.length - 1, i));
+    cabItems.forEach((x, j) => x.classList.toggle('active', j === cabActive));
+    cab.setAttribute('aria-activedescendant', cabItems[cabActive].id);
+  }
+  function openCabin() { cabList.hidden = false; cab.setAttribute('aria-expanded', 'true'); setCabActive(W.cabins.findIndex(c => c.value === state.cabin)); }
+  function closeCabin() { cabList.hidden = true; cab.setAttribute('aria-expanded', 'false'); cab.removeAttribute('aria-activedescendant'); }
+  function selectCab(i) {
+    state.cabin = W.cabins[i].value;
+    cabItems.forEach((x, j) => x.setAttribute('aria-selected', String(j === i)));
+    $('#cabin-val').textContent = W.cabins[i].label;
+    closeCabin(); updatePax();
+  }
+  cab.addEventListener('click', () => (cabList.hidden ? openCabin() : closeCabin()));
+  cab.addEventListener('keydown', e => {
+    const isOpen = !cabList.hidden;
+    if (!isOpen && ['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(e.key)) { e.preventDefault(); openCabin(); return; }
+    if (!isOpen) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); setCabActive(cabActive + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setCabActive(cabActive - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); setCabActive(0); }
+    else if (e.key === 'End') { e.preventDefault(); setCabActive(cabItems.length - 1); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectCab(cabActive); }
+    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeCabin(); }
+    else if (e.key === 'Tab') closeCabin();
+  });
 
-  // Options
-  ['#opt-direct', '#opt-nearby', '#opt-flex'].forEach(id => { $(id).onclick = () => toggle($(id)); });
+  // Close popovers on outside click
+  document.addEventListener('mousedown', e => {
+    if (!paxPop.hidden && !paxPop.contains(e.target) && !paxBtn.contains(e.target)) closePax(false);
+  });
 
-  // Search
-  $('#search-btn').onclick = () => {
-    [fromIn, toIn].forEach(i => i.classList.remove('bad'));
-    let ok = true;
-    if (!fromIn.dataset.code) { fromIn.classList.add('bad'); ok = false; }
-    if (!toIn.dataset.code || toIn.dataset.code === fromIn.dataset.code) { toIn.classList.add('bad'); ok = false; }
-    $('#dates-btn').classList.toggle('bad', !dates.dep || (state.trip !== 'oneway' && !dates.ret));
-    if ($('#dates-btn').classList.contains('bad')) ok = false;
-    $('#errors').hidden = ok;
-    if (ok) runSearch(true);
-  };
-  function runSearch(fromUser) {
-    state.search = {
+  /* ---------- Options ---------- */
+  makeCheckbox($('#opt-direct'));
+  makeCheckbox($('#opt-nearby'));
+  makeCheckbox($('#opt-flex'), null, [' ', 'Enter']);
+
+  /* ---------- Validation ---------- */
+  function setFieldError(input, msg) {
+    const err = $('#' + input.id.replace('-input', '') + '-err');
+    err.textContent = msg; err.hidden = false;
+    input.setAttribute('aria-invalid', 'true');
+    input.setAttribute('aria-describedby', [input.dataset.hint, err.id].filter(Boolean).join(' '));
+  }
+  function clearFieldError(input) {
+    const err = $('#' + input.id.replace('-input', '') + '-err');
+    if (err) { err.hidden = true; err.textContent = ''; }
+    input.removeAttribute('aria-invalid');
+    if (input.dataset.hint) input.setAttribute('aria-describedby', input.dataset.hint); else input.removeAttribute('aria-describedby');
+  }
+
+  function validateSearch() {
+    [fromIn, toIn].forEach(clearFieldError);
+    const errs = [];
+    if (!fromIn.dataset.code) errs.push([fromIn, 'Choose where you are flying from.']);
+    if (!toIn.dataset.code) errs.push([toIn, 'Choose where you are flying to.']);
+    else if (fromIn.dataset.code && fromIn.dataset.code === toIn.dataset.code) errs.push([toIn, 'Choose a destination that is different from where you are flying from.']);
+    clearFieldError(datesBtn);
+    if (!dates.dep) errs.push([datesBtn, 'Choose your travel dates.']);
+    else if (state.trip !== 'oneway' && !dates.ret) errs.push([datesBtn, 'Choose your return date.']);
+    const box = $('#errors'), ul = $('#errors-list');
+    ul.innerHTML = '';
+    errs.forEach(([input, msg]) => {
+      setFieldError(input, msg);
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + input.id; a.textContent = msg;
+      a.addEventListener('click', e => { e.preventDefault(); input.focus(); });
+      li.appendChild(a); ul.appendChild(li);
+    });
+    box.hidden = errs.length === 0;
+    if (errs.length) box.focus();
+    return errs.length === 0;
+  }
+
+  /* ---------- Search and results ---------- */
+  activate($('#search-btn'), () => { if (validateSearch()) runSearch(true); });
+
+  function readSearch() {
+    return {
       from: fromIn.dataset.code, to: toIn.dataset.code, depart: dates.dep,
       ret: state.trip === 'oneway' ? null : dates.ret,
-      adults: +$('#adults').textContent, children: +$('#children').textContent, cabin: state.cabin
+      adults: +$('#adults').getAttribute('aria-valuenow'), children: +$('#children').getAttribute('aria-valuenow'),
+      cabin: state.cabin, direct: $('#opt-direct').getAttribute('aria-checked') === 'true'
     };
-    state.flights = W.flights(state.search.from, state.search.to, state.search.depart, state.cabin);
-    if (isOn($('#opt-direct'))) setStops(['0']); else if (fromUser) setStops(['0', '1', '2']);
-    $('#results').hidden = false;
-    render();
   }
   function setStops(vals) {
     state.filters.stops = new Set(vals);
-    $$('[data-stops]').forEach(c => c.classList.toggle('on', state.filters.stops.has(c.dataset.stops)));
+    $$('[data-stops]').forEach(c => c.setAttribute('aria-checked', String(state.filters.stops.has(c.dataset.stops))));
+  }
+  function runSearch(fromUser) {
+    const s = readSearch();
+    state.search = s;
+    state.flights = W.flights(s.from, s.to, s.depart, s.cabin);
+    if (s.direct) setStops(['0']); else if (fromUser) setStops(['0', '1', '2']);
+    const first = $('#results').hidden;
+    $('#results').hidden = false;
+    render(fromUser && !first);
+    if (first) $('#results-h').focus();
   }
 
   // Filters
-  $$('[data-stops]').forEach(c => c.onclick = () => { toggle(c); isOn(c) ? state.filters.stops.add(c.dataset.stops) : state.filters.stops.delete(c.dataset.stops); render(); });
+  $$('[data-stops]').forEach(c => makeCheckbox(c, v => { v ? state.filters.stops.add(c.dataset.stops) : state.filters.stops.delete(c.dataset.stops); render(true); }));
+  const af = $('#airline-filters');
   W.airlines.forEach(a => {
     const d = document.createElement('div');
-    d.className = 'chk on'; d.dataset.airline = a.code;
-    d.innerHTML = '<span class="box"></span><span>' + a.name + '</span>';
-    d.onclick = () => { toggle(d); isOn(d) ? state.filters.airlines.add(a.code) : state.filters.airlines.delete(a.code); render(); };
-    $('#f-air').appendChild(d);
+    d.className = 'chk'; d.setAttribute('role', 'checkbox'); d.setAttribute('aria-checked', 'true'); d.tabIndex = 0; d.dataset.airline = a.code;
+    d.innerHTML = '<span class="box"></span>' + a.name;
+    af.appendChild(d);
+    makeCheckbox(d, v => { v ? state.filters.airlines.add(a.code) : state.filters.airlines.delete(a.code); render(true); });
   });
-  $$('.acc-btn').forEach(b => b.onclick = () => { const p = $('#' + b.dataset.target); p.hidden = !p.hidden; b.classList.toggle('open', !p.hidden); });
+  $$('.acc-btn').forEach(makeAccordion);
 
-  const slider = $('#slider');
+  // Slider
+  const thumb = $('#before'), slider = $('#slider');
   function setBefore(v) {
+    v = Math.max(7, Math.min(24, v));
+    if (v === state.filters.before && thumb.getAttribute('aria-valuenow') === String(v)) return;
     const pct = (v - 7) / 17 * 100;
-    $('#before').style.left = pct + '%'; $('#slider-fill').style.width = pct + '%';
+    thumb.setAttribute('aria-valuenow', v);
+    thumb.setAttribute('aria-valuetext', W.beforeText(v));
+    thumb.style.left = pct + '%';
+    $('#slider-fill').style.width = pct + '%';
     $('#before-out').textContent = W.beforeText(v);
-    if (state.filters.before !== v) { state.filters.before = v; render(); }
+    state.filters.before = v;
+    render(true);
   }
+  thumb.addEventListener('keydown', e => {
+    const v = +thumb.getAttribute('aria-valuenow');
+    const map = { ArrowRight: v + 1, ArrowUp: v + 1, ArrowLeft: v - 1, ArrowDown: v - 1, PageUp: v + 3, PageDown: v - 3, Home: 7, End: 24 };
+    if (e.key in map) { e.preventDefault(); setBefore(map[e.key]); }
+  });
   function fromPointer(e) { const r = slider.getBoundingClientRect(); setBefore(Math.round(7 + Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * 17)); }
-  slider.addEventListener('pointerdown', e => { slider.setPointerCapture(e.pointerId); fromPointer(e); });
+  slider.addEventListener('pointerdown', e => { slider.setPointerCapture(e.pointerId); thumb.focus(); fromPointer(e); });
   slider.addEventListener('pointermove', e => { if (slider.hasPointerCapture(e.pointerId)) fromPointer(e); });
-  $('#reset').onclick = () => {
+
+  function resetFilters() {
     setStops(['0', '1', '2']);
     state.filters.airlines = new Set(W.airlines.map(a => a.code));
-    $$('[data-airline]').forEach(c => c.classList.add('on'));
+    $$('[data-airline]').forEach(c => c.setAttribute('aria-checked', 'true'));
     state.filters.before = 23; setBefore(24);
-  };
+  }
+  activate($('#reset'), resetFilters);
+  activate($('#reset2'), resetFilters);
 
-  $$('.sort .tab').forEach(t => t.onclick = () => {
-    $$('.sort .tab').forEach(x => x.classList.toggle('on', x === t));
-    state.sort = t.dataset.value; render();
+  // Tabs
+  const tabs = $$('[role="tab"]'), panel = $('#panel');
+  function selectTab(t) {
+    tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; });
+    panel.setAttribute('aria-labelledby', t.id);
+    t.focus();
+    state.sort = t.dataset.value;
+    render(true);
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => selectTab(t));
+    t.addEventListener('keydown', e => {
+      let n = null;
+      if (e.key === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+      else if (e.key === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+      else if (e.key === 'Home') n = tabs[0];
+      else if (e.key === 'End') n = tabs[tabs.length - 1];
+      if (n) { e.preventDefault(); selectTab(n); }
+    });
   });
 
-  function render() {
-    const s = state.search, fromA = W.airport(s.from), toA = W.airport(s.to);
-    $('#results-h').textContent = fromA.name + ' → ' + toA.name;
-    $('#results-meta').textContent = W.fmtShort(s.depart) + (s.ret ? ' – ' + W.fmtShort(s.ret) : '') + ' · ' + (s.adults + s.children) + ' pax · ' + W.cabin(s.cabin).label;
+  function paxText(s) {
+    const parts = [s.adults + (s.adults === 1 ? ' adult' : ' adults')];
+    if (s.children) parts.push(s.children + (s.children === 1 ? ' child' : ' children'));
+    return parts.join(', ');
+  }
+  function render(doAnnounce) {
+    const s = state.search;
+    const fromA = W.airport(s.from), toA = W.airport(s.to);
+    $('#results-h').textContent = 'Flights from ' + fromA.name + ' to ' + toA.name;
+    $('#results-meta').textContent = W.fmtLong(s.depart) + (s.ret ? ', returning ' + W.fmtLong(s.ret) : ', one way') + '. ' + paxText(s) + ', ' + W.cabin(s.cabin).label + '.';
     const filtered = W.filterFlights(state.flights, state.filters);
-    ['best', 'cheapest', 'fastest'].forEach(m => { const top = W.sortFlights(filtered, m)[0]; $('#sub-' + m).textContent = top ? W.money(top.price) + ' · ' + W.fmtDur(top.dur) : '–'; });
-    const list = W.sortFlights(filtered, state.sort);
-    const box = $('#list');
-    box.innerHTML = '';
-    list.forEach(f => {
-      const c = document.createElement('div');
-      c.className = 'card';
-      c.innerHTML =
-        '<div class="card-main">' +
-          '<div class="carrier"><img class="wide" src="' + W.logo(f.airline, true) + '"><span class="fno lowc">' + f.flightNo + '</span></div>' +
-          '<div class="leg">' +
-            '<div><span class="t">' + W.fmtTime(f.dep) + '</span><div class="ap">' + fromA.code + '</div></div>' +
-            '<div class="mid"><span>' + W.fmtDur(f.dur) + '</span><span class="line' + (f.stops ? ' stops' : '') + '"></span><span class="' + (f.stops ? '' : 'direct') + '">' + W.stopsText(f) + '</span></div>' +
-            '<div><span class="t">' + W.fmtTime(f.arr) + (W.nextDay(f) ? '<span class="plus1">+1</span>' : '') + '</span><div class="ap">' + toA.code + '</div></div>' +
-          '</div>' +
-          '<div class="more"><span class="more-btn">Flight details</span> <span class="lowc">· For fare rules <a href="#">click here</a></span>' +
-          '<div class="more-body" hidden><div>' + f.flightNo + '</div><div>' + (f.stops ? 'Via ' + f.via.join(' and ') : 'Non-stop') + '</div><div>1 bag, up to 10 kg</div><div>Changes £25</div></div></div>' +
-        '</div>' +
-        '<div class="card-side"><div><div class="price">' + W.money(f.price) + '</div><div class="price-note lowc">pp</div></div>' +
-          '<div class="card-actions"><div class="save-btn' + (state.saved.has(f.id) ? ' on' : '') + '"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div><div class="btn btn-primary sel">Select</div></div>' +
-          '<span class="saved-note" hidden>Saved!</span></div>';
-      $('.more-btn', c).onclick = () => { const b = $('.more-body', c); b.hidden = !b.hidden; };
-      $('.save-btn', c).onclick = e => {
-        const b = e.currentTarget, note = $('.saved-note', c);
-        b.classList.toggle('on');
-        b.classList.contains('on') ? state.saved.add(f.id) : state.saved.delete(f.id);
-        note.hidden = !b.classList.contains('on');
-        setTimeout(() => { note.hidden = true; }, 1500);
-      };
-      $('.sel', c).onclick = () => openBooking(f);
-      box.appendChild(c);
+    ['best', 'cheapest', 'fastest'].forEach(m => {
+      const top = W.sortFlights(filtered, m)[0];
+      $('#sub-' + m).textContent = top ? W.money(top.price) + ' · ' + W.fmtDur(top.dur) : 'No flights';
     });
+    const list = W.sortFlights(filtered, state.sort);
+    const ul = $('#list');
+    ul.innerHTML = '';
+    list.forEach(f => ul.appendChild(card(f, s)));
     $('#empty').hidden = list.length > 0;
-    $('#status').textContent = list.length + ' results';
+    const msg = 'Showing ' + list.length + ' of ' + state.flights.length + ' flights, sorted by ' + state.sort + '.';
+    if (doAnnounce) announce($('#status'), msg, 500); else $('#status').textContent = msg;
   }
 
-  // Booking overlay: focus never moves into it and the page behind stays reachable
-  const backdrop = $('#book-backdrop');
-  let current = null;
+  function card(f, s) {
+    const li = document.createElement('li');
+    const fromA = W.airport(s.from), toA = W.airport(s.to), hid = 'h-' + f.id;
+    li.innerHTML =
+      '<article class="card" aria-labelledby="' + hid + '">' +
+        '<div class="card-main">' +
+          '<div class="carrier"><img src="' + W.logo(f.airline) + '" alt=""><div><h3 id="' + hid + '">' + f.airline.name + '</h3><span class="fno">Flight ' + f.flightNo + '</span></div></div>' +
+          '<div class="leg">' +
+            '<div><span class="vh">Departs </span><span class="t">' + W.fmtTime(f.dep) + '</span><div class="ap">' + fromA.code + '<span class="vh"> ' + fromA.name + '</span></div></div>' +
+            '<div class="mid"><span><span class="vh">Journey time </span>' + W.fmtDur(f.dur) + '</span><span class="line' + (f.stops ? ' stops' : '') + '"></span><span class="' + (f.stops ? '' : 'direct') + '">' + W.stopsText(f) + '</span></div>' +
+            '<div><span class="vh">Arrives </span><span class="t">' + W.fmtTime(f.arr) + (W.nextDay(f) ? '<span class="plus1">+1<span class="vh"> day</span></span>' : '') + '</span><div class="ap">' + toA.code + '<span class="vh"> ' + toA.name + '</span></div></div>' +
+          '</div>' +
+          '<div class="more"><div class="more-btn" role="button" tabindex="0" aria-expanded="false" aria-controls="more-' + f.id + '">Flight details</div>' +
+          '<div class="more-body" id="more-' + f.id + '" hidden><dl>' +
+            '<dt>Flight number</dt><dd>' + f.flightNo + '</dd>' +
+            '<dt>Stops</dt><dd>' + (f.stops ? 'Via ' + f.via.join(' and ') : 'Non-stop') + '</dd>' +
+            '<dt>Cabin bag</dt><dd>1 bag, up to 10 kg</dd>' +
+            '<dt>Changes</dt><dd>£25 per passenger</dd>' +
+          '</dl></div></div>' +
+        '</div>' +
+        '<div class="card-side">' +
+          '<div><div class="price">' + W.money(f.price) + '</div><div class="price-note">per person</div></div>' +
+          '<div class="card-actions">' +
+            '<div class="save-btn" role="button" tabindex="0" aria-pressed="' + state.saved.has(f.id) + '" aria-label="Save ' + f.airline.name + ' ' + W.fmtTime(f.dep) + ' flight"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div>' +
+            '<div class="btn btn-primary sel" role="button" tabindex="0" aria-label="Select ' + f.airline.name + ' ' + W.fmtTime(f.dep) + ' flight, ' + W.money(f.price) + '">Select</div>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+    makeAccordion($('.more-btn', li));
+    const sel = $('.sel', li);
+    activate(sel, () => openBooking(f, sel));
+    const sv = $('.save-btn', li);
+    activate(sv, () => {
+      const on = !state.saved.has(f.id);
+      on ? state.saved.add(f.id) : state.saved.delete(f.id);
+      sv.setAttribute('aria-pressed', String(on));
+      announce($('#save-status'), on ? 'Saved to your trips.' : 'Removed from your trips.', 100);
+    });
+    return li;
+  }
+
+  /* ---------- Booking dialog ---------- */
+  const page = $('#page'), backdrop = $('#book-backdrop'), modal = $('#book');
+  let opener = null, current = null;
+  const seatGroup = makeRadioGroup($('#seat'), v => { state.seat = v; });
+  const ex = $('#extras');
   W.extras.forEach(e => {
     const d = document.createElement('div');
-    d.className = 'chk'; d.dataset.extra = e.value;
-    d.innerHTML = '<span class="box"></span>' + e.label + ' +' + W.money(e.price);
-    d.onclick = () => { toggle(d); updateTotal(); };
-    $('#extras').appendChild(d);
+    d.className = 'chk'; d.setAttribute('role', 'checkbox'); d.setAttribute('aria-checked', 'false'); d.tabIndex = 0; d.dataset.extra = e.value;
+    d.innerHTML = '<span class="box"></span>' + e.label + ', ' + W.money(e.price);
+    ex.appendChild(d);
+    makeCheckbox(d, updateTotal);
   });
-  $$('#seat .chk').forEach(o => o.onclick = () => $$('#seat .chk').forEach(x => x.classList.toggle('on', x === o)));
-  $('#terms').onclick = () => toggle($('#terms'));
+  makeCheckbox($('#terms'), v => { if (v) clearBookError($('#terms')); });
+  $('#pemail').dataset.hint = 'pemail-hint';
+
+  function paxCount() { return state.search.adults + state.search.children; }
   function updateTotal() {
-    const n = state.search.adults + state.search.children;
-    const extras = $$('[data-extra].on').reduce((s, c) => s + W.extras.find(e => e.value === c.dataset.extra).price, 0);
-    $('#total').textContent = W.money((current.price + extras) * n);
+    if (!current) return;
+    const extras = $$('[data-extra][aria-checked="true"]').reduce((sum, c) => sum + W.extras.find(e => e.value === c.dataset.extra).price, 0);
+    $('#total').textContent = W.money((current.price + extras) * paxCount());
   }
-  function openBooking(f) {
-    current = f;
+  function bookError(el, msg) {
+    const err = $('#' + el.id + '-err');
+    err.textContent = msg; err.hidden = false;
+    el.setAttribute('aria-invalid', 'true');
+    el.setAttribute('aria-describedby', [el.dataset.hint, err.id].filter(Boolean).join(' '));
+  }
+  function clearBookError(el) {
+    const err = $('#' + el.id + '-err');
+    err.hidden = true; err.textContent = '';
+    el.removeAttribute('aria-invalid');
+    if (el.dataset.hint) el.setAttribute('aria-describedby', el.dataset.hint); else el.removeAttribute('aria-describedby');
+  }
+  function openBooking(f, btn) {
+    opener = btn; current = f;
     const s = state.search;
     $('#pname').value = ''; $('#pemail').value = '';
-    [$('#pname'), $('#pemail')].forEach(i => i.classList.remove('bad'));
-    $('#terms').classList.remove('on'); $('#terms').style.color = '';
-    $$('[data-extra]').forEach(c => c.classList.remove('on'));
+    [$('#pname'), $('#pemail'), $('#terms')].forEach(clearBookError);
+    $('#terms').setAttribute('aria-checked', 'false');
+    $$('[data-extra]').forEach(c => c.setAttribute('aria-checked', 'false'));
+    seatGroup.reset();
     $('#book-body').hidden = false; $('#confirm').hidden = true;
-    $('#trip-sum').innerHTML = '<img class="wide" src="' + W.logo(f.airline, true) + '"><span>' + W.airport(s.from).code + ' → ' + W.airport(s.to).code + ' · ' + W.fmtShort(s.depart) + ' · ' + W.fmtTime(f.dep) + '–' + W.fmtTime(f.arr) + '</span>';
+    $('#trip-sum').innerHTML = '<strong>' + f.airline.name + ', flight ' + f.flightNo + '</strong>' +
+      '<span>' + W.airport(s.from).name + ' to ' + W.airport(s.to).name + ', ' + W.fmtLong(s.depart) + '</span>' +
+      '<span>Departs ' + W.fmtTime(f.dep) + ', arrives ' + W.fmtTime(f.arr) + (W.nextDay(f) ? ' the next day' : '') + '. ' + W.stopsText(f) + '.</span>';
+    const n = paxCount();
+    $('#pax-count').textContent = n + (n === 1 ? ' passenger' : ' passengers');
     updateTotal();
     backdrop.hidden = false;
+    page.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = 'hidden';
+    $('#book-h').focus();
   }
-  const close = () => { backdrop.hidden = true; };
-  $('#book-close').onclick = close;
-  $('#book-cancel').onclick = close;
-  $('#book-confirm').onclick = () => {
-    let ok = true;
-    const name = $('#pname'), email = $('#pemail');
-    name.classList.toggle('bad', !name.value.trim()); if (!name.value.trim()) ok = false;
-    const goodEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
-    email.classList.toggle('bad', !goodEmail); if (!goodEmail) ok = false;
-    if (!isOn($('#terms'))) { $('#terms').style.color = 'var(--danger)'; ok = false; }
-    if (!ok) return;
+  function closeBooking() {
+    backdrop.hidden = true;
+    page.removeAttribute('aria-hidden');
+    document.body.style.overflow = '';
+    if (opener && document.body.contains(opener)) opener.focus(); else $('#results-h').focus();
+  }
+  activate($('#book-close'), closeBooking);
+  activate($('#book-cancel'), closeBooking);
+  activate($('#confirm-done'), closeBooking);
+  modal.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { e.preventDefault(); closeBooking(); }
+    if (e.key === 'Tab') trapTab(modal, e);
+  });
+  backdrop.addEventListener('mousedown', e => { if (e.target === backdrop) closeBooking(); });
+  ['pname', 'pemail'].forEach(id => $('#' + id).addEventListener('input', e => clearBookError(e.target)));
+  activate($('#book-confirm'), () => {
+    const name = $('#pname'), email = $('#pemail'), terms = $('#terms');
+    [name, email, terms].forEach(clearBookError);
+    const bad = [];
+    if (!name.value.trim()) { bookError(name, 'Enter your full name.'); bad.push(name); }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { bookError(email, 'Enter an email address in the format name@example.com.'); bad.push(email); }
+    if (terms.getAttribute('aria-checked') !== 'true') { bookError(terms, 'Accept the fare rules to continue.'); bad.push(terms); }
+    if (bad.length) { bad[0].focus(); return; }
     $('#ref').textContent = W.bookingRef();
-    $('#book-body').hidden = true; $('#confirm').hidden = false;
-    setTimeout(close, 4000);
-  };
+    $('#confirm-text').textContent = 'We have sent your e-ticket to ' + email.value.trim() + '. Have a legendary trip.';
+    $('#book-body').hidden = true;
+    $('#confirm').hidden = false;
+    $('#confirm-h').focus();
+  });
+
+  /* ---------- Tooltip (APG tooltip pattern) ---------- */
+  const tipBtn = $('#tip-nearby-btn'), tipEl = $('#tip-nearby');
+  let tipTimer = null;
+  function showTip() { clearTimeout(tipTimer); tipEl.hidden = false; }
+  function hideTip(delay) { clearTimeout(tipTimer); tipTimer = setTimeout(() => { tipEl.hidden = true; }, delay || 0); }
+  tipBtn.addEventListener('focus', showTip);
+  tipBtn.addEventListener('blur', () => hideTip(0));
+  tipBtn.addEventListener('mouseenter', showTip);
+  tipBtn.addEventListener('mouseleave', () => hideTip(400));
+  tipEl.addEventListener('mouseenter', showTip);
+  tipEl.addEventListener('mouseleave', () => hideTip(400));
+  activate(tipBtn, () => (tipEl.hidden ? showTip() : hideTip(0)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !tipEl.hidden) tipEl.hidden = true; });
+
+  /* ---------- Popular destinations carousel (APG carousel pattern) ---------- */
+  const destEl = $('#dest'), slidesEl = $('#dest-slides'), rotBtn = $('#dest-rotate'), D = W.destinations;
+  D.forEach((d, i) => {
+    const a = W.airport(d.code);
+    const s = document.createElement('div');
+    s.className = 'dest-slide';
+    s.setAttribute('role', 'group');
+    s.setAttribute('aria-roledescription', 'slide');
+    s.setAttribute('aria-label', 'Slide ' + (i + 1));
+    s.hidden = i !== 0;
+    s.innerHTML = '<div class="dest-card"><img src="' + d.img + '" width="320" height="180">' +
+      '<div class="dest-body"><p class="dest-region">' + d.region + '</p><h3>' + a.name + '</h3><p>' + d.blurb + '</p>' +
+      '<p class="dest-price">Return flights from <strong>' + W.money(d.price) + '</strong></p>' +
+      '<div class="btn btn-secondary" role="button" tabindex="0" data-dest="' + d.code + '">Search flights to ' + a.name + '</div></div></div>';
+    slidesEl.appendChild(s);
+    activate($('[data-dest]', s), () => {
+      setAirport(toIn, d.code);
+      if (fromIn.dataset.code === d.code) setAirport(fromIn, d.code === 'CML' ? 'AVN' : 'CML');
+      clearFieldError(toIn);
+      toIn.focus();
+    });
+  });
+  let cur = 0, rotTimer = null, userPaused = false, hovering = false, focusedIn = false;
+  function showSlide(i) {
+    cur = (i + D.length) % D.length;
+    $$('.dest-slide', slidesEl).forEach((s, j) => { s.hidden = j !== cur; });
+    $('#dest-count').textContent = (cur + 1) + ' of ' + D.length;
+    // FAULT: every change is announced, even while you are reading something else
+    $('#dest-live').textContent = 'Slide ' + (cur + 1);
+  }
+  function startRotation() {
+    // FAULT: rotation does not pause on focus or hover
+    if (rotTimer || userPaused) return;
+    rotTimer = setInterval(() => showSlide(cur + 1), 6000);
+  }
+  function stopRotation() { clearInterval(rotTimer); rotTimer = null; }
+  activate(rotBtn, () => {
+    userPaused = !userPaused;
+    rotBtn.textContent = userPaused ? 'Start slide rotation' : 'Stop slide rotation';
+    if (userPaused) stopRotation(); else startRotation();
+  });
+  activate($('#dest-prev'), () => showSlide(cur - 1));
+  activate($('#dest-next'), () => showSlide(cur + 1));
+  showSlide(0); $('#dest-live').textContent = '';
+  startRotation();
+
+  /* ---------- Cookie banner and preferences dialog ---------- */
+  const ckBack = $('#cookie-backdrop'), ckDlg = $('#cookie-dlg');
+  const ckIds = ['ck-analytics', 'ck-marketing', 'ck-personal'];
+  let ckOpener = null, ckSnapshot = [];
+  ckIds.forEach(id => makeCheckbox($('#' + id), null, [' ', 'Enter']));
+  function cookieDone(msg) {
+    $('#cookie-ask').hidden = true; $('#cookie-btns').hidden = true;
+    $('#cookie-done-text').textContent = msg;
+    $('#cookie-done').hidden = false; $('#cookie-done-btns').hidden = false;
+    $('#cookie-done').focus();
+  }
+  $$('[data-cookie]').forEach(b => activate(b, () => {
+    const all = b.dataset.cookie === 'all';
+    ckIds.forEach(id => $('#' + id).setAttribute('aria-checked', String(all)));
+    cookieDone(all ? 'You have accepted all cookies. You can change your cookie settings at any time.' : 'You have rejected optional cookies. You can change your cookie settings at any time.');
+  }));
+  function openCookie() {
+    ckOpener = document.activeElement;
+    ckSnapshot = ckIds.map(id => $('#' + id).getAttribute('aria-checked'));
+    ckBack.hidden = false;
+    page.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = 'hidden';
+    $('#cookie-dlg-h').focus();
+  }
+  function closeCookie(restore) {
+    if (restore) ckIds.forEach((id, i) => $('#' + id).setAttribute('aria-checked', ckSnapshot[i]));
+    ckBack.hidden = true;
+    page.removeAttribute('aria-hidden');
+    document.body.style.overflow = '';
+    if (restore && ckOpener) ckOpener.focus();
+  }
+  activate($('#cookie-manage'), openCookie);
+  activate($('#cookie-change'), openCookie);
+  activate($('#cookie-dlg-close'), () => closeCookie(true));
+  activate($('#cookie-dlg-cancel'), () => closeCookie(true));
+  activate($('#cookie-save'), () => {
+    closeCookie(false);
+    const on = ckIds.filter(id => $('#' + id).getAttribute('aria-checked') === 'true').length;
+    cookieDone('Your cookie preferences have been saved. ' + (on ? on + ' optional ' + (on === 1 ? 'type is' : 'types are') + ' turned on.' : 'Only essential cookies are turned on.'));
+  });
+  ckDlg.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { e.preventDefault(); closeCookie(true); }
+    if (e.key === 'Tab') trapTab(ckDlg, e);
+  });
+  ckBack.addEventListener('mousedown', e => { if (e.target === ckBack) closeCookie(true); });
+  activate($('#cookie-hide'), () => { $('#cookie').hidden = true; $('#main').focus(); });
 
 })();
 </script>

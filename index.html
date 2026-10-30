@@ -76,7 +76,7 @@
         <li class="version">
           <span class="tag">Version 2</span>
           <h3><a href="broken.html">Inaccessible</a></h3>
-          <p>Looks the same as version 1, but every widget is a plain <code>div</code> that only responds to a mouse. No headings, no labels, no announcements and no visible focus.</p>
+          <p>Looks and works exactly like version 1, but has a handful of realistic faults of the kind you find on real sites: missing states, an unlabelled button, results you can't reach, a calendar that loses your focus, a cookie message at the end of the page and a chatty carousel. Can you find them all?</p>
           <span class="pill bad">Deliberately inaccessible</span>
         </li>
       </ul>
@@ -120,25 +120,25 @@
             <tr><th scope="col">Part of the page</th><th scope="col">1. Accessible</th><th scope="col">2. Inaccessible</th></tr>
           </thead>
           <tbody>
-            <tr><th scope="row">Trip type</th><td><code>radiogroup</code> with roving focus</td><td>Clickable <code>div</code>s</td></tr>
-            <tr><th scope="row">From and To</th><td>Text box, a results list of real buttons, and a count message</td><td>Unlabelled text box, suggestions mouse-only</td></tr>
-            <tr><th scope="row">Swap button</th><td><code>role="button"</code> with <code>aria-label</code></td><td>Icon in a <code>div</code></td></tr>
-            <tr><th scope="row">Dates</th><td>A plain calendar showing two months at once: the browser's own <code>dialog</code>, a heading and an ordinary table for each month, and a real <code>button</code> for each day you can choose. Each button reads its date, whether the price is low, average or high, and what choosing it does. Previous month, Next month and Cheapest buttons. No custom keys</td><td>Mouse-only calendar of <code>div</code>s. Nothing says whether you are choosing departure or return, and cheap or expensive days are shown only by a coloured line</td></tr>
-            <tr><th scope="row">Passengers</th><td>Disclosure popover with <code>spinbutton</code>s</td><td>Popover with unlabelled + and − symbols</td></tr>
-            <tr><th scope="row">Cabin class</th><td>Select-only <code>combobox</code> and <code>listbox</code></td><td>Mouse-only list</td></tr>
-            <tr><th scope="row">Options</th><td><code>role="checkbox"</code> and <code>role="switch"</code></td><td>Styled <code>div</code>s</td></tr>
-            <tr><th scope="row">Nearby airports help</th><td><code>tooltip</code> shown on focus and hover, closed with Escape</td><td>Hover-only tooltip on an unlabelled icon</td></tr>
-            <tr><th scope="row">Search errors</th><td>Error summary that takes focus, plus <code>aria-invalid</code> and <code>aria-describedby</code></td><td>Red outline and a vague message</td></tr>
-            <tr><th scope="row">Results updates</th><td><code>role="status"</code> live region</td><td>Text changes silently</td></tr>
-            <tr><th scope="row">Sort</th><td><code>tablist</code> with a <code>tabpanel</code></td><td>Clickable <code>div</code>s</td></tr>
-            <tr><th scope="row">Filter sections</th><td>Accordion buttons with <code>aria-expanded</code></td><td>Clickable <code>div</code>s</td></tr>
-            <tr><th scope="row">Departure time</th><td><code>slider</code> with <code>aria-valuetext</code></td><td>Drag-only slider</td></tr>
-            <tr><th scope="row">Save flight</th><td><code>role="button"</code> with <code>aria-pressed</code> and a status message</td><td>Unlabelled heart icon; "Saved!" flashes up silently</td></tr>
-            <tr><th scope="row">Popular destinations</th><td>Carousel with slides, Previous, Next and a button to stop rotation</td><td>Auto-rotating slides with no pause; images have no alt text</td></tr>
-            <tr><th scope="row">Cookie message</th><td>Banner region with <code>role="button"</code> controls</td><td>Fixed to the bottom of the screen, last in the page</td></tr>
-            <tr><th scope="row">Cookie settings</th><td><code>role="dialog"</code> with <code>role="switch"</code> controls</td><td>Overlay of coloured toggles with no labels or state</td></tr>
-            <tr><th scope="row">Booking</th><td><code>role="dialog"</code> with <code>aria-modal</code>, a focus trap and Escape</td><td>Overlay that never gets focus and closes itself</td></tr>
-            <tr><th scope="row">Questions</th><td>Accordion: heading containing a button</td><td>Clickable <code>div</code>s</td></tr>
+            <tr><th scope="row">Trip type</th><td><code>radiogroup</code> with roving focus</td><td><code>radiogroup</code>, but the selected option is shown only visually: <code>aria-checked</code> is never set</td></tr>
+            <tr><th scope="row">From and To</th><td>Text box, a results list of real buttons, and a count message</td><td>Same text box and count message ("2 results available"), but the results are hidden from screen readers and can only be chosen with a mouse</td></tr>
+            <tr><th scope="row">Swap button</th><td><code>role="button"</code> with <code>aria-label</code></td><td><code>role="button"</code> with no name</td></tr>
+            <tr><th scope="row">Dates</th><td>A plain calendar showing two months at once: the browser's own <code>dialog</code>, a heading and an ordinary table for each month, and a real <code>button</code> for each day you can choose. Each button reads its date, whether the price is low, average or high, and what choosing it does. Previous month, Next month and Cheapest buttons. No custom keys</td><td>Same calendar, but it opens as a non-modal pop-up and focus stays on Travel dates. Days only say the number and price, with no month, weekday, low or high price, or what choosing does. After choosing a departure date, focus is thrown to the top of the page</td></tr>
+            <tr><th scope="row">Passengers</th><td>Disclosure popover with <code>spinbutton</code>s</td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Cabin class</th><td>Select-only <code>combobox</code> and <code>listbox</code></td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Options</th><td><code>role="checkbox"</code> and <code>role="switch"</code></td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Nearby airports help</th><td><code>tooltip</code> shown on focus and hover, closed with Escape</td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Search errors</th><td>Error summary that takes focus, plus <code>aria-invalid</code> and <code>aria-describedby</code></td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Results updates</th><td><code>role="status"</code> live region</td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Sort</th><td><code>tablist</code> with a <code>tabpanel</code></td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Filter sections</th><td>Accordion buttons with <code>aria-expanded</code></td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Departure time</th><td><code>slider</code> with <code>aria-valuetext</code></td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Save flight</th><td><code>role="button"</code> with <code>aria-pressed</code> and a status message</td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Popular destinations</th><td>Carousel with slides, Previous, Next and a button to stop rotation</td><td>Images have no alt text. Slides are labelled only "Slide 1", "Slide 2" and so on, rotation never pauses on focus or hover, and every change is announced</td></tr>
+            <tr><th scope="row">Cookie message</th><td>Banner region with <code>role="button"</code> controls</td><td>Fixed to the bottom of the screen but last in the page, so screen readers reach it only at the very end</td></tr>
+            <tr><th scope="row">Cookie settings</th><td><code>role="dialog"</code> with <code>role="switch"</code> controls</td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Booking</th><td><code>role="dialog"</code> with <code>aria-modal</code>, a focus trap and Escape</td><td>Same as version 1</td></tr>
+            <tr><th scope="row">Questions</th><td>Accordion: heading containing a button</td><td>Same as version 1</td></tr>
           </tbody>
         </table>
       </div>
@@ -227,29 +227,16 @@
         <summary>Show the deliberate problems in the inaccessible version</summary>
         <div class="key-body">
           <ul>
-            <li>The page title is "Untitled" and the page has no language set. <span class="sc">WCAG 2.4.2, 3.1.1</span></li>
-            <li>There are no headings, no landmarks and no skip link. <span class="sc">1.3.1, 2.4.1</span></li>
-            <li>The logo has no alt text, and airline names only appear inside logo images. <span class="sc">1.1.1</span></li>
-            <li>Navigation, buttons, checkboxes, radio buttons, tabs, sections, the calendar and the slider are plain <code>div</code>s. They can't be reached with the keyboard and have no role or state. <span class="sc">2.1.1, 4.1.2</span></li>
-            <li>Form fields only have nearby text or a placeholder, not a label. <span class="sc">1.3.1, 3.3.2</span></li>
-            <li>Destination suggestions can only be chosen with a mouse. <span class="sc">2.1.1</span></li>
-            <li>In the calendar, cheap and expensive days are shown only by a green or red line, with no prices or text. <span class="sc">1.4.1, 1.1.1</span></li>
-            <li>Errors only show as a red outline and a vague message, and are never announced. <span class="sc">1.4.1, 3.3.1, 4.1.3</span></li>
-            <li>The results count changes silently. <span class="sc">4.1.3</span></li>
-            <li>The focus outline is removed. <span class="sc">2.4.7</span></li>
-            <li>The booking overlay never takes focus, doesn't trap it, ignores Escape and closes itself 4 seconds after you confirm. <span class="sc">2.4.3, 2.2.1</span></li>
-            <li>The footer email field has <code>tabindex="1"</code>, so it gets focus first. <span class="sc">2.4.3</span></li>
-            <li>Hint text has low contrast. <span class="sc">1.4.3</span></li>
-            <li>A countdown changes every second and can't be paused. <span class="sc">2.2.2</span></li>
-            <li>Zoom is disabled in the viewport settings. <span class="sc">1.4.4</span></li>
-            <li>Links say "click here", and the fare rules link goes nowhere. <span class="sc">2.4.4</span></li>
-            <li>The cookie banner covers the bottom of the page and can only be closed with a mouse. <span class="sc">2.1.1, 2.4.11</span></li>
-            <li>Cookie settings: the overlay never takes focus, the toggles have no names, and on or off is shown only by colour and position. Every toggle starts switched on. <span class="sc">1.4.1, 2.4.3, 4.1.2</span></li>
-            <li>The help icon next to "Include nearby airports" has no name, the tooltip only appears on mouse hover and it disappears when you move the pointer onto it. <span class="sc">1.4.13, 2.1.1, 4.1.2</span></li>
-            <li>The save heart has no name or state, and "Saved!" is never announced. <span class="sc">4.1.2, 4.1.3</span></li>
-            <li>The destination carousel changes every 4 seconds and can't be paused. Hidden slides are only see-through, so screen readers read all five. <span class="sc">2.2.2, 1.3.2</span></li>
-            <li>Destination images have no alt text, so file names such as "IMG_2041" are read. "Read more" says nothing about where it goes. <span class="sc">1.1.1, 2.4.4</span></li>
-            <li>Abbreviations such as "pp" and "pax" and the arrow symbol in the results heading are not explained. <span class="sc">3.1.4</span></li>
+            <li>Main navigation: "Flights" is underlined as the current page, but <code>aria-current</code> is missing, so screen readers don't say it is the current page. <span class="sc">WCAG 1.3.1</span></li>
+            <li>Trip type: Return and One way are radio buttons, but neither is ever announced as selected. <span class="sc">4.1.2</span></li>
+            <li>The swap button between From and To has no name, so it is read as just "button". <span class="sc">4.1.2, 2.4.6</span></li>
+            <li>From and To: typing announces "2 results available", but the results are hidden from screen readers, Down arrow does nothing and they can only be chosen with a mouse. <span class="sc">2.1.1, 4.1.2</span></li>
+            <li>Calendar: it opens, but focus stays on Travel dates and nothing tells you it opened. It is not modal, so you have to go looking for it. <span class="sc">2.4.3</span></li>
+            <li>Calendar days only say the number and price, for example "30 £106". The month, weekday, low or high price and "select as departure date" are missing. Low and high prices are shown only by colour. <span class="sc">1.3.1, 1.4.1, 2.4.6</span></li>
+            <li>After you choose a departure date, focus is thrown to the top of the page with no message, while the calendar stays open waiting for a return date. <span class="sc">2.4.3, 3.2.2</span></li>
+            <li>The cookie message shows at the bottom of the screen straight away, but it is last in the page, so screen reader users don't hear about it until the end and have to go to the bottom to dismiss it. <span class="sc">1.3.2, 2.4.3</span></li>
+            <li>Popular destinations: images have no alt text, so file names may be read. <span class="sc">1.1.1</span></li>
+            <li>Popular destinations: slides are labelled only "Slide 1", "Slide 2" and so on. Rotation doesn't stop when you focus or hover on the carousel, and each change is announced, even while you are reading something else. <span class="sc">2.2.2, 4.1.3</span></li>
           </ul>
         </div>
       </details>

@@ -387,3 +387,5 @@ dialog.modal.cal-dialog { width: min(860px, calc(100vw - 16px)); }
 .cal-month-cheap { margin: 0 0 8px; text-align: center; font-size: .9rem; color: var(--muted); }
 .cal-month-cheap .cal-go { font: inherit; font-weight: 700; color: var(--ok); background: none; border: 0; padding: 2px 4px; text-decoration: underline; cursor: pointer; border-radius: 4px; }
 .cal-month-cheap .cal-go:hover, .cal-month-cheap .cal-go:focus { background: var(--accent-soft); }
+/* Inaccessible version: the calendar opens as a non-modal pop-up, floating in the middle of the screen */
+dialog.modal.cal-float[open] { position: fixed; inset: 0; margin: auto; height: fit-content; z-index: 60; }

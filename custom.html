@@ -511,6 +511,13 @@
       if (!input.dataset.code) { const a = W.airportByName(input.value); if (a) setAirport(input, a.code); }
     }
     function buttons() { return $$('button', ul); }
+    // When a place is already chosen, the first letter you type (or Backspace)
+    // clears it, so you start a fresh search instead of adding to "Camelot (CML)".
+    input.addEventListener('beforeinput', e => {
+      if (!input.dataset.code) return;
+      if (e.inputType.startsWith('insert')) { input.value = ''; }
+      else if (e.inputType.startsWith('delete')) { e.preventDefault(); input.value = ''; input.dataset.code = ''; hide(); sayPlace('Cleared. Type to search places.'); }
+    });
     input.addEventListener('input', () => {
       input.dataset.code = '';
       if (input.value.trim()) show(input.value, true);

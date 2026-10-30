@@ -1,4 +1,4 @@
-/* Wyvernway shared data and helpers. Every flight is invented. */
+/* FlyAble Flights shared data and helpers. Every flight is invented. */
 window.WYV = (function () {
   const airports = [
     { code: 'CML', name: 'Camelot' },
@@ -165,7 +165,7 @@ window.WYV = (function () {
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
-  function bookingRef() { return 'WYV-' + (1000 + Math.floor(Math.random() * 9000)); }
+  function bookingRef() { return 'FLY-' + (1000 + Math.floor(Math.random() * 9000)); }
 
   return {
     airports, airlines, cabins, extras, destinations, airport, airportByName, cabin, flights, dayPrice, sortFlights, filterFlights,

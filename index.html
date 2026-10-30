@@ -3,91 +3,57 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wyvernway Practice Site</title>
+<title>FlyAble Flights practice site</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
 <link rel="stylesheet" href="styles.css">
 <style>
-  .intro { padding-block: 32px 40px; }
-  .intro .wrap { display: grid; gap: 12px; }
-  section.block { padding-block: 28px; }
-  section.block .wrap { display: grid; gap: 16px; }
-  .prose { max-width: 68ch; display: grid; gap: 10px; }
-  .versions { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-  .version { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; align-content: start; }
-  .version .tag { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
-  .version h3 a { color: var(--ink); text-decoration-color: var(--accent); text-underline-offset: 4px; text-decoration-thickness: 2px; }
-  .version .pill { justify-self: start; font-size: .82rem; font-weight: 700; border-radius: 999px; padding: 3px 10px; }
-  .pill.good { background: var(--accent-soft); color: var(--ink); }
-  .pill.bad { background: var(--danger-soft); color: var(--danger); }
-  ol.tasks { margin: 0; padding-left: 1.6rem; display: grid; gap: 8px; max-width: 72ch; }
-  ol.tasks li::marker { font-family: var(--font-display); font-weight: 800; color: var(--accent); }
-  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
-  table.compare { border-collapse: collapse; width: 100%; min-width: 560px; font-size: .93rem; }
-  table.compare caption { text-align: left; padding: 14px 16px 4px; font-weight: 700; font-family: var(--font-display); font-size: 1.05rem; }
-  table.compare th, table.compare td { text-align: left; vertical-align: top; padding: 10px 16px; border-top: 1px solid var(--line); }
-  table.compare thead th { background: var(--sunk); font-size: .85rem; letter-spacing: .02em; }
-  table.compare tbody th { font-weight: 700; white-space: nowrap; }
-  table.compare code { font-size: .88em; background: var(--sunk); padding: 1px 5px; border-radius: 4px; }
-  .listen { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
-  .listen > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 6px; align-content: start; }
-  .listen ul, .key ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; }
-  .key { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 18px; }
-  .key summary { cursor: pointer; font-weight: 700; font-family: var(--font-display); padding: 14px 0; }
-  .key .key-body { padding-bottom: 16px; display: grid; gap: 10px; }
+  .intro { padding-block: 32px 36px; }
+  .intro .wrap, section.block .wrap { display: grid; gap: 14px; }
+  section.block { padding-block: 24px; }
+  .versions { margin: 0; padding-left: 1.4rem; display: grid; gap: 10px; font-size: 1.1rem; }
+  .versions a { font-weight: 700; }
+  details.more { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 18px; max-width: 78ch; }
+  details.more summary { cursor: pointer; font-weight: 700; font-family: var(--font-display); font-size: 1.15rem; padding: 14px 0; }
+  details.more > div { padding-bottom: 16px; display: grid; gap: 10px; }
+  details.more ol, details.more ul { margin: 0; padding-left: 1.4rem; display: grid; gap: 8px; }
+  details.more code { font-size: .88em; background: var(--sunk); padding: 1px 5px; border-radius: 4px; }
   .sc { color: var(--muted); font-size: .88rem; }
 </style>
 </head>
 <body>
 
-<a class="skip" href="#main">Skip to main content</a>
-
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="index.html">
       <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true" focusable="false"><path d="M3 22c6-1 10-5 12-12 2 6 6 9 16 9-6 3-11 3-14 1-2 4-8 6-14 2z" fill="currentColor"/><circle cx="24" cy="10" r="2.4" fill="#4fd1c5"/></svg>
-      Wyvernway
+      FlyAble Flights
     </a>
-    <p style="color: var(--band-muted); font-weight: 700;">Screen reader practice site</p>
   </div>
 </header>
 
-<main id="main" tabindex="-1">
+<main id="main">
   <div class="hero intro">
     <div class="wrap">
-      <p class="eyebrow">Practice site for screen reader testing</p>
-      <h1>Wyvernway practice site</h1>
-      <p class="lede">Wyvernway is an imaginary flight comparison site that sells flights to mythical places. The same booking journey is built twice: once accessibly and once badly, so you can hear how the build changes the experience. Nothing here is real, and no data leaves the page.</p>
+      <h1>FlyAble Flights practice site</h1>
+      <p class="lede">A pretend flight booking site for practising with a screen reader. The same page is built twice: once accessibly, and once with hidden faults.</p>
     </div>
   </div>
 
   <section class="block" aria-labelledby="versions-h">
     <div class="wrap">
       <h2 id="versions-h">Choose a version</h2>
-      <ul class="versions">
-        <li class="version">
-          <span class="tag">Version 1</span>
-          <h3><a href="custom.html">Accessible</a></h3>
-          <p>Built from custom widgets that follow the ARIA Authoring Practices, plus plain patterns where they work better: type-to-search From and To boxes with a list of results, a cabin class combobox, a plain two-month calendar made of real buttons that read out the day, month and price, spinbuttons, tabs, switches, a slider, a tooltip, a carousel and modal dialogs. Use this one to compare VoiceOver on Mac with JAWS on Windows.</p>
-          <span class="pill good">Accessible</span>
-        </li>
-        <li class="version">
-          <span class="tag">Version 2</span>
-          <h3><a href="broken.html">Inaccessible</a></h3>
-          <p>Looks and works exactly like version 1, but has a handful of realistic faults of the kind you find on real sites: missing states, an unlabelled button, results you can't reach, a calendar that loses your focus, a cookie message at the end of the page and a chatty carousel. Can you find them all?</p>
-          <span class="pill bad">Deliberately inaccessible</span>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="block" aria-labelledby="tasks-h">
-    <div class="wrap">
-      <h2 id="tasks-h">Practice tasks</h2>
-      <p class="prose">Try the same tasks on both versions, in order. For each step, note how you found the control, what the screen reader said, and how you knew it worked.</p>
-      <ol class="tasks">
+      <ol class="versions">
+        <li><a href="custom.html">Accessible version</a></li>
+        <li><a href="broken.html">Inaccessible version</a></li>
+      </ol>
+      <details class="more">
+        <summary>Practice tasks</summary>
+        <div>
+          <p>Try the same tasks on both versions.</p>
+          <ol class="tasks">
         <li>Read the page title, then find the main heading and list the landmarks.</li>
         <li>Find the cookie message. Open the cookie settings, turn on Analytics cookies only, and save. How were you told it worked, and where did your focus go?</li>
         <li>Change the trip type to One way, then back to Return.</li>
@@ -107,125 +73,11 @@
         <li>Open the answer to "What happens if Atlantis sinks before my flight?"</li>
         <li>Find out whether there is step-free access at Mount Olympus airport.</li>
       </ol>
-    </div>
-  </section>
-
-  <section class="block" aria-labelledby="compare-h">
-    <div class="wrap">
-      <h2 id="compare-h">How each version is built</h2>
-      <div class="table-wrap">
-        <table class="compare">
-          <caption>Components in each version</caption>
-          <thead>
-            <tr><th scope="col">Part of the page</th><th scope="col">1. Accessible</th><th scope="col">2. Inaccessible</th></tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row">Trip type</th><td><code>radiogroup</code> with roving focus</td><td><code>radiogroup</code>, but the selected option is shown only visually: <code>aria-checked</code> is never set</td></tr>
-            <tr><th scope="row">From and To</th><td>Text box, a results list of real buttons, and a count message</td><td>Same text box and count message ("2 results available"), but the results are hidden from screen readers and can only be chosen with a mouse</td></tr>
-            <tr><th scope="row">Swap button</th><td><code>role="button"</code> with <code>aria-label</code></td><td><code>role="button"</code> with no name</td></tr>
-            <tr><th scope="row">Dates</th><td>A plain calendar showing two months at once: the browser's own <code>dialog</code>, a heading and an ordinary table for each month, and a real <code>button</code> for each day you can choose. Each button reads its date, whether the price is low, average or high, and what choosing it does. Previous month, Next month and Cheapest buttons. No custom keys</td><td>Same calendar, but it opens as a non-modal pop-up and focus stays on Travel dates. Days only say the number and price, with no month, weekday, low or high price, or what choosing does. After choosing a departure date, focus is thrown to the top of the page</td></tr>
-            <tr><th scope="row">Passengers</th><td>Disclosure popover with <code>spinbutton</code>s</td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Cabin class</th><td>Select-only <code>combobox</code> and <code>listbox</code></td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Options</th><td><code>role="checkbox"</code> and <code>role="switch"</code></td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Nearby airports help</th><td><code>tooltip</code> shown on focus and hover, closed with Escape</td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Search errors</th><td>Error summary that takes focus, plus <code>aria-invalid</code> and <code>aria-describedby</code></td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Results updates</th><td><code>role="status"</code> live region</td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Sort</th><td><code>tablist</code> with a <code>tabpanel</code></td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Filter sections</th><td>Accordion buttons with <code>aria-expanded</code></td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Departure time</th><td><code>slider</code> with <code>aria-valuetext</code></td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Save flight</th><td><code>role="button"</code> with <code>aria-pressed</code> and a status message</td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Popular destinations</th><td>Carousel with slides, Previous, Next and a button to stop rotation</td><td>Images have no alt text. Slides are labelled only "Slide 1", "Slide 2" and so on, rotation never pauses on focus or hover, and every change is announced</td></tr>
-            <tr><th scope="row">Cookie message</th><td>Banner region with <code>role="button"</code> controls</td><td>Fixed to the bottom of the screen but last in the page, so screen readers reach it only at the very end</td></tr>
-            <tr><th scope="row">Cookie settings</th><td><code>role="dialog"</code> with <code>role="switch"</code> controls</td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Booking</th><td><code>role="dialog"</code> with <code>aria-modal</code>, a focus trap and Escape</td><td>Same as version 1</td></tr>
-            <tr><th scope="row">Questions</th><td>Accordion: heading containing a button</td><td>Same as version 1</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" aria-labelledby="listen-h">
-    <div class="wrap">
-      <h2 id="listen-h">What to listen for: VoiceOver and JAWS</h2>
-      <p class="prose">These are the places in version 1 where screen readers most often differ. Note what each one says and does, rather than assuming either is correct.</p>
-      <div class="listen">
-        <div>
-          <h3>Modes and keys</h3>
-          <ul>
-            <li>When does JAWS switch to forms mode on its own, and when do you need Enter? Try the combobox, date grid, tabs, slider and spinbuttons.</li>
-            <li>With VoiceOver, do the arrow keys reach the widget, or do you need to interact with it first?</li>
-          </ul>
         </div>
+      </details>
+      <details class="more">
+        <summary>Faults in the inaccessible version</summary>
         <div>
-          <h3>Comboboxes</h3>
-          <ul>
-            <li>From and To: after typing, is the number of results read out? Can you reach the results with Down arrow or VO+Right arrow, and are you back in the box after choosing?</li>
-            <li>Cabin class: is it announced as a combobox, a pop-up button or something else?</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Date picker</h3>
-          <ul>
-            <li>When the calendar opens, do you hear "Choose your departure date", and is focus on a day?</li>
-            <li>Moving through the days with your usual table and button commands, do you hear the day, the month, "low price", "average price" or "high price", and "select as departure date" or "select as return date"?</li>
-            <li>Does selecting a day choose that exact day?</li>
-            <li>After choosing your departure date, is "Now choose your return date" read, while you stay in the calendar?</li>
-            <li>Two months are shown at once. Can you jump between them by heading (H in JAWS, the Headings rotor or VO+Command+H in VoiceOver)?</li>
-            <li>Do Previous month, Next month and Cheapest tell you which months are showing or move you to the cheapest day?</li>
-            <li>When you choose your return date, does the calendar close, put you back on Travel dates and read your new dates?</li>
-          </ul>
-        </div>
-        <div>
-          <h3>States and values</h3>
-          <ul>
-            <li>Flexible dates: "switch, on" or something else?</li>
-            <li>Spinbuttons: is the new number read when it changes? Can you find the + and − buttons, which are not in the Tab order?</li>
-            <li>Slider: do you hear "Before 12:00" or just "12"?</li>
-            <li>Tabs: do you hear the position, such as "2 of 3", and "selected"?</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Dialog and messages</h3>
-          <ul>
-            <li>Can the virtual cursor or VoiceOver cursor leave the booking dialog?</li>
-            <li>Is the results count read after you change a filter or sort?</li>
-            <li>Is the new total read when you add an extra?</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Carousel</h3>
-          <ul>
-            <li>Is "carousel" and "slide, 2 of 5" announced, or just "group"?</li>
-            <li>Does the carousel stop rotating when your screen reader cursor or focus is inside it? VoiceOver's cursor does not always move keyboard focus.</li>
-            <li>When you press Next, is the new slide read out?</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Tooltip</h3>
-          <ul>
-            <li>When you Tab to the help button, is the tooltip text read as a description?</li>
-            <li>Can you read the tooltip with the virtual cursor or VoiceOver cursor, or does it vanish first?</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Cookie settings</h3>
-          <ul>
-            <li>Is Essential cookies read as "switch, on, dimmed" or "unavailable"?</li>
-            <li>Are the descriptions under each switch read?</li>
-            <li>After saving, is the new cookie message read, and where is your focus?</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" aria-labelledby="key-h">
-    <div class="wrap">
-      <h2 id="key-h">Answer key for version 2</h2>
-      <details class="key">
-        <summary>Show the deliberate problems in the inaccessible version</summary>
-        <div class="key-body">
           <ul>
             <li>Main navigation: "Flights" is underlined as the current page, but <code>aria-current</code> is missing, so screen readers don't say it is the current page. <span class="sc">WCAG 1.3.1</span></li>
             <li>Trip type: Return and One way are radio buttons, but neither is ever announced as selected. <span class="sc">4.1.2</span></li>
@@ -246,7 +98,7 @@
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>Wyvernway is fictional. Flights, airlines and places are invented for screen reader practice.</p>
+    <p>FlyAble Flights is fictional. Flights, airlines and places are invented for screen reader practice.</p>
   </div>
 </footer>
 <script>document.documentElement.lang = 'en-GB';</script>

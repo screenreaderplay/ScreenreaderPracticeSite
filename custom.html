@@ -155,6 +155,7 @@
         <div class="btn btn-primary btn-search" role="button" tabindex="0" id="search-btn">Search flights</div>
       </div>
       <div id="combo-status" class="vh" role="status"></div>
+      <div id="place-status" class="vh" aria-live="assertive" aria-atomic="true"></div>
     </section>
   </div>
 
@@ -467,6 +468,14 @@
       a.name.toLowerCase().split(/[\s-]+/).some(w => w.startsWith(q)) ||
       a.name.toLowerCase().startsWith(q) || a.code.toLowerCase().startsWith(q));
   }
+  // Results count: assertive and quick, so you know straight away that the list changed.
+  const placeStatus = $('#place-status');
+  let placeTimer;
+  function sayPlace(msg) {
+    clearTimeout(placeTimer);
+    placeStatus.textContent = '';
+    placeTimer = setTimeout(() => { placeStatus.textContent = msg; }, 200);
+  }
   function makePlace(input) {
     const box = $('#' + input.id.replace('-input', '-results'));
     const ul = $('ul', box);
@@ -486,9 +495,9 @@
         li.appendChild(b); ul.appendChild(li);
       });
       box.hidden = !found.length;
-      if (speak) announce(comboStatus, found.length
-        ? found.length + (found.length === 1 ? ' result' : ' results') + ' available. Press Down arrow to reach them.'
-        : 'No places match.', 500);
+      if (speak) sayPlace(found.length
+        ? found.length + (found.length === 1 ? ' result' : ' results') + '. First: ' + found[0].name + '. Press Down arrow to choose.'
+        : 'No places match.');
     }
     function pick(code) {
       setAirport(input, code);
@@ -505,7 +514,7 @@
     input.addEventListener('input', () => {
       input.dataset.code = '';
       if (input.value.trim()) show(input.value, true);
-      else { hide(); comboStatus.textContent = ''; }
+      else { hide(); clearTimeout(placeTimer); placeStatus.textContent = ''; }
     });
     input.addEventListener('keydown', e => {
       if (e.key === 'ArrowDown') {

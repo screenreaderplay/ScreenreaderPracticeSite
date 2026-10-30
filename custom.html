@@ -643,13 +643,15 @@
   }
   // Draw two months, each with its own heading and table. Days you can choose are buttons; past days are plain text.
   // The headings let screen reader users jump between months (H key in JAWS, the rotor in VoiceOver).
-  const DAY_HEAD = '<thead><tr><th scope="col" abbr="Monday">Mo</th><th scope="col" abbr="Tuesday">Tu</th><th scope="col" abbr="Wednesday">We</th><th scope="col" abbr="Thursday">Th</th><th scope="col" abbr="Friday">Fr</th><th scope="col" abbr="Saturday">Sa</th><th scope="col" abbr="Sunday">Su</th></tr></thead>';
+  // The day-name row and the blank cells before the 1st and after the last day are hidden from screen readers:
+  // each day button already says its weekday, so they only add noise.
+  const DAY_HEAD = '<thead aria-hidden="true"><tr><th scope="col" abbr="Monday">Mo</th><th scope="col" abbr="Tuesday">Tu</th><th scope="col" abbr="Wednesday">We</th><th scope="col" abbr="Thursday">Th</th><th scope="col" abbr="Friday">Fr</th><th scope="col" abbr="Saturday">Sa</th><th scope="col" abbr="Sunday">Su</th></tr></thead>';
   function monthTable(mo, n) {
     const y = mo.getFullYear(), m = mo.getMonth();
     const offset = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
     let html = '<div class="cal-month"><h3 class="cal-month-h" id="cal-m' + n + '">' + W.fmtMonth(mo) + '</h3>' +
       '<table class="cal-table" aria-labelledby="cal-m' + n + '">' + DAY_HEAD + '<tbody><tr>', col = 0;
-    for (let i = 0; i < offset; i++) { html += '<td></td>'; col++; }
+    for (let i = 0; i < offset; i++) { html += '<td aria-hidden="true"></td>'; col++; }
     for (let d = 1; d <= days; d++) {
       const iso = W.iso(new Date(y, m, d));
       if (iso < todayIso()) {
@@ -663,7 +665,7 @@
       col++;
       if (col === 7 && d < days) { html += '</tr><tr>'; col = 0; }
     }
-    while (col > 0 && col < 7) { html += '<td></td>'; col++; }
+    while (col > 0 && col < 7) { html += '<td aria-hidden="true"></td>'; col++; }
     return html + '</tr></tbody></table></div>';
   }
   function renderMonth(focusIso) {

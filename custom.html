@@ -165,16 +165,12 @@
       <button type="button" class="btn btn-secondary" id="cal-cancel">Cancel</button>
     </div>
     <div class="modal-body cal-plain">
-      <h3 class="cal-month-h" id="cal-title"></h3>
       <div class="cal-jumps">
         <button type="button" class="btn btn-secondary cal-month-btn" id="cal-prev">Previous month</button>
         <button type="button" class="btn btn-secondary cal-month-btn" id="cal-next">Next month</button>
         <button type="button" class="btn btn-secondary cal-cheap-btn" id="cal-cheap"></button>
       </div>
-      <table class="cal-table" aria-labelledby="cal-title">
-        <thead><tr><th scope="col" abbr="Monday">Mo</th><th scope="col" abbr="Tuesday">Tu</th><th scope="col" abbr="Wednesday">We</th><th scope="col" abbr="Thursday">Th</th><th scope="col" abbr="Friday">Fr</th><th scope="col" abbr="Saturday">Sa</th><th scope="col" abbr="Sunday">Su</th></tr></thead>
-        <tbody id="cal-body"></tbody>
-      </table>
+      <div class="cal-months" id="cal-months"></div>
       <div class="cal-legend" aria-hidden="true"><span class="lg low">Low price</span><span class="lg high">High price</span></div>
       <p><button type="button" class="btn btn-secondary" id="cal-redep" hidden>Change departure date</button></p>
       <p class="vh" role="status" id="cal-live"></p>
@@ -589,7 +585,7 @@
   }
   showDates();
 
-  const cal = $('#cal'), calBody = $('#cal-body'), calTitle = $('#cal-title'), calStep = $('#cal-step'), calLive = $('#cal-live');
+  const cal = $('#cal'), calBody = $('#cal-months'), calStep = $('#cal-step'), calLive = $('#cal-live');
   const calTarget = datesBtn;
   let view = null, step = 'depart';
   const mk = d => d.getFullYear() * 12 + d.getMonth();
@@ -602,17 +598,32 @@
     calStep.textContent = s === 'depart' ? 'Choose your departure date' : 'Now choose your return date';
     $('#cal-redep').hidden = s !== 'return';
   }
+  // The two months on show: the one in view and the one after it
+  function shown() { return [view, new Date(view.getFullYear(), view.getMonth() + 1, 1)]; }
+  function bothMonths() {
+    const [a, b] = shown();
+    return a.getFullYear() === b.getFullYear()
+      ? H_MONTHS[a.getMonth()] + ' and ' + W.fmtMonth(b)
+      : W.fmtMonth(a) + ' and ' + W.fmtMonth(b);
+  }
   function cheapest() {
-    const y = view.getFullYear(), m = view.getMonth(), days = new Date(y, m + 1, 0).getDate(), [f, t] = route();
-    const from = step === 'return' ? dates.dep : todayIso();
+    const [f, t] = route(), from = step === 'return' ? dates.dep : todayIso();
     let best = null;
-    for (let d = 1; d <= days; d++) {
-      const iso = W.iso(new Date(y, m, d));
-      if (iso < from) continue;
-      const pr = W.dayPrice(f, t, iso).price;
-      if (!best || pr < best.price) best = { iso, price: pr };
-    }
+    shown().forEach(mo => {
+      const y = mo.getFullYear(), m = mo.getMonth(), days = new Date(y, m + 1, 0).getDate();
+      for (let d = 1; d <= days; d++) {
+        const iso = W.iso(new Date(y, m, d));
+        if (iso < from) continue;
+        const pr = W.dayPrice(f, t, iso).price;
+        if (!best || pr < best.price) best = { iso, price: pr };
+      }
+    });
     return best;
+  }
+  function setCheapBtn() {
+    const best = cheapest(), cb = $('#cal-cheap');
+    cb.hidden = !best;
+    if (best) cb.textContent = 'Cheapest day: ' + W.fmtShort(best.iso) + ', ' + W.money(best.price);
   }
   // What a day says and how it looks, for the current step
   function dayInfo(iso) {
@@ -628,17 +639,16 @@
   // Update the existing day buttons in place, so focus and the VoiceOver cursor stay where they are
   function refreshDays() {
     $$('button[data-date]', calBody).forEach(b => { const i = dayInfo(b.dataset.date); b.className = i.cls; $('.vh', b).textContent = i.text; });
-    const best = cheapest(), cb = $('#cal-cheap');
-    cb.hidden = !best;
-    if (best) cb.textContent = 'Cheapest in ' + H_MONTHS[view.getMonth()] + ': ' + W.fmtShort(best.iso) + ', ' + W.money(best.price);
+    setCheapBtn();
   }
-  // Draw the month. Days you can choose are buttons; past days are plain text.
-  function renderMonth(focusIso) {
-    const y = view.getFullYear(), m = view.getMonth(), [f, t] = route();
-    calTitle.textContent = W.fmtMonth(view);
-    $('#cal-prev').disabled = mk(view) <= mk(W.today());
+  // Draw two months, each with its own heading and table. Days you can choose are buttons; past days are plain text.
+  // The headings let screen reader users jump between months (H key in JAWS, the rotor in VoiceOver).
+  const DAY_HEAD = '<thead><tr><th scope="col" abbr="Monday">Mo</th><th scope="col" abbr="Tuesday">Tu</th><th scope="col" abbr="Wednesday">We</th><th scope="col" abbr="Thursday">Th</th><th scope="col" abbr="Friday">Fr</th><th scope="col" abbr="Saturday">Sa</th><th scope="col" abbr="Sunday">Su</th></tr></thead>';
+  function monthTable(mo, n) {
+    const y = mo.getFullYear(), m = mo.getMonth();
     const offset = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
-    let html = '<tr>', col = 0;
+    let html = '<div class="cal-month"><h3 class="cal-month-h" id="cal-m' + n + '">' + W.fmtMonth(mo) + '</h3>' +
+      '<table class="cal-table" aria-labelledby="cal-m' + n + '">' + DAY_HEAD + '<tbody><tr>', col = 0;
     for (let i = 0; i < offset; i++) { html += '<td></td>'; col++; }
     for (let d = 1; d <= days; d++) {
       const iso = W.iso(new Date(y, m, d));
@@ -654,10 +664,12 @@
       if (col === 7 && d < days) { html += '</tr><tr>'; col = 0; }
     }
     while (col > 0 && col < 7) { html += '<td></td>'; col++; }
-    calBody.innerHTML = html + '</tr>';
-    const best = cheapest(), cb = $('#cal-cheap');
-    cb.hidden = !best;
-    if (best) cb.textContent = 'Cheapest in ' + H_MONTHS[view.getMonth()] + ': ' + W.fmtShort(best.iso) + ', ' + W.money(best.price);
+    return html + '</tr></tbody></table></div>';
+  }
+  function renderMonth(focusIso) {
+    $('#cal-prev').disabled = mk(view) <= mk(W.today());
+    calBody.innerHTML = shown().map(monthTable).join('');
+    setCheapBtn();
     if (focusIso) { const b = $('[data-date="' + focusIso + '"]', calBody); if (b) b.focus(); }
   }
   const H_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -712,7 +724,7 @@
     if (mk(n) < mk(W.today())) return;
     view = n; renderMonth(null);
     const best = cheapest();
-    say(W.fmtMonth(n) + (best ? '. Cheapest day ' + spoken(best.iso) + ', ' + W.money(best.price) : ''));
+    say('Showing ' + bothMonths() + (best ? '. Cheapest day ' + spoken(best.iso) + ', ' + W.money(best.price) : ''));
   }
   $('#cal-prev').addEventListener('click', () => changeMonth(-1));
   $('#cal-next').addEventListener('click', () => changeMonth(1));

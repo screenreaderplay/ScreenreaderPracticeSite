@@ -269,7 +269,7 @@ dialog.modal::backdrop { background: rgba(10, 16, 32, .6); }
 .cal-app { display: grid; gap: 10px; }
 .cal-month-h { text-align: center; }
 .cal-jumps { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; }
-.cal-jumps .cal-cheap-btn { flex: 1 1 100%; min-height: 38px; padding: 6px 12px; font-size: .9rem; }
+.cal-jumps .cal-cheap-btn { flex: 1 1 auto; min-height: 38px; padding: 6px 12px; font-size: .9rem; }
 @media (max-width: 640px) {
   .cal { position: fixed; top: auto; left: max(8px, env(safe-area-inset-left, 0px)); right: max(8px, env(safe-area-inset-right, 0px)); bottom: calc(8px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: calc(100vh - 24px); overflow: auto; z-index: 70; }
 }
@@ -357,7 +357,10 @@ dialog.modal::backdrop { background: rgba(10, 16, 32, .6); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
 /* Plain calendar: browser dialog, ordinary table, a real button for each day */
-.cal-dialog { width: min(440px, calc(100vw - 16px)); }
+dialog.modal.cal-dialog { width: min(860px, calc(100vw - 16px)); }
+.cal-months { display: flex; flex-wrap: wrap; gap: 24px; }
+.cal-month { flex: 1 1 320px; min-width: 0; }
+.cal-month .cal-month-h { margin: 0 0 6px; }
 .cal-plain { gap: 12px; }
 .cal-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-variant-numeric: tabular-nums; }
 .cal-table th { font-size: .78rem; color: var(--muted); font-weight: 700; padding: 4px 0; text-align: center; }

@@ -70,7 +70,7 @@
         <li class="version">
           <span class="tag">Version 1</span>
           <h3><a href="custom.html">Accessible</a></h3>
-          <p>Built from custom widgets that follow the ARIA Authoring Practices, plus plain patterns where they work better: type-to-search From and To boxes with a list of results, a cabin class combobox, a plain calendar made of real buttons that read out the day, month and price, spinbuttons, tabs, switches, a slider, a tooltip, a carousel and modal dialogs. Use this one to compare VoiceOver on Mac with JAWS on Windows.</p>
+          <p>Built from custom widgets that follow the ARIA Authoring Practices, plus plain patterns where they work better: type-to-search From and To boxes with a list of results, a cabin class combobox, a plain two-month calendar made of real buttons that read out the day, month and price, spinbuttons, tabs, switches, a slider, a tooltip, a carousel and modal dialogs. Use this one to compare VoiceOver on Mac with JAWS on Windows.</p>
           <span class="pill good">Accessible</span>
         </li>
         <li class="version">
@@ -123,7 +123,7 @@
             <tr><th scope="row">Trip type</th><td><code>radiogroup</code> with roving focus</td><td>Clickable <code>div</code>s</td></tr>
             <tr><th scope="row">From and To</th><td>Text box, a results list of real buttons, and a count message</td><td>Unlabelled text box, suggestions mouse-only</td></tr>
             <tr><th scope="row">Swap button</th><td><code>role="button"</code> with <code>aria-label</code></td><td>Icon in a <code>div</code></td></tr>
-            <tr><th scope="row">Dates</th><td>A plain calendar: the browser's own <code>dialog</code>, an ordinary table, and a real <code>button</code> for each day you can choose. Each button reads its date, whether the price is low, average or high, and what choosing it does. Previous month, Next month and Cheapest buttons. No custom keys</td><td>Mouse-only calendar of <code>div</code>s. Nothing says whether you are choosing departure or return, and cheap or expensive days are shown only by a coloured line</td></tr>
+            <tr><th scope="row">Dates</th><td>A plain calendar showing two months at once: the browser's own <code>dialog</code>, a heading and an ordinary table for each month, and a real <code>button</code> for each day you can choose. Each button reads its date, whether the price is low, average or high, and what choosing it does. Previous month, Next month and Cheapest buttons. No custom keys</td><td>Mouse-only calendar of <code>div</code>s. Nothing says whether you are choosing departure or return, and cheap or expensive days are shown only by a coloured line</td></tr>
             <tr><th scope="row">Passengers</th><td>Disclosure popover with <code>spinbutton</code>s</td><td>Popover with unlabelled + and − symbols</td></tr>
             <tr><th scope="row">Cabin class</th><td>Select-only <code>combobox</code> and <code>listbox</code></td><td>Mouse-only list</td></tr>
             <tr><th scope="row">Options</th><td><code>role="checkbox"</code> and <code>role="switch"</code></td><td>Styled <code>div</code>s</td></tr>
@@ -171,7 +171,8 @@
             <li>Moving through the days with your usual table and button commands, do you hear the day, the month, "low price", "average price" or "high price", and "select as departure date" or "select as return date"?</li>
             <li>Does selecting a day choose that exact day?</li>
             <li>After choosing your departure date, is "Now choose your return date" read, while you stay in the calendar?</li>
-            <li>Do Previous month, Next month and Cheapest tell you the new month or move you to the cheapest day?</li>
+            <li>Two months are shown at once. Can you jump between them by heading (H in JAWS, the Headings rotor or VO+Command+H in VoiceOver)?</li>
+            <li>Do Previous month, Next month and Cheapest tell you which months are showing or move you to the cheapest day?</li>
             <li>When you choose your return date, does the calendar close, put you back on Travel dates and read your new dates?</li>
           </ul>
         </div>

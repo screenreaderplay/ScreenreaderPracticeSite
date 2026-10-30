@@ -442,7 +442,12 @@
   function announce(el, msg, delay) {
     clearTimeout(statusTimer);
     el.textContent = '';
-    statusTimer = setTimeout(() => { el.textContent = msg; }, Math.max(delay || 0, 50));
+    statusTimer = setTimeout(() => {
+      el.textContent = msg;
+      // Hidden messages near the search form are cleared after a few seconds,
+      // so they aren't found again later when reading down the page
+      if (el.id === 'combo-status') setTimeout(() => { if (el.textContent === msg) el.textContent = ''; }, 5000);
+    }, Math.max(delay || 0, 50));
   }
 
   /* ---------- Trip type ---------- */
@@ -489,7 +494,10 @@
   function sayPlace(msg) {
     clearTimeout(placeTimer);
     placeStatus.textContent = '';
-    placeTimer = setTimeout(() => { placeStatus.textContent = msg; }, 200);
+    placeTimer = setTimeout(() => {
+      placeStatus.textContent = msg;
+      placeTimer = setTimeout(() => { placeStatus.textContent = ''; }, 5000);
+    }, 200);
   }
   function makePlace(input) {
     const box = $('#' + input.id.replace('-input', '-results'));

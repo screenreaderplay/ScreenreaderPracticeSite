@@ -613,12 +613,33 @@
       const y = mo.getFullYear(), m = mo.getMonth(), days = new Date(y, m + 1, 0).getDate();
       for (let d = 1; d <= days; d++) {
         const iso = W.iso(new Date(y, m, d));
-        if (iso < from) continue;
+        if (iso < from || (step === 'return' && iso === from)) continue;
         const pr = W.dayPrice(f, t, iso).price;
         if (!best || pr < best.price) best = { iso, price: pr };
       }
     });
     return best;
+  }
+  // Cheapest day or days in one month (from today, or from the departure date when choosing the return)
+  function monthCheapest(mo) {
+    const [f, t] = route(), from = step === 'return' ? dates.dep : todayIso();
+    const y = mo.getFullYear(), m = mo.getMonth(), days = new Date(y, m + 1, 0).getDate();
+    let price = null, list = [];
+    for (let d = 1; d <= days; d++) {
+      const iso = W.iso(new Date(y, m, d));
+      if (iso < from || (step === 'return' && iso === from)) continue;
+      const pr = W.dayPrice(f, t, iso).price;
+      if (price === null || pr < price) { price = pr; list = [iso]; }
+      else if (pr === price) list.push(iso);
+    }
+    return price === null ? null : { price, list };
+  }
+  // The line under each month heading: "Cheapest, £81:" then a button for each cheapest day
+  function cheapLine(mo) {
+    const c = monthCheapest(mo);
+    if (!c) return step === 'return' ? 'No return dates this month.' : 'No dates available this month.';
+    return 'Cheapest ' + (c.list.length > 1 ? 'days' : 'day') + ', ' + W.money(c.price) + ': ' +
+      c.list.map(iso => '<button type="button" class="linkish cal-go" data-go="' + iso + '">' + spoken(iso) + '</button>').join(' ');
   }
   function setCheapBtn() {
     const best = cheapest(), cb = $('#cal-cheap');
@@ -639,6 +660,8 @@
   // Update the existing day buttons in place, so focus and the VoiceOver cursor stay where they are
   function refreshDays() {
     $$('button[data-date]', calBody).forEach(b => { const i = dayInfo(b.dataset.date); b.className = i.cls; $('.vh', b).textContent = i.text; });
+    const mos = shown();
+    $$('.cal-month-cheap', calBody).forEach(p => { p.innerHTML = cheapLine(mos[+p.dataset.month]); });
     setCheapBtn();
   }
   // Draw two months, each with its own heading and table. Days you can choose are buttons; past days are plain text.
@@ -650,6 +673,7 @@
     const y = mo.getFullYear(), m = mo.getMonth();
     const offset = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
     let html = '<div class="cal-month"><h3 class="cal-month-h" id="cal-m' + n + '">' + W.fmtMonth(mo) + '</h3>' +
+      '<p class="cal-month-cheap" data-month="' + n + '">' + cheapLine(mo) + '</p>' +
       '<table class="cal-table" aria-labelledby="cal-m' + n + '">' + DAY_HEAD + '<tbody><tr>', col = 0;
     for (let i = 0; i < offset; i++) { html += '<td aria-hidden="true"></td>'; col++; }
     for (let d = 1; d <= days; d++) {
@@ -701,6 +725,8 @@
   $('#cal-cancel').addEventListener('click', closeCal);
 
   calBody.addEventListener('click', e => {
+    const go = e.target.closest('button[data-go]');
+    if (go) { const d = $('[data-date="' + go.dataset.go + '"]', calBody); if (d) d.focus(); return; }
     const b = e.target.closest('button[data-date]');
     if (!b) return;
     const iso = b.dataset.date;

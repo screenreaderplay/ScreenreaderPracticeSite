@@ -74,7 +74,7 @@
             <div class="pop place-results" id="from-results" aria-hidden="true" hidden><ul class="listbox" aria-label="From results"></ul></div>
             <span class="field-error" id="from-err" hidden></span>
           </div>
-          <div class="swap" role="button" tabindex="0" id="swap">
+          <div class="swap" id="swap">
             <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M6 3 2 7l4 4M2 7h12M14 17l4-4-4-4M18 13H6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div class="field">
@@ -234,9 +234,9 @@
         <p class="dest-count" id="dest-count" aria-hidden="true"></p>
       </div>
       <div class="dest-controls">
-        <div class="btn btn-secondary" role="button" tabindex="0" id="dest-rotate">Stop slide rotation</div>
-        <div class="cal-nav" role="button" tabindex="0" id="dest-prev" aria-controls="dest-slides" aria-label="Previous slide">‹</div>
-        <div class="cal-nav" role="button" tabindex="0" id="dest-next" aria-controls="dest-slides" aria-label="Next slide">›</div>
+        <div class="btn btn-secondary" role="button" tabindex="0" id="dest-rotate" hidden>Stop slide rotation</div>
+        <div class="cal-nav" role="button" tabindex="0" id="dest-prev" aria-controls="dest-slides">‹</div>
+        <div class="cal-nav" role="button" tabindex="0" id="dest-next" aria-controls="dest-slides">›</div>
       </div>
     </div>
     <div class="dest-stack" id="dest-slides"></div>
@@ -369,12 +369,12 @@
       <p>We use essential cookies to make this site work. We would also like to use analytics and marketing cookies, but only if you agree.</p>
     </div>
     <div class="cookie-actions" id="cookie-btns">
-      <div class="btn btn-primary" role="button" tabindex="0" data-cookie="all">Accept all cookies</div>
-      <div class="btn btn-secondary" role="button" tabindex="0" data-cookie="none">Reject optional cookies</div>
-      <div class="btn btn-secondary" role="button" tabindex="0" id="cookie-manage" aria-haspopup="dialog">Manage cookies</div>
+      <div class="btn btn-primary" role="button" tabindex="0" data-cookie="all">Accept</div>
+      <div class="btn btn-secondary" role="button" tabindex="0" data-cookie="none">Close</div>
+      <div class="btn btn-secondary" role="button" tabindex="0" id="cookie-manage" aria-haspopup="dialog">Settings</div>
     </div>
     <div class="cookie-text" id="cookie-done" tabindex="-1" hidden><p id="cookie-done-text"></p></div>
-    <div class="cookie-actions" id="cookie-done-btns" hidden><div class="btn btn-secondary" role="button" tabindex="0" id="cookie-change" aria-haspopup="dialog">Change cookie settings</div><div class="btn btn-secondary" role="button" tabindex="0" id="cookie-hide">Hide cookie message</div></div>
+    <div class="cookie-actions" id="cookie-done-btns" hidden><div class="btn btn-secondary" role="button" tabindex="0" id="cookie-change" aria-haspopup="dialog">Change</div><div class="btn btn-secondary" role="button" tabindex="0" id="cookie-hide">Close</div></div>
   </div>
 </div>
 
@@ -1223,7 +1223,7 @@
   activate($('#dest-prev'), () => showSlide(cur - 1));
   activate($('#dest-next'), () => showSlide(cur + 1));
   showSlide(0); $('#dest-live').textContent = '';
-  startRotation();
+  // The slides only change with the Previous and Next buttons
 
   /* ---------- Cookie banner and preferences dialog ---------- */
   const ckBack = $('#cookie-backdrop'), ckDlg = $('#cookie-dlg');

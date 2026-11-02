@@ -214,6 +214,7 @@
           <div class="tab" role="tab" id="tab-fastest" data-value="fastest" aria-selected="false" aria-controls="panel" tabindex="-1"><span class="t">Fastest</span><span class="s" id="sub-fastest"></span></div>
         </div>
         <div role="tabpanel" id="panel" aria-labelledby="tab-best" tabindex="0">
+          <h2 class="list-h" id="list-h">Search results</h2>
           <ul class="flist" id="list"></ul>
           <div class="empty" id="empty" hidden>
             <h3>No flights match your filters</h3>
@@ -1017,6 +1018,8 @@
     ul.innerHTML = '';
     list.forEach(f => ul.appendChild(card(f, s)));
     $('#empty').hidden = list.length > 0;
+    const sortName = { best: 'best', cheapest: 'cheapest first', fastest: 'fastest first' }[state.sort];
+    $('#list-h').textContent = 'Search results: ' + list.length + (list.length === 1 ? ' flight' : ' flights') + ', ' + sortName;
     const msg = 'Showing ' + list.length + ' of ' + state.flights.length + ' flights, sorted by ' + state.sort + '.';
     if (doAnnounce) announce($('#status'), msg, 500); else $('#status').textContent = msg;
   }
@@ -1025,14 +1028,16 @@
     const li = document.createElement('li');
     const fromA = W.airport(s.from), toA = W.airport(s.to), hid = 'h-' + f.id;
     li.innerHTML =
-      '<article class="card" aria-labelledby="' + hid + '">' +
+      '<div class="card">' +
         '<div class="card-main">' +
-          '<div class="carrier"><img src="' + W.logo(f.airline) + '" alt=""><div><h3 id="' + hid + '">' + f.airline.name + '</h3><span class="fno">Flight ' + f.flightNo + '</span></div></div>' +
+          // The heading leads with what matters most: price, then departure time
+          '<h3 class="card-h" id="' + hid + '"><span class="price">' + W.money(f.price) + '</span> <span class="price-note">per person,</span> <span class="card-dep">departs ' + W.fmtTime(f.dep) + '</span></h3>' +
           '<div class="leg">' +
             '<div><span class="vh">Departs </span><span class="t">' + W.fmtTime(f.dep) + '</span><div class="ap">' + fromA.code + '<span class="vh"> ' + fromA.name + '</span></div></div>' +
             '<div class="mid"><span><span class="vh">Journey time </span>' + W.fmtDur(f.dur) + '</span><span class="line' + (f.stops ? ' stops' : '') + '"></span><span class="' + (f.stops ? '' : 'direct') + '">' + W.stopsText(f) + '</span></div>' +
             '<div><span class="vh">Arrives </span><span class="t">' + W.fmtTime(f.arr) + (W.nextDay(f) ? '<span class="plus1">+1<span class="vh"> day</span></span>' : '') + '</span><div class="ap">' + toA.code + '<span class="vh"> ' + toA.name + '</span></div></div>' +
           '</div>' +
+          '<div class="carrier"><img src="' + W.logo(f.airline) + '" alt=""><div><span class="aname">' + f.airline.name + '</span> <span class="fno">Flight ' + f.flightNo + '</span></div></div>' +
           '<div class="more"><div class="more-btn" role="button" tabindex="0" aria-expanded="false" aria-controls="more-' + f.id + '">Flight details</div>' +
           '<div class="more-body" id="more-' + f.id + '" hidden><dl>' +
             '<dt>Flight number</dt><dd>' + f.flightNo + '</dd>' +
@@ -1042,13 +1047,12 @@
           '</dl></div></div>' +
         '</div>' +
         '<div class="card-side">' +
-          '<div><div class="price">' + W.money(f.price) + '</div><div class="price-note">per person</div></div>' +
           '<div class="card-actions">' +
-            '<div class="save-btn" role="button" tabindex="0" aria-pressed="' + state.saved.has(f.id) + '" aria-label="Save ' + f.airline.name + ' ' + W.fmtTime(f.dep) + ' flight"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div>' +
-            '<div class="btn btn-primary sel" role="button" tabindex="0" aria-label="Select ' + f.airline.name + ' ' + W.fmtTime(f.dep) + ' flight, ' + W.money(f.price) + '">Select</div>' +
+            '<div class="save-btn" role="button" tabindex="0" aria-pressed="' + state.saved.has(f.id) + '" aria-label="Save ' + W.fmtTime(f.dep) + ' ' + f.airline.name + ' flight"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div>' +
+            '<div class="btn btn-primary sel" role="button" tabindex="0" aria-label="Select ' + W.money(f.price) + ' flight departing ' + W.fmtTime(f.dep) + ', ' + f.airline.name + '">Select</div>' +
           '</div>' +
         '</div>' +
-      '</article>';
+      '</div>';
     makeAccordion($('.more-btn', li));
     const sel = $('.sel', li);
     activate(sel, () => openBooking(f, sel));

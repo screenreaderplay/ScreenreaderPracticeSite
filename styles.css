@@ -389,3 +389,10 @@ dialog.modal.cal-dialog { width: min(860px, calc(100vw - 16px)); }
 .cal-month-cheap .cal-go:hover, .cal-month-cheap .cal-go:focus { background: var(--accent-soft); }
 /* Inaccessible version: the calendar opens as a non-modal pop-up, floating in the middle of the screen */
 dialog.modal.cal-float[open] { position: fixed; inset: 0; margin: auto; height: fit-content; z-index: 60; }
+/* Results: a heading straight before the list, and cards that lead with price and departure time */
+.list-h { font-size: 1.15rem; margin: 14px 0 10px; }
+.card-h { margin: 0; font-size: 1rem; font-weight: 400; line-height: 1.5; }
+.card-h .price-note { margin: 0 10px 0 6px; }
+.card-h .price { line-height: 1.1; }
+.card-h .card-dep { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--ink); }
+.carrier .aname { font-weight: 700; }

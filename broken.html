@@ -102,17 +102,17 @@
             <div class="counter">
               <div class="who"><span id="ad-label">Adults</span><span class="hint">16 or over</span></div>
               <div class="stepper">
-                <button type="button" class="step-btn" data-for="adults" data-step="-1" aria-label="Remove an adult" aria-disabled="true">−</button>
+                <button type="button" class="step-btn" data-for="adults" data-step="-1" aria-disabled="true">−</button>
                 <span class="step-val" id="adults" data-min="1" data-max="9" data-value="1">1</span>
-                <button type="button" class="step-btn" data-for="adults" data-step="1" aria-label="Add an adult">+</button>
+                <button type="button" class="step-btn" data-for="adults" data-step="1">+</button>
               </div>
             </div>
             <div class="counter">
               <div class="who"><span id="ch-label">Children</span><span class="hint">2 to 15</span></div>
               <div class="stepper">
-                <button type="button" class="step-btn" data-for="children" data-step="-1" aria-label="Remove a child" aria-disabled="true">−</button>
+                <button type="button" class="step-btn" data-for="children" data-step="-1" aria-disabled="true">−</button>
                 <span class="step-val" id="children" data-min="0" data-max="8" data-value="0">0</span>
-                <button type="button" class="step-btn" data-for="children" data-step="1" aria-label="Add a child">+</button>
+                <button type="button" class="step-btn" data-for="children" data-step="1">+</button>
               </div>
             </div>
             <div class="field">
@@ -145,7 +145,7 @@
 
   <dialog class="modal cal-dialog cal-float" id="cal" aria-labelledby="cal-step">
     <div class="modal-head">
-      <h2 id="cal-step">Choose your departure date</h2>
+      <h2 id="cal-step">Select dates</h2>
       <button type="button" class="btn btn-secondary" id="cal-cancel">Cancel</button>
     </div>
     <div class="modal-body cal-plain">
@@ -624,7 +624,6 @@
 
   function setStep(s) {
     step = s;
-    calStep.textContent = s === 'depart' ? 'Choose your departure date' : 'Now choose your return date';
     $('#cal-redep').hidden = s !== 'return';
   }
   // The two months on show: the one in view and the one after it
@@ -666,7 +665,7 @@
   // The line under each month heading: "Cheapest, £81:" then a button for each cheapest day
   function cheapLine(mo) {
     const c = monthCheapest(mo);
-    if (!c) return step === 'return' ? 'No return dates this month.' : 'No dates available this month.';
+    if (!c) return 'No dates available this month.';
     return 'Cheapest ' + (c.list.length > 1 ? 'days' : 'day') + ', ' + W.money(c.price) + ': ' +
       c.list.map(iso => '<button type="button" class="linkish cal-go" data-go="' + iso + '">' + spoken(iso) + '</button>').join(' ');
   }

@@ -102,17 +102,17 @@
             <div class="counter">
               <div class="who"><span id="ad-label">Adults</span><span class="hint">16 or over</span></div>
               <div class="stepper">
-                <span class="step-btn" role="button" tabindex="-1" aria-label="Fewer adults" data-for="adults" data-step="-1">−</span>
-                <span class="step-val" role="spinbutton" tabindex="0" id="adults" aria-labelledby="ad-label" aria-valuemin="1" aria-valuemax="9" aria-valuenow="1">1</span>
-                <span class="step-btn" role="button" tabindex="-1" aria-label="More adults" data-for="adults" data-step="1">+</span>
+                <button type="button" class="step-btn" data-for="adults" data-step="-1" aria-label="Remove an adult" aria-disabled="true">−</button>
+                <span class="step-val" id="adults" data-min="1" data-max="9" data-value="1">1</span>
+                <button type="button" class="step-btn" data-for="adults" data-step="1" aria-label="Add an adult">+</button>
               </div>
             </div>
             <div class="counter">
               <div class="who"><span id="ch-label">Children</span><span class="hint">2 to 15</span></div>
               <div class="stepper">
-                <span class="step-btn" role="button" tabindex="-1" aria-label="Fewer children" data-for="children" data-step="-1">−</span>
-                <span class="step-val" role="spinbutton" tabindex="0" id="children" aria-labelledby="ch-label" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0">0</span>
-                <span class="step-btn" role="button" tabindex="-1" aria-label="More children" data-for="children" data-step="1">+</span>
+                <button type="button" class="step-btn" data-for="children" data-step="-1" aria-label="Remove a child" aria-disabled="true">−</button>
+                <span class="step-val" id="children" data-min="0" data-max="8" data-value="0">0</span>
+                <button type="button" class="step-btn" data-for="children" data-step="1" aria-label="Add a child">+</button>
               </div>
             </div>
             <div class="field">
@@ -120,6 +120,7 @@
               <div class="control btnlike" role="combobox" tabindex="0" id="cabin" aria-haspopup="listbox" aria-expanded="false" aria-controls="cabin-list" aria-labelledby="cabin-label"><span id="cabin-val">Economy</span></div>
               <ul class="pop listbox" id="cabin-list" role="listbox" aria-labelledby="cabin-label" tabindex="-1" hidden></ul>
             </div>
+            <p class="vh" role="status" id="pax-live"></p>
             <div class="btn btn-primary" role="button" tabindex="0" id="pax-done">Done</div>
           </div>
         </div>
@@ -795,29 +796,44 @@
   /* ---------- Passengers popover ---------- */
   const paxBtn = $('#pax-btn'), paxPop = $('#pax-pop');
   function paxSummary() {
-    const a = +$('#adults').getAttribute('aria-valuenow'), c = +$('#children').getAttribute('aria-valuenow');
+    const a = +$('#adults').dataset.value, c = +$('#children').dataset.value;
     const parts = [a + (a === 1 ? ' adult' : ' adults')];
     if (c) parts.push(c + (c === 1 ? ' child' : ' children'));
     return parts.join(', ');
   }
   function updatePax() { $('#pax-val').textContent = paxSummary() + ', ' + W.cabin(state.cabin).label; }
-  function openPax() { paxPop.hidden = false; paxBtn.setAttribute('aria-expanded', 'true'); $('#adults').focus(); }
+  function openPax() { paxPop.hidden = false; paxBtn.setAttribute('aria-expanded', 'true'); $('[data-for="adults"][data-step="1"]').focus(); }
   function closePax(focus) { closeCabin(); paxPop.hidden = true; paxBtn.setAttribute('aria-expanded', 'false'); if (focus) paxBtn.focus(); }
   activate(paxBtn, () => (paxPop.hidden ? openPax() : closePax(true)));
   activate($('#pax-done'), () => closePax(true));
   paxPop.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); closePax(true); } });
 
-  function makeSpin(el) {
-    const min = +el.getAttribute('aria-valuemin'), max = +el.getAttribute('aria-valuemax');
-    function set(v) { v = Math.max(min, Math.min(max, v)); el.setAttribute('aria-valuenow', v); el.textContent = v; updatePax(); }
-    el.addEventListener('keydown', e => {
-      const v = +el.getAttribute('aria-valuenow');
-      const map = { ArrowUp: v + 1, ArrowRight: v + 1, ArrowDown: v - 1, ArrowLeft: v - 1, Home: min, End: max };
-      if (e.key in map) { e.preventDefault(); set(map[e.key]); }
-    });
-    $$('[data-for="' + el.id + '"]').forEach(b => activate(b, () => set(+el.getAttribute('aria-valuenow') + +b.dataset.step)));
+  // Passenger counters: real Add and Remove buttons, the number as plain text,
+  // and a status message that says the new number after every change
+  const paxLive = $('#pax-live');
+  function makeCounter(el, one, many) {
+    const min = +el.dataset.min, max = +el.dataset.max;
+    const [minus, plus] = $$('[data-for="' + el.id + '"]');
+    function set(v) {
+      el.dataset.value = v; el.textContent = v;
+      minus.setAttribute('aria-disabled', String(v <= min));
+      plus.setAttribute('aria-disabled', String(v >= max));
+      updatePax();
+    }
+    function step(d) {
+      const v = +el.dataset.value, n = v + d;
+      let msg;
+      if (n < min) msg = min === 0 ? 'No ' + many + ' added.' : 'At least ' + min + ' ' + (min === 1 ? one : many) + ' needed.';
+      else if (n > max) msg = 'Up to ' + max + ' ' + many + ' only.';
+      else { set(n); msg = (n === 0 ? 'No ' + many : n + ' ' + (n === 1 ? one : many)) + '.'; }
+      paxLive.textContent = '';
+      setTimeout(() => { paxLive.textContent = msg; }, 50);
+    }
+    minus.addEventListener('click', () => step(-1));
+    plus.addEventListener('click', () => step(1));
+    set(+el.dataset.value);
   }
-  makeSpin($('#adults')); makeSpin($('#children'));
+  makeCounter($('#adults'), 'adult', 'adults'); makeCounter($('#children'), 'child', 'children');
 
   // Cabin class: select-only combobox
   const cab = $('#cabin'), cabList = $('#cabin-list');
@@ -914,7 +930,7 @@
     return {
       from: fromIn.dataset.code, to: toIn.dataset.code, depart: dates.dep,
       ret: state.trip === 'oneway' ? null : dates.ret,
-      adults: +$('#adults').getAttribute('aria-valuenow'), children: +$('#children').getAttribute('aria-valuenow'),
+      adults: +$('#adults').dataset.value, children: +$('#children').dataset.value,
       cabin: state.cabin, direct: $('#opt-direct').getAttribute('aria-checked') === 'true'
     };
   }

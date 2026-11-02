@@ -1047,7 +1047,7 @@
       '<div class="card">' +
         '<div class="card-main">' +
           // The heading leads with what matters most: price, then departure time
-          '<h3 class="card-h" id="' + hid + '"><span class="price">' + W.money(f.price) + '</span> <span class="price-note">per person,</span> <span class="card-dep">departs ' + W.fmtTime(f.dep) + '</span></h3>' +
+          '<div class="card-h" id="' + hid + '"><span class="price">' + W.money(f.price) + '</span> <span class="price-note">per person,</span> <span class="card-dep">departs ' + W.fmtTime(f.dep) + '</span></div>' +
           '<div class="leg">' +
             '<div><span class="vh">Departs </span><span class="t">' + W.fmtTime(f.dep) + '</span><div class="ap">' + fromA.code + '<span class="vh"> ' + fromA.name + '</span></div></div>' +
             '<div class="mid"><span><span class="vh">Journey time </span>' + W.fmtDur(f.dur) + '</span><span class="line' + (f.stops ? ' stops' : '') + '"></span><span class="' + (f.stops ? '' : 'direct') + '">' + W.stopsText(f) + '</span></div>' +

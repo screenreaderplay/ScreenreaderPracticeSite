@@ -166,8 +166,8 @@
         <h2 id="results-h" tabindex="-1">Flights</h2>
         <p class="hint" id="results-meta"></p>
       </div>
-      <div id="status" class="status" role="status"></div>
-      <div id="save-status" class="vh" role="status"></div>
+      <div id="status" class="status"></div>
+      <div id="save-status" class="vh"></div>
     </div>
 
     <div class="layout">
@@ -855,8 +855,6 @@
   function setFieldError(input, msg) {
     const err = $('#' + input.id.replace('-input', '') + '-err');
     err.textContent = msg; err.hidden = false;
-    input.setAttribute('aria-invalid', 'true');
-    input.setAttribute('aria-describedby', [input.dataset.hint, err.id].filter(Boolean).join(' '));
   }
   function clearFieldError(input) {
     const err = $('#' + input.id.replace('-input', '') + '-err');
@@ -885,7 +883,6 @@
       li.appendChild(a); ul.appendChild(li);
     });
     box.hidden = errs.length === 0;
-    if (errs.length) box.focus();
     return errs.length === 0;
   }
 
@@ -1064,8 +1061,8 @@
         '</div>' +
         '<div class="card-side">' +
           '<div class="card-actions">' +
-            '<div class="save-btn" role="button" tabindex="0" aria-pressed="' + state.saved.has(f.id) + '" aria-label="Save ' + W.money(f.price) + ' trip"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div>' +
-            '<div class="btn btn-primary sel" role="button" tabindex="0" aria-label="Select ' + W.money(f.price) + ' trip, outbound ' + t12(o.dep) + (r ? ', return ' + t12(r.dep) : '') + '">Select</div>' +
+            '<div class="save-btn" role="button" tabindex="0" aria-label="Save"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div>' +
+            '<div class="btn btn-primary sel" role="button" tabindex="0" aria-label="Select">Select</div>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -1075,7 +1072,7 @@
     activate(sv, () => {
       const on = !state.saved.has(f.id);
       on ? state.saved.add(f.id) : state.saved.delete(f.id);
-      sv.setAttribute('aria-pressed', String(on));
+      sv.classList.toggle('on', on);
       announce($('#save-status'), on ? 'Saved to your trips.' : 'Removed from your trips.', 100);
     });
     return li;

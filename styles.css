@@ -406,3 +406,6 @@ dialog.modal.cal-float[open] { position: fixed; inset: 0; margin: auto; height: 
 .leg-sum { margin: 0; line-height: 1.5; }
 .leg-sum strong { font-family: var(--font-display); }
 .card-main > .price-note { margin: 0; }
+/* Paragraph text in the full text colour rather than grey, for stronger contrast */
+p.hint, p.price-note, p.dest-price, p.dest-region, p.dest-count, p.cal-month-cheap, .faq-body, .faq-body p, .simple p { color: var(--ink); }
+.hero .lede, .hero .eyebrow, .site-footer, .site-footer p { color: var(--band-ink); }

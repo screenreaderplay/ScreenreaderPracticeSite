@@ -1,3 +1,8 @@
+/* Atkinson Hyperlegible (Braille Institute, SIL Open Font License), hosted with the site so it loads even where Google Fonts is blocked */
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/atkinson-hyperlegible-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: italic; font-weight: 400; font-display: swap; src: url("fonts/atkinson-hyperlegible-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/atkinson-hyperlegible-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible"; font-style: italic; font-weight: 700; font-display: swap; src: url("fonts/atkinson-hyperlegible-latin-700-italic.woff2") format("woff2"); }
 /* Layout: navy header band, hero band holding the search card, then a two-column results area (filters + list) that stacks on phones. */
 :root {
   --bg: #f4f6fa;
@@ -19,7 +24,7 @@
   --band-muted: #b9c4da;
   --focus: #c2410c;
   --shadow: 0 10px 30px rgba(20, 33, 61, .12);
-  --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --font-display: "Atkinson Hyperlegible", "Segoe UI", Verdana, sans-serif;
   --font-body: "Atkinson Hyperlegible", "Segoe UI", Verdana, sans-serif;
   --radius: 10px;
 }
@@ -40,12 +45,12 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.5; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1.125rem; line-height: 1.55; }
 img { max-width: 100%; }
 [hidden] { display: none !important; }
 a { color: var(--accent); }
 h1, h2, h3, .h1, .h2, .h3 { font-family: var(--font-display); line-height: 1.15; text-wrap: balance; margin: 0; }
-h1, .h1 { font-size: clamp(1.9rem, 4.5vw, 2.9rem); font-weight: 700; letter-spacing: -.02em; }
+h1, .h1 { font-size: clamp(1.9rem, 4.5vw, 2.9rem); font-weight: 700; letter-spacing: 0; }
 h2, .h2 { font-size: 1.45rem; font-weight: 700; }
 h3, .h3 { font-size: 1.08rem; font-weight: 700; }
 p { margin: 0; }
@@ -67,7 +72,7 @@ p { margin: 0; }
 /* Header */
 .site-header { background: var(--band); color: var(--band-ink); }
 .site-header .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding-block: 14px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--band-ink); text-decoration: none; font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; letter-spacing: -.02em; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--band-ink); text-decoration: none; font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; letter-spacing: 0; }
 .brand svg { flex: none; }
 .site-nav ul, .site-nav .navlist { display: flex; flex-wrap: wrap; gap: 4px 18px; list-style: none; margin: 0; padding: 0; }
 .site-nav a, .site-nav .navitem { color: var(--band-ink); text-decoration: none; font-weight: 700; padding: 4px 0; border-bottom: 2px solid transparent; cursor: pointer; }
@@ -78,7 +83,7 @@ p { margin: 0; }
 .hero { background: var(--band); color: var(--band-ink); padding-block: 28px 96px; }
 .hero .wrap { display: grid; gap: 10px; }
 .hero .lede { color: var(--band-muted); max-width: 60ch; font-size: 1.08rem; }
-.eyebrow { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--band-muted); font-weight: 700; }
+.eyebrow { font-size: .9rem; letter-spacing: .06em; text-transform: uppercase; color: var(--band-muted); font-weight: 700; }
 
 /* Search card */
 .search-wrap { margin-top: -72px; }
@@ -100,13 +105,13 @@ legend, .legend { font-weight: 700; padding: 0; margin-bottom: 6px; font-size: .
 .route { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: end; flex: 2 1 380px; }
 .field { display: grid; gap: 5px; min-width: 0; flex: 1 1 160px; position: relative; }
 .field > label, .field > .label { font-weight: 700; font-size: .92rem; }
-.hint { color: var(--muted); font-size: .85rem; }
+.hint { color: var(--muted); font-size: .95rem; }
 .control, select.control, input.control { width: 100%; font: inherit; color: var(--ink); background: var(--surface); border: 1.5px solid var(--muted); border-radius: 8px; padding: 10px 12px; min-height: 46px; }
 .control[aria-invalid="true"], .control.bad { border-color: var(--danger); box-shadow: 0 0 0 1px var(--danger); }
 .control.btnlike { text-align: left; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .control.btnlike::after { content: ""; width: 8px; height: 8px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg) translateY(-3px); flex: none; }
 .control.cal-btn::after { display: none; }
-.field-error { color: var(--danger); font-weight: 700; font-size: .88rem; }
+.field-error { color: var(--danger); font-weight: 700; font-size: .95rem; }
 
 .swap { width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; cursor: pointer; }
 .swap:hover { border-color: var(--accent); }
@@ -156,7 +161,7 @@ input.num { width: 5.5rem; }
 .cal-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .cal-nav { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; cursor: pointer; font-size: 1.1rem; font-weight: 700; }
 .cal table { border-collapse: collapse; width: 100%; table-layout: fixed; }
-.cal th { font-size: .78rem; color: var(--muted); font-weight: 700; padding: 4px 0; text-align: center; }
+.cal th { font-size: .9rem; color: var(--muted); font-weight: 700; padding: 4px 0; text-align: center; }
 .cal td { text-align: center; padding: 2px; }
 .cal .day { display: grid; place-items: center; height: 38px; border-radius: 8px; cursor: pointer; font-variant-numeric: tabular-nums; }
 .cal td[role="gridcell"], .cal .day { border-radius: 8px; }
@@ -165,7 +170,7 @@ input.num { width: 5.5rem; }
 .cal [aria-selected="true"], .cal .day.sel { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
 .cal [aria-disabled="true"], .cal .day.off { color: var(--faint); cursor: not-allowed; text-decoration: line-through; }
 .cal [aria-current="date"], .cal .day.today { box-shadow: inset 0 0 0 2px var(--gold); }
-.cal-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: .85rem; color: var(--muted); }
+.cal-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: .95rem; color: var(--muted); }
 
 /* Results */
 .results { padding-block: 40px 24px; }
@@ -196,7 +201,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .sort label, .sort [role="tab"], .sort .tab { display: grid; gap: 2px; padding: 12px 14px; cursor: pointer; border-right: 1px solid var(--line); text-align: left; }
 .sort > *:last-child { border-right: 0; }
 .sort .t { font-weight: 700; font-family: var(--font-display); }
-.sort .s { color: var(--muted); font-size: .88rem; font-variant-numeric: tabular-nums; }
+.sort .s { color: var(--muted); font-size: .95rem; font-variant-numeric: tabular-nums; }
 .sort label:has(input:checked), .sort [aria-selected="true"], .sort .tab.on { background: var(--accent-soft); box-shadow: inset 0 -3px 0 var(--accent); }
 .sort input { accent-color: var(--accent); }
 .sort fieldset { display: flex; flex-wrap: wrap; width: 100%; }
@@ -209,19 +214,19 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .carrier { display: flex; align-items: center; gap: 10px; }
 .carrier img { width: 40px; height: 40px; border-radius: 10px; flex: none; }
 .carrier img.wide { width: 150px; }
-.carrier .fno { color: var(--muted); font-size: .88rem; }
+.carrier .fno { color: var(--muted); font-size: .95rem; }
 .leg { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; }
 .leg .t { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.leg .ap { color: var(--muted); font-size: .85rem; }
-.leg .mid { display: grid; justify-items: center; gap: 2px; font-size: .85rem; color: var(--muted); text-align: center; }
+.leg .ap { color: var(--muted); font-size: .95rem; }
+.leg .mid { display: grid; justify-items: center; gap: 2px; font-size: .95rem; color: var(--muted); text-align: center; }
 .leg .line { width: 100%; height: 2px; background: var(--line); position: relative; }
 .leg .line.stops::after { content: ""; position: absolute; left: 50%; top: -3px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--gold); }
 .direct { color: var(--ok); font-weight: 700; }
-.plus1 { font-size: .75rem; vertical-align: super; color: var(--gold); font-weight: 700; }
+.plus1 { font-size: .85rem; vertical-align: super; color: var(--gold); font-weight: 700; }
 .card-side { display: grid; gap: 8px; align-content: center; justify-items: end; text-align: right; }
 @media (max-width: 560px) { .card-side { justify-items: stretch; text-align: left; grid-template-columns: 1fr auto; align-items: center; } }
 .price { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--gold); font-variant-numeric: tabular-nums; }
-.price-note { color: var(--muted); font-size: .82rem; }
+.price-note { color: var(--muted); font-size: .92rem; }
 .more summary, .more-btn { cursor: pointer; color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; padding: 0; font: inherit; font-weight: 700; }
 .more-body { margin-top: 8px; padding: 12px; background: var(--sunk); border-radius: 8px; display: grid; gap: 4px; font-size: .92rem; }
 .more-body dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; margin: 0; }
@@ -274,7 +279,7 @@ dialog.modal::backdrop { background: rgba(10, 16, 32, .6); }
   .cal { position: fixed; top: auto; left: max(8px, env(safe-area-inset-left, 0px)); right: max(8px, env(safe-area-inset-right, 0px)); bottom: calc(8px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: calc(100vh - 24px); overflow: auto; z-index: 70; }
 }
 .cal-step { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
-.cal-keys { font-size: .85rem; color: var(--muted); background: var(--sunk); border-radius: 8px; padding: 8px 10px; }
+.cal-keys { font-size: .95rem; color: var(--muted); background: var(--sunk); border-radius: 8px; padding: 8px 10px; }
 .cal .cal-head { flex-wrap: wrap; }
 .cal .cal-head .h3 { order: -1; flex-basis: 100%; text-align: center; }
 .cal-month-btn { min-height: 38px; padding: 6px 12px; font-size: .9rem; }
@@ -286,12 +291,12 @@ dialog.modal::backdrop { background: rgba(10, 16, 32, .6); }
 .cal .sr { position: absolute; inset: 0; overflow: hidden; opacity: 0; white-space: nowrap; font-size: 1rem; color: transparent; pointer-events: none; }
 .cal td[role="gridcell"] { position: relative; height: 50px; padding: 3px 0; line-height: 1.15; vertical-align: middle; }
 .cal .dn { display: block; font-weight: 700; }
-.cal .dp { display: block; font-size: .7rem; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 1em; }
+.cal .dp { display: block; font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 1em; }
 .cal .dp.low { color: var(--ok); font-weight: 700; }
 .cal .dp.high { color: var(--danger); }
 .cal [aria-selected="true"] .dp { color: var(--accent-ink); }
 .cal td.in-range { background: var(--accent-soft); border-radius: 0; }
-.cal-legend { display: flex; gap: 16px; font-size: .8rem; color: var(--muted); }
+.cal-legend { display: flex; gap: 16px; font-size: .9rem; color: var(--muted); }
 .cal-legend .lg::before { content: ""; display: inline-block; width: .6rem; height: .6rem; border-radius: 50%; margin-right: 6px; background: currentColor; }
 .cal-legend .low { color: var(--ok); }
 .cal-legend .high { color: var(--danger); }
@@ -316,10 +321,10 @@ dialog.modal::backdrop { background: rgba(10, 16, 32, .6); }
 
 /* Tooltip and toggletip */
 .tip-wrap { position: relative; display: inline-flex; align-items: center; gap: 8px; }
-.tip-btn { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--muted); background: var(--surface); color: var(--ink); display: inline-grid; place-items: center; font: inherit; font-weight: 700; font-size: .85rem; line-height: 1; cursor: pointer; padding: 0; flex: none; }
+.tip-btn { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--muted); background: var(--surface); color: var(--ink); display: inline-grid; place-items: center; font: inherit; font-weight: 700; font-size: .95rem; line-height: 1; cursor: pointer; padding: 0; flex: none; }
 .tip-btn:hover { border-color: var(--accent); }
 .tip-btn svg { width: 14px; height: 14px; }
-.tip { position: absolute; z-index: 45; bottom: calc(100% + 8px); left: 0; width: max-content; max-width: min(260px, calc(100vw - 32px)); background: var(--ink); color: var(--bg); padding: 8px 12px; border-radius: 8px; font-size: .88rem; line-height: 1.4; box-shadow: var(--shadow); font-weight: 400; }
+.tip { position: absolute; z-index: 45; bottom: calc(100% + 8px); left: 0; width: max-content; max-width: min(260px, calc(100vw - 32px)); background: var(--ink); color: var(--bg); padding: 8px 12px; border-radius: 8px; font-size: .95rem; line-height: 1.4; box-shadow: var(--shadow); font-weight: 400; }
 .tip[popover] { position: fixed; inset: auto; margin: 0; border: 0; }
 
 /* Save a flight */
@@ -330,7 +335,7 @@ dialog.modal::backdrop { background: rgba(10, 16, 32, .6); }
 .save-btn svg path { fill: none; stroke: currentColor; stroke-width: 2; }
 .save-btn[aria-pressed="true"], .save-btn.on { color: var(--danger); border-color: var(--danger); }
 .save-btn[aria-pressed="true"] svg path, .save-btn.on svg path { fill: currentColor; }
-.saved-note { font-size: .82rem; color: var(--ok); font-weight: 700; }
+.saved-note { font-size: .92rem; color: var(--ok); font-weight: 700; }
 
 /* Popular destinations carousel */
 .dest { padding-block: 16px 24px; }
@@ -350,7 +355,7 @@ dialog.modal::backdrop { background: rgba(10, 16, 32, .6); }
 @media (max-width: 640px) { .dest-card { grid-template-columns: minmax(0, 1fr); } }
 .dest-card img { width: 100%; height: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
 .dest-body { padding: 20px; display: grid; gap: 8px; align-content: center; justify-items: start; }
-.dest-region { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+.dest-region { font-size: .9rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
 .dest-price { color: var(--muted); }
 .dest-price strong { color: var(--gold); font-family: var(--font-display); font-size: 1.3rem; }
 
@@ -363,13 +368,13 @@ dialog.modal.cal-dialog { width: min(860px, calc(100vw - 16px)); }
 .cal-month .cal-month-h { margin: 0 0 6px; }
 .cal-plain { gap: 12px; }
 .cal-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-variant-numeric: tabular-nums; }
-.cal-table th { font-size: .78rem; color: var(--muted); font-weight: 700; padding: 4px 0; text-align: center; }
+.cal-table th { font-size: .9rem; color: var(--muted); font-weight: 700; padding: 4px 0; text-align: center; }
 .cal-table td { padding: 2px; text-align: center; }
 .cal-table .day { position: relative; width: 100%; min-height: 50px; display: grid; place-items: center; align-content: center; border: 0; border-radius: 8px; background: none; color: var(--ink); font: inherit; padding: 4px 0; line-height: 1.15; }
 .cal-table button.day { cursor: pointer; }
 .cal-table button.day:hover { background: var(--accent-soft); }
 .cal-table .day .dn { font-weight: 700; }
-.cal-table .day .dp { font-size: .7rem; color: var(--muted); }
+.cal-table .day .dp { font-size: .8rem; color: var(--muted); }
 .cal-table .day.low .dp { color: var(--ok); font-weight: 700; }
 .cal-table .day.high .dp { color: var(--danger); }
 .cal-table .day.in-range { background: var(--accent-soft); }

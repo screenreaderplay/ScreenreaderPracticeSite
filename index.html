@@ -19,6 +19,9 @@
   details.more summary { cursor: pointer; font-weight: 700; font-family: var(--font-display); font-size: 1.15rem; padding: 14px 0; }
   details.more > div { padding-bottom: 16px; display: grid; gap: 10px; }
   details.more ol, details.more ul { margin: 0; padding-left: 1.4rem; display: grid; gap: 8px; }
+  details.more h3 { font-size: 1.15rem; margin-top: 10px; }
+  details.more h4 { font-size: 1rem; margin-top: 6px; }
+  details.more li ul { margin-top: 6px; }
   details.more code { font-size: .88em; background: var(--sunk); padding: 1px 5px; border-radius: 4px; }
   .sc { color: var(--muted); font-size: .88rem; }
 </style>
@@ -52,7 +55,84 @@
       <details class="more">
         <summary>Practice tasks</summary>
         <div>
-          <p>Try the same tasks on both versions.</p>
+          <h3>On the Mac with VoiceOver</h3>
+          <p>Use Safari. Headphones help, so you can hear VoiceOver clearly. Press Control at any time to stop VoiceOver talking.</p>
+          <p><strong>Keys you'll need:</strong> VO means holding down Control and Option together.</p>
+          <ul>
+            <li>Turn VoiceOver on or off: Command+F5 (on some keyboards, Fn+Command+F5), or press Touch ID three times quickly</li>
+            <li>Move forward or back: VO+Right arrow or VO+Left arrow</li>
+            <li>Activate a link or button: VO+Space</li>
+            <li>List headings: VO+U, then Left or Right arrow until you reach Headings</li>
+            <li>Next or previous heading: VO+Command+H or VO+Command+Shift+H</li>
+          </ul>
+
+          <h4>Activity 1 of 5: Turn VoiceOver on and off (2 minutes)</h4>
+          <ol>
+            <li>Turn VoiceOver on with your shortcut, then turn it off again.</li>
+            <li>Repeat until you're comfortable doing it without thinking.</li>
+          </ol>
+
+          <h4>Activity 2 of 5: Can you reach all the content on the page, and does it make sense? (5 minutes)</h4>
+          <ol>
+            <li>With VoiceOver off, open the <a href="custom.html">Accessible version</a>.</li>
+            <li>Turn VoiceOver on and move forward and back through the page.</li>
+            <li>Accept the cookie message.</li>
+            <li>Find the question "How much luggage is included?" near the bottom of the page, open it and read the answer.</li>
+            <li>Turn VoiceOver off and post "done" in the Zoom chat.</li>
+          </ol>
+
+          <h4>Activity 3 of 5: Can you use every part of the form, and does focus go to the right place? (10 minutes)</h4>
+          <ol>
+            <li>On the Accessible version, book a return flight from Camelot to Avalon for 2 adults.</li>
+            <li>As you go, notice:
+              <ul>
+                <li>Are you told about suggestions as you type in From and To?</li>
+                <li>Can you open and use the calendar, and pick your departure and return dates without leaving it?</li>
+                <li>When the calendar closes, are you back where you started?</li>
+                <li>When you add a passenger, is the new number announced?</li>
+              </ul>
+            </li>
+          </ol>
+
+          <h4>Activity 4 of 5: Can you understand the page and move through the results using headings? (5 minutes)</h4>
+          <ol>
+            <li>On the search results, press VO+U and go to Headings. Do the headings make sense?</li>
+            <li>Arrow down to the heading that starts "Search results" and press Enter to go there.</li>
+            <li>Press VO+Command+H to jump from result to result. Go to the 3rd result.</li>
+            <li>Find that result's Save button and select it. Were you told it was saved?</li>
+          </ol>
+
+          <h4>Activity 5 of 5: Accessibility testing (10 minutes)</h4>
+          <ol>
+            <li>Open the <a href="broken.html">Inaccessible version</a>.</li>
+            <li>Use your new VoiceOver skills to find as many accessibility problems as you can, using the checklist below.</li>
+          </ol>
+
+          <h4>Testing checklist</h4>
+          <ul>
+            <li><strong>Navigating:</strong> can you move to everything on the page, and is it easy to do so?</li>
+            <li><strong>Understanding:</strong> is everything read out, with any extra hints you need? Are changes to the page announced?</li>
+            <li><strong>Operating:</strong> can you use all the controls on the page?</li>
+            <li><strong>Managing focus:</strong> when you finish something, does your focus go to the right place?</li>
+            <li><strong>State:</strong> are things like selected or not selected, and expanded or collapsed, announced?</li>
+          </ul>
+          <p>In more detail:</p>
+          <ul>
+            <li>Are buttons and links descriptive? For example, "Close cookie message" rather than just "Close".</li>
+            <li>Can you use buttons, drop-downs and other controls?</li>
+            <li>When typing in a field with suggestions, are you told how many there are?</li>
+            <li>If something is shown by colour, such as a low price, is it also announced?</li>
+            <li>In the calendar, after picking your departure date, are you still in the calendar to pick your return date? Does the calendar then close and put you back where you started?</li>
+            <li>Are headings marked up as headings? Something can look like a heading but be ignored by the screen reader if it isn't marked up as one.</li>
+            <li>Can you move through the search results using headings?</li>
+            <li>Are updates announced, for example when you add a passenger?</li>
+          </ul>
+
+          <h3>On your phone</h3>
+          <p>Mobile activities with VoiceOver on iPhone and TalkBack on Android are coming soon.</p>
+
+          <h3>Extra practice</h3>
+          <p>More tasks to try on both versions.</p>
           <ol class="tasks">
         <li>Read the page title, then find the main heading and list the landmarks.</li>
         <li>Find the cookie message. Open the cookie settings, turn on Analytics cookies only, and save. How were you told it worked, and where did your focus go?</li>

@@ -12,14 +12,18 @@
   section.block { padding-block: 24px; }
   .versions { margin: 0; padding-left: 1.4rem; display: grid; gap: 10px; font-size: 1.1rem; }
   .versions a { font-weight: 700; }
-  details.more { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 18px; max-width: 78ch; }
-  details.more summary { cursor: pointer; font-weight: 700; font-family: var(--font-display); font-size: 1.15rem; padding: 14px 0; }
-  details.more > div { padding-bottom: 16px; display: grid; gap: 10px; }
-  details.more ol, details.more ul { margin: 0; padding-left: 1.4rem; display: grid; gap: 8px; }
-  details.more h3 { font-size: 1.15rem; margin-top: 10px; }
-  details.more h4 { font-size: 1rem; margin-top: 6px; }
-  details.more li ul { margin-top: 6px; }
-  details.more code { font-size: .88em; background: var(--sunk); padding: 1px 5px; border-radius: 4px; }
+  .more { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 18px; max-width: 78ch; }
+  .more-h { margin: 0; font-size: 1.15rem; }
+  .more-h button { all: unset; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; padding: 14px 0; cursor: pointer; font-weight: 700; font-family: var(--font-display); color: var(--accent); }
+  .more-h .pm::after { content: "+"; font-size: 1.4rem; line-height: 1; }
+  .more-h button[aria-expanded="true"] .pm::after { content: "−"; }
+  .more-h button:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+  .more > div { padding-bottom: 16px; display: grid; gap: 10px; }
+  .more ol, .more ul { margin: 0; padding-left: 1.4rem; display: grid; gap: 8px; }
+  .more h3 { font-size: 1.15rem; margin-top: 10px; }
+  .more h4 { font-size: 1rem; margin-top: 6px; }
+  .more li ul { margin-top: 6px; }
+  .more code { font-size: .88em; background: var(--sunk); padding: 1px 5px; border-radius: 4px; }
   .sc { color: var(--muted); font-size: .88rem; }
 </style>
 </head>
@@ -49,9 +53,9 @@
         <li><a href="custom.html">Accessible version</a></li>
         <li><a href="broken.html">Inaccessible version</a></li>
       </ol>
-      <details class="more">
-        <summary>Practice tasks</summary>
-        <div>
+      <div class="more">
+        <h2 class="more-h"><button type="button" aria-expanded="false" aria-controls="tasks-panel">Practice tasks<span class="pm" aria-hidden="true"></span></button></h2>
+        <div id="tasks-panel" hidden>
           <h3>On the Mac with VoiceOver</h3>
           <p>Use Safari. Headphones help, so you can hear VoiceOver clearly. Press Control at any time to stop VoiceOver talking.</p>
           <p><strong>Keys you'll need:</strong> VO means holding down Control and Option together.</p>
@@ -198,10 +202,10 @@
             <li>Find your booking reference, close the booking and check where your focus lands.</li>
           </ol>
         </div>
-      </details>
-      <details class="more">
-        <summary>Faults in the inaccessible version</summary>
-        <div>
+      </div>
+      <div class="more">
+        <h2 class="more-h"><button type="button" aria-expanded="false" aria-controls="faults-panel">Faults in the inaccessible version<span class="pm" aria-hidden="true"></span></button></h2>
+        <div id="faults-panel" hidden>
           <ul>
             <li>Main navigation: "Flights" is underlined as the current page, but <code>aria-current</code> is missing, so screen readers don't say it is the current page. <span class="sc">WCAG 1.3.1</span></li>
             <li>Trip type: Return and One way are radio buttons, but neither is ever announced as selected. <span class="sc">4.1.2</span></li>
@@ -221,7 +225,7 @@
             <li>Popular destinations: the Previous and Next buttons have no names, so they are read as symbols such as "‹" or "left-pointing angle quotation mark". Slides are labelled only "Slide 1", "Slide 2" and so on, which tells you nothing about the destination. <span class="sc">4.1.2, 1.3.1</span></li>
           </ul>
         </div>
-      </details>
+      </div>
     </div>
   </section>
 </main>
@@ -231,6 +235,16 @@
     <p>FlyAble Flights is fictional. Flights, airlines and places are invented for screen reader practice.</p>
   </div>
 </footer>
-<script>document.documentElement.lang = 'en-GB';</script>
+<script>
+  document.documentElement.lang = 'en-GB';
+  // Show and hide sections with plain buttons (aria-expanded), which work reliably with VoiceOver in Safari
+  document.querySelectorAll('.more-h button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', String(open));
+      document.getElementById(b.getAttribute('aria-controls')).hidden = !open;
+    });
+  });
+</script>
 </body>
 </html>

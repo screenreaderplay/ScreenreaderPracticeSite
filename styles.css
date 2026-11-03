@@ -397,3 +397,7 @@ dialog.modal.cal-float[open] { position: fixed; inset: 0; margin: auto; height: 
 .card-h .card-dep { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--ink); }
 .carrier .aname { font-weight: 700; }
 .step-btn[aria-disabled="true"] { opacity: .45; cursor: default; }
+/* Result cards: one block of text per flight */
+.leg-sum { margin: 0; line-height: 1.5; }
+.leg-sum strong { font-family: var(--font-display); }
+.card-main > .price-note { margin: 0; }

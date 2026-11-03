@@ -922,7 +922,18 @@
   function runSearch(fromUser) {
     const s = readSearch();
     state.search = s;
-    state.flights = W.flights(s.from, s.to, s.depart, s.cabin);
+    // Each result is a trip: the outbound flight, plus the return flight on a return search
+    const outs = W.flights(s.from, s.to, s.depart, s.cabin);
+    const backs = s.ret ? W.flights(s.to, s.from, s.ret, s.cabin) : [];
+    state.flights = outs.map((o, i) => {
+      const r = backs[i] ? Object.assign({}, backs[i], { airline: o.airline, flightNo: o.airline.code + ' ' + backs[i].flightNo.split(' ')[1] }) : null;
+      return {
+        id: o.id, airline: o.airline, flightNo: o.flightNo, out: o, back: r,
+        dep: o.dep, arr: o.arr, via: o.via,
+        dur: o.dur + (r ? r.dur : 0), stops: Math.max(o.stops, r ? r.stops : 0),
+        price: o.price + (r ? r.price : 0)
+      };
+    });
     if (s.direct) setStops(['0']); else if (fromUser) setStops(['0', '1', '2']);
     const first = $('#results').hidden;
     $('#results').hidden = false;
@@ -1021,26 +1032,40 @@
     if (doAnnounce) announce($('#status'), msg, 500); else $('#status').textContent = msg;
   }
 
+  // Times written the way people say them: 7am, 4:35pm
+  function t12(m) {
+    m = m % 1440;
+    const h = Math.floor(m / 60), mm = m % 60;
+    return (h % 12 || 12) + (mm ? ':' + String(mm).padStart(2, '0') : '') + (h < 12 ? 'am' : 'pm');
+  }
+  function stopsWords(f) { return f.stops === 0 ? 'direct' : (f.stops === 1 ? '1 stop' : f.stops + ' stops') + ' via ' + f.via.join(' and '); }
+  // One flight of the trip, in two lines: route and times, then flight time, stops and airline
+  function legText(label, fromA, toA, f) {
+    return '<p class="leg-sum"><strong>' + label + '</strong>, ' + fromA.name + ' to ' + toA.name +
+      ', departs ' + t12(f.dep) + ', arrives ' + t12(f.arr) + (W.nextDay(f) ? ' the next day' : '') + ',<br>' +
+      W.spokenDur(f.dur) + ' flight time, ' + stopsWords(f) + ', flying with ' + f.airline.name + '</p>';
+  }
   function card(f, s) {
     const li = document.createElement('li');
     const fromA = W.airport(s.from), toA = W.airport(s.to), hid = 'h-' + f.id;
+    const o = f.out, r = f.back;
+    const summary = r
+      ? 'outbound ' + t12(o.dep) + ' to ' + toA.name + ', return flight ' + t12(r.dep) + ' to ' + fromA.name
+      : 'one way, ' + t12(o.dep) + ' to ' + toA.name;
     li.innerHTML =
       '<div class="card">' +
         '<div class="card-main">' +
-          // The heading leads with what matters most: price, then departure time
-          '<h3 class="card-h" id="' + hid + '"><span class="price">' + W.money(f.price) + '</span> <span class="price-note">per person,</span> <span class="card-dep">departs ' + W.fmtTime(f.dep) + ', ' + fromA.name + ' (' + fromA.code + ')</span></h3>' +
-          '<div class="leg">' +
-            // Departure time and airport are already in the heading, so they are hidden here to avoid repeating them
-            '<div aria-hidden="true"><span class="t">' + W.fmtTime(f.dep) + '</span><div class="ap">' + fromA.code + '</div></div>' +
-            '<div class="mid"><span><span class="vh">Journey time </span>' + W.fmtDur(f.dur) + '</span><span class="line' + (f.stops ? ' stops' : '') + '"></span><span class="' + (f.stops ? '' : 'direct') + '">' + W.stopsText(f) + '</span></div>' +
-            '<div><span class="vh">Arrives </span><span class="t">' + W.fmtTime(f.arr) + (W.nextDay(f) ? '<span class="plus1">+1<span class="vh"> day</span></span>' : '') + '</span><div class="ap"><span aria-hidden="true">' + toA.code + '</span><span class="vh">' + toA.name + ' (' + toA.code + ')</span></div></div>' +
-          '</div>' +
-          '<div class="carrier"><img src="' + W.logo(f.airline) + '" alt=""><div><span class="aname">' + f.airline.name + '</span> <span class="fno">Flight ' + f.flightNo + '</span></div></div>' +
+          // Heading: the price, then when each flight leaves and where it goes
+          '<h3 class="card-h" id="' + hid + '"><span class="price">' + W.money(f.price) + '</span><span class="card-dep">, ' + summary + '</span></h3>' +
+          // Then the details, one block per flight
+          legText('Outbound flight', fromA, toA, o) +
+          (r ? legText('Return flight', toA, fromA, r) : '') +
+          '<p class="price-note">' + W.money(f.price) + ' per person' + (r ? ', for both flights' : '') + '</p>' +
         '</div>' +
         '<div class="card-side">' +
           '<div class="card-actions">' +
-            '<div class="save-btn" role="button" tabindex="0" aria-pressed="' + state.saved.has(f.id) + '" aria-label="Save ' + W.fmtTime(f.dep) + ' ' + f.airline.name + ' flight"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div>' +
-            '<div class="btn btn-primary sel" role="button" tabindex="0" aria-label="Select ' + W.money(f.price) + ' flight departing ' + W.fmtTime(f.dep) + ', ' + f.airline.name + '">Select</div>' +
+            '<div class="save-btn" role="button" tabindex="0" aria-pressed="' + state.saved.has(f.id) + '" aria-label="Save ' + W.money(f.price) + ' trip, outbound ' + t12(o.dep) + '"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.6 3.9 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.3 0 5.6 3.1 4.4 6.6-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></div>' +
+            '<div class="btn btn-primary sel" role="button" tabindex="0" aria-label="Select ' + W.money(f.price) + ' trip, outbound ' + t12(o.dep) + (r ? ', return ' + t12(r.dep) : '') + '">Select</div>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -1098,9 +1123,10 @@
     $$('[data-extra]').forEach(c => c.setAttribute('aria-checked', 'false'));
     seatGroup.reset();
     $('#book-body').hidden = false; $('#confirm').hidden = true;
-    $('#trip-sum').innerHTML = '<strong>' + f.airline.name + ', flight ' + f.flightNo + '</strong>' +
-      '<span>' + W.airport(s.from).name + ' to ' + W.airport(s.to).name + ', ' + W.fmtLong(s.depart) + '</span>' +
-      '<span>Departs ' + W.fmtTime(f.dep) + ', arrives ' + W.fmtTime(f.arr) + (W.nextDay(f) ? ' the next day' : '') + '. ' + W.stopsText(f) + '.</span>';
+    const fA = W.airport(s.from), tA = W.airport(s.to);
+    $('#trip-sum').innerHTML = '<strong>' + W.money(f.price) + ' per person, flying with ' + f.airline.name + '</strong>' +
+      '<span>Outbound, ' + W.fmtLong(s.depart) + ': ' + fA.name + ' to ' + tA.name + ', departs ' + t12(f.out.dep) + ', arrives ' + t12(f.out.arr) + (W.nextDay(f.out) ? ' the next day' : '') + ', ' + stopsWords(f.out) + '.</span>' +
+      (f.back ? '<span>Return, ' + W.fmtLong(s.ret) + ': ' + tA.name + ' to ' + fA.name + ', departs ' + t12(f.back.dep) + ', arrives ' + t12(f.back.arr) + (W.nextDay(f.back) ? ' the next day' : '') + ', ' + stopsWords(f.back) + '.</span>' : '');
     const n = paxCount();
     $('#pax-count').textContent = n + (n === 1 ? ' passenger' : ' passengers');
     updateTotal();

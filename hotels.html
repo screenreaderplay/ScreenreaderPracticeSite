@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hotels – FlyAble Flights</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<link rel="stylesheet" href="styles.css">
+<style>.simple { padding-block: 40px 60px; display: grid; gap: 14px; max-width: 70ch; }</style>
+</head>
+<body>
+<header class="site-header"><div class="wrap"><a class="brand" href="index.html">FlyAble Flights</a></div></header>
+<main id="main" class="wrap simple">
+  <h1>Hotels</h1>
+  <p>Hotel search is coming soon. FlyAble Flights is a practice site, so only the flight search works for now.</p>
+  <p><a id="back" href="index.html">Back to flights</a></p>
+</main>
+<script>
+  // Go back to whichever version of the flights page you came from
+  try { const r = document.referrer; if (/\/(custom|broken)\.html/.test(r)) document.getElementById('back').href = r.split('#')[0]; } catch (e) {}
+</script>
+</body>
+</html>

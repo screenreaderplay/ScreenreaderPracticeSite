@@ -240,7 +240,7 @@
     </div>
   </section>
 
-  <section class="dest wrap" aria-roledescription="carousel" aria-labelledby="dest-h" id="dest">
+  <section class="dest wrap" aria-labelledby="dest-h" id="dest">
     <div class="dest-head">
       <div>
         <h2 id="dest-h">Popular destinations</h2>
@@ -1183,13 +1183,12 @@
     const s = document.createElement('div');
     s.className = 'dest-slide';
     s.setAttribute('role', 'group');
-    s.setAttribute('aria-roledescription', 'slide');
-    s.setAttribute('aria-label', (i + 1) + ' of ' + D.length);
+    s.setAttribute('aria-label', a.name + ', ' + (i + 1) + ' of ' + D.length);
     s.hidden = i !== 0;
     s.innerHTML = '<div class="dest-card"><img src="' + d.img + '" alt="' + d.alt + '" width="320" height="180">' +
       '<div class="dest-body"><p class="dest-region">' + d.region + '</p><h3>' + a.name + '</h3><p>' + d.blurb + '</p>' +
       '<p class="dest-price">Return flights from <strong>' + W.money(d.price) + '</strong></p>' +
-      '<div class="btn btn-secondary" role="button" tabindex="0" data-dest="' + d.code + '">Search flights to ' + a.name + '</div></div></div>';
+      '<button type="button" class="btn btn-secondary" data-dest="' + d.code + '">Search flights to ' + a.name + '</button></div></div>';
     slidesEl.appendChild(s);
     activate($('[data-dest]', s), () => {
       setAirport(toIn, d.code);

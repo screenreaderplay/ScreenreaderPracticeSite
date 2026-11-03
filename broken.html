@@ -137,6 +137,8 @@
       </div>
       <div id="combo-status" class="vh" role="status"></div>
       <div id="place-status" class="vh" aria-live="assertive" aria-atomic="true"></div>
+      <div class="loading" id="loading" hidden><span class="spinner" aria-hidden="true"></span><span>Searching for flights…</span></div>
+      <div id="search-live" class="vh" role="status"></div>
     </section>
   </div>
 
@@ -922,7 +924,22 @@
   }
 
   /* ---------- Search and results ---------- */
-  activate($('#search-btn'), () => { if (validateSearch()) runSearch(true); });
+  // Searching: show a loading indicator for a moment, and say so to screen readers
+  let searching = false;
+  function startSearch() {
+    if (searching || !validateSearch()) return;
+    searching = true;
+    $('#loading').hidden = false;
+    $('#results').setAttribute('aria-busy', 'true');
+    setTimeout(() => {
+      searching = false;
+      $('#loading').hidden = true;
+      $('#results').removeAttribute('aria-busy');
+      $('#search-live').textContent = '';
+      runSearch(true);
+    }, 1800);
+  }
+  activate($('#search-btn'), startSearch);
 
   function readSearch() {
     return {

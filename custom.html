@@ -261,7 +261,7 @@
         <p class="dest-count" id="dest-count" aria-hidden="true"></p>
       </div>
       <div class="dest-controls">
-        <div class="btn btn-secondary" role="button" tabindex="0" id="dest-rotate">Stop slide rotation</div>
+        <div class="btn btn-secondary" role="button" tabindex="0" id="dest-rotate">Start slide rotation</div>
         <div class="cal-nav" role="button" tabindex="0" id="dest-prev" aria-controls="dest-slides" aria-label="Previous slide">‹</div>
         <div class="cal-nav" role="button" tabindex="0" id="dest-next" aria-controls="dest-slides" aria-label="Next slide">›</div>
       </div>
@@ -1299,9 +1299,9 @@
   destEl.addEventListener('mouseenter', () => { hovering = true; stopRotation(); });
   destEl.addEventListener('mouseleave', () => { hovering = false; startRotation(); });
   showSlide(0);
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    userPaused = true; rotBtn.textContent = 'Start slide rotation'; stopRotation();
-  } else startRotation();
+  // The slides don't move on their own: moving content is hard to follow with a screen reader,
+  // especially on a phone where reading doesn't always count as focus. Press Start slide rotation to start them.
+  userPaused = true; stopRotation();
 
   /* ---------- Cookie banner and preferences dialog ---------- */
   const ckBack = $('#cookie-backdrop'), ckDlg = $('#cookie-dlg');

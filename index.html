@@ -31,6 +31,11 @@
   .think { background: var(--accent-soft); border-radius: 10px; padding: 12px 16px; display: grid; gap: 6px; }
   .think p { margin: 0; font-weight: 700; }
   .tip { margin: 0; font-weight: 700; }
+  .keytable { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 8px; overflow: hidden; font-size: 1rem; }
+  .keytable th, .keytable td { text-align: left; vertical-align: top; padding: 9px 12px; border-top: 1px solid var(--line); }
+  .keytable thead th { background: var(--accent-soft); border-top: 0; }
+  .keytable td:first-child { font-weight: 700; width: 45%; }
+  @media (max-width: 520px) { .keys, .task { padding: 14px 12px; } .more { padding: 4px 12px; } .keytable th, .keytable td { padding: 8px 8px; } .keytable td:first-child { width: 50%; } }
   .sc { color: var(--muted); font-size: .88rem; }
 </style>
 </head>
@@ -70,15 +75,22 @@
           <div class="keys">
             <h3>Keys you'll need</h3>
             <p>VO means holding down Control and Option together.</p>
-            <ul>
-              <li>Turn VoiceOver on or off: Command+F5 (on some keyboards, Fn+Command+F5), or press Touch ID three times quickly</li>
-              <li>Pause the speech: Control</li>
-              <li>Move forward or back: VO+Right arrow or VO+Left arrow</li>
-              <li>Activate a link or button: VO+Space</li>
-              <li>In an open list: Up and Down arrows to move, Enter to choose</li>
-              <li>List headings: VO+U, then Left or Right arrow until you reach Headings</li>
-              <li>Next or previous heading: VO+Command+H or VO+Command+Shift+H</li>
-            </ul>
+            <table class="keytable">
+              <caption class="vh">Keys for VoiceOver on the Mac</caption>
+              <thead><tr><th scope="col">Keys</th><th scope="col">What it does</th></tr></thead>
+              <tbody>
+                <tr><td>Command+F5 (on some keyboards, Fn+Command+F5), or press Touch ID three times</td><td>Turn VoiceOver on or off</td></tr>
+                <tr><td>Control</td><td>Pause the speech</td></tr>
+                <tr><td>VO+Right arrow</td><td>Move forward</td></tr>
+                <tr><td>VO+Left arrow</td><td>Move back</td></tr>
+                <tr><td>VO+Space</td><td>Activate a link or button</td></tr>
+                <tr><td>Up and Down arrows</td><td>Move through an open list</td></tr>
+                <tr><td>Enter</td><td>Choose from an open list</td></tr>
+                <tr><td>VO+U, then Left or Right arrow to Headings</td><td>List the headings</td></tr>
+                <tr><td>VO+Command+H</td><td>Next heading</td></tr>
+                <tr><td>VO+Command+Shift+H</td><td>Previous heading</td></tr>
+              </tbody>
+            </table>
           </div>
 
           <div class="task">
@@ -230,16 +242,22 @@
 
           <div class="keys">
             <h3>Gestures you'll need</h3>
-            <ul>
-              <li>Turn the screen reader on or off: iPhone, press the side button three times (the Home button on older iPhones). Android, press and hold both volume keys for a few seconds.</li>
-              <li>Pause or carry on speaking: tap with two fingers</li>
-              <li>Move forward or back: swipe right or swipe left with one finger</li>
-              <li>Activate the item you're on: double tap anywhere on the screen</li>
-              <li>Hear what's under your finger: drag one finger over the screen</li>
-              <li>Move by headings on iPhone: twist two fingers on the screen, like turning a dial, until you hear "Headings". Then swipe down for the next heading and up for the previous one.</li>
-              <li>Move by headings on Android: swipe up or down with three fingers until you hear "Headings". Then swipe down with one finger for the next heading, and up for the previous one.</li>
-              <li>Typing on iPhone: switch Typing Style to Touch Typing (Settings, Accessibility, VoiceOver, Typing), so you just lift your finger to type a letter.</li>
-            </ul>
+            <table class="keytable">
+              <caption class="vh">Gestures for VoiceOver on iPhone and TalkBack on Android</caption>
+              <thead><tr><th scope="col">Gesture</th><th scope="col">What it does</th></tr></thead>
+              <tbody>
+                <tr><td>iPhone: press the side button three times (the Home button on older iPhones)</td><td>Turn VoiceOver on or off</td></tr>
+                <tr><td>Android: hold both volume keys for a few seconds</td><td>Turn TalkBack on or off</td></tr>
+                <tr><td>Tap with two fingers</td><td>Pause, or carry on speaking</td></tr>
+                <tr><td>Swipe right or left with one finger</td><td>Move forward or back</td></tr>
+                <tr><td>Double tap anywhere on the screen</td><td>Activate the item you’re on</td></tr>
+                <tr><td>Drag one finger over the screen</td><td>Hear what’s under your finger</td></tr>
+                <tr><td>iPhone: twist two fingers, like turning a dial, until you hear “Headings”</td><td>Choose to move by headings</td></tr>
+                <tr><td>Android: swipe up or down with three fingers until you hear “Headings”</td><td>Choose to move by headings</td></tr>
+                <tr><td>Swipe down or up with one finger</td><td>Next or previous heading, once Headings is chosen</td></tr>
+                <tr><td>iPhone: Settings, Accessibility, VoiceOver, Typing, Typing Style, Touch Typing</td><td>Type by lifting your finger off a letter</td></tr>
+              </tbody>
+            </table>
           </div>
 
           <div class="task">
@@ -400,44 +418,44 @@
           <h3>Navigating</h3>
           <ul>
             <li>From and To: typing announces how many results there are, but the results are hidden from screen readers. Down arrow does nothing, and swiping or exploring by touch can't reach them. <span class="sc">WCAG 4.1.2</span></li>
-            <li>Search results: each flight's price and departure time look like a heading but aren't marked up as one, so you can't jump from flight to flight by heading. <span class="sc">1.3.1</span></li>
-            <li>The cookie message shows at the bottom of the screen straight away, but it is last in the page, so screen reader users don't hear about it until the end. <span class="sc">1.3.2, 2.4.3</span></li>
+            <li>Search results: each flight's price and departure time look like a heading but aren't marked up as one, so you can't jump from flight to flight by heading. <span class="sc">WCAG 1.3.1</span></li>
+            <li>The cookie message shows at the bottom of the screen straight away, but it is last in the page, so screen reader users don't hear about it until the end. <span class="sc">WCAG 1.3.2, 2.4.3</span></li>
           </ul>
 
           <h3>Understanding</h3>
           <ul>
-            <li>From and To: the instructions say to press Down arrow to reach the results, which makes no sense on a phone. <span class="sc">3.3.2</span></li>
-            <li>Calendar days only say the number and price, for example "30 £106". The month, weekday, low or high price and "select as departure date" are missing. <span class="sc">1.3.1, 2.4.6</span></li>
-            <li>The calendar's heading just says "Select dates" and never changes, so nothing tells you whether you are choosing your departure or your return date. <span class="sc">2.4.6, 3.3.2</span></li>
-            <li>The cookie buttons just say "Accept", "Close" and "Settings", and after choosing, "Change" and "Close". "Close" actually rejects optional cookies, which nothing tells you. <span class="sc">2.4.6, 3.3.2</span></li>
-            <li>Popular destinations: images have no alt text, so file names may be read. The Previous and Next buttons have no names, so they are read as symbols, and slides are labelled only "Slide 1", "Slide 2" and so on. <span class="sc">1.1.1, 4.1.2</span></li>
-            <li>The buttons that close Passengers and cabin and the booking confirmation both just say "Done", so out of context you can't tell what they close. <span class="sc">2.4.6</span></li>
-            <li>Search results: every result's buttons are called just "Save" and "Select", so you can't tell which flight they belong to. <span class="sc">2.4.6</span></li>
+            <li>From and To: the instructions say to press Down arrow to reach the results, which makes no sense on a phone. <span class="sc">WCAG 3.3.2</span></li>
+            <li>Calendar days only say the number and price, for example "30 £106". The month, weekday, low or high price and "select as departure date" are missing. <span class="sc">WCAG 1.3.1, 2.4.6</span></li>
+            <li>The calendar's heading just says "Select dates" and never changes, so nothing tells you whether you are choosing your departure or your return date. <span class="sc">WCAG 2.4.6, 3.3.2</span></li>
+            <li>The cookie buttons just say "Accept", "Close" and "Settings", and after choosing, "Change" and "Close". "Close" actually rejects optional cookies, which nothing tells you. <span class="sc">WCAG 2.4.6, 3.3.2</span></li>
+            <li>Popular destinations: images have no alt text, so file names may be read. The Previous and Next buttons have no names, so they are read as symbols, and slides are labelled only "Slide 1", "Slide 2" and so on. <span class="sc">WCAG 1.1.1, 4.1.2</span></li>
+            <li>The buttons that close Passengers and cabin and the booking confirmation both just say "Done", so out of context you can't tell what they close. <span class="sc">WCAG 2.4.6</span></li>
+            <li>Search results: every result's buttons are called just "Save" and "Select", so you can't tell which flight they belong to. <span class="sc">WCAG 2.4.6</span></li>
           </ul>
 
           <h3>Operating</h3>
           <ul>
-            <li>The swap button between From and To only works with a mouse: it has no name and no role, and you can't reach it with the keyboard. <span class="sc">2.1.1, 4.1.2</span></li>
-            <li>From and To: the results can only be chosen with a mouse. <span class="sc">2.1.1</span></li>
-            <li>Cabin class is a home-made drop-down that only works with a mouse. You can't reach it with Tab, it isn't announced as a drop-down or button, and the "Cabin class" label isn't linked to it. <span class="sc">2.1.1, 4.1.2, 1.3.1</span></li>
+            <li>The swap button between From and To only works with a mouse: it has no name and no role, and you can't reach it with the keyboard. <span class="sc">WCAG 2.1.1, 4.1.2</span></li>
+            <li>From and To: the results can only be chosen with a mouse. <span class="sc">WCAG 2.1.1</span></li>
+            <li>Cabin class is a home-made drop-down that only works with a mouse. You can't reach it with Tab, it isn't announced as a drop-down or button, and the "Cabin class" label isn't linked to it. <span class="sc">WCAG 2.1.1, 4.1.2, 1.3.1</span></li>
           </ul>
 
           <h3>Managing focus</h3>
           <ul>
-            <li>Calendar: it opens, but focus stays on Travel dates. It is not modal, so you have to go looking for it. <span class="sc">2.4.3</span></li>
-            <li>After you choose a departure date, focus is thrown to the top of the page, while the calendar stays open waiting for a return date. <span class="sc">2.4.3, 3.2.2</span></li>
+            <li>Calendar: it opens, but focus stays on Travel dates. It is not modal, so you have to go looking for it. <span class="sc">WCAG 2.4.3</span></li>
+            <li>After you choose a departure date, focus is thrown to the top of the page, while the calendar stays open waiting for a return date. <span class="sc">WCAG 2.4.3, 3.2.2</span></li>
           </ul>
 
           <h3>State and feedback</h3>
           <ul>
-            <li>Main navigation: "Flights" is underlined as the current page, but screen readers aren't told it is the current page. <span class="sc">1.3.1</span></li>
-            <li>Trip type: Return and One way are radio buttons, but neither is ever announced as selected. <span class="sc">4.1.2</span></li>
-            <li>Calendar: nothing tells you it has opened. <span class="sc">4.1.3</span></li>
-            <li>Calendar: low and high prices are shown only by colour. <span class="sc">1.4.1</span></li>
-            <li>When you search, a "Searching for flights…" spinner appears, but nothing tells a screen reader user that the search has started. <span class="sc">4.1.3</span></li>
-            <li>Search errors, such as "Choose your travel dates", appear in red on screen, but nothing is announced: focus stays on the Search button and the fields aren't marked as having an error. <span class="sc">3.3.1, 4.1.3</span></li>
-            <li>The Save button never says whether the flight is saved. <span class="sc">4.1.2</span></li>
-            <li>Changing the sort or the filters updates the results silently, so you aren't told the list has changed or how many flights it now shows. <span class="sc">4.1.3</span></li>
+            <li>Main navigation: "Flights" is underlined as the current page, but screen readers aren't told it is the current page. <span class="sc">WCAG 1.3.1</span></li>
+            <li>Trip type: Return and One way are radio buttons, but neither is ever announced as selected. <span class="sc">WCAG 4.1.2</span></li>
+            <li>Calendar: nothing tells you it has opened. <span class="sc">WCAG 4.1.3</span></li>
+            <li>Calendar: low and high prices are shown only by colour. <span class="sc">WCAG 1.4.1</span></li>
+            <li>When you search, a "Searching for flights…" spinner appears, but nothing tells a screen reader user that the search has started. <span class="sc">WCAG 4.1.3</span></li>
+            <li>Search errors, such as "Choose your travel dates", appear in red on screen, but nothing is announced: focus stays on the Search button and the fields aren't marked as having an error. <span class="sc">WCAG 3.3.1, 4.1.3</span></li>
+            <li>The Save button never says whether the flight is saved. <span class="sc">WCAG 4.1.2</span></li>
+            <li>Changing the sort or the filters updates the results silently, so you aren't told the list has changed or how many flights it now shows. <span class="sc">WCAG 4.1.3</span></li>
           </ul>
         </div>
       </div>

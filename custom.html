@@ -791,7 +791,15 @@
       // Safari on iPhone doesn't move VoiceOver for autofocus alone, so move focus to the day explicitly too
       // (on the Mac it's already there, so nothing moves)
       first.focus();
-      if (window.matchMedia('(pointer: coarse)').matches) setTimeout(() => { if (cal.open && document.activeElement !== first) first.focus(); }, 300);
+      // On a phone, VoiceOver finishes handling your double tap after the calendar has opened, and can put
+      // its cursor back on Travel dates even though focus is already on the day. So once it has settled,
+      // move focus off and back on to the day: a fresh focus change that VoiceOver always follows.
+      if (window.matchMedia('(pointer: coarse)').matches) {
+        [450, 900].forEach(ms => setTimeout(() => {
+          if (!cal.open || (document.activeElement && document.activeElement.closest && document.activeElement.closest('#cal') && document.activeElement !== first)) return;
+          first.blur(); first.focus();
+        }, ms));
+      }
     }
     datesBtn.setAttribute('aria-expanded', 'true');
   }

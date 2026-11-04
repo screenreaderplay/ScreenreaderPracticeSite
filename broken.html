@@ -583,16 +583,31 @@
      a combobox and listbox tested with VoiceOver on iPhone and Mac, TalkBack, JAWS and NVDA.
      The home-made version above (makePlace) is kept for the inaccessible version. */
   const USE_TESTED_AUTOCOMPLETE = false;
-  // On a phone, move the field to the top of the screen while typing,
-  // so the suggestions under it sit above the on-screen keyboard, where they can be found
+  // On a phone, keep the field and its suggestions in the part of the screen above the keyboard
   const touchScreen = window.matchMedia('(pointer: coarse)').matches;
   function liftField(inp) {
     if (!touchScreen) return;
     const field = inp.closest('.field');
-    setTimeout(() => {
-      const top = field.getBoundingClientRect().top + window.scrollY - 8;
-      if (Math.abs(window.scrollY - top) > 4) window.scrollTo(0, top);
-    }, 350);
+    const fit = () => {
+      const vv = window.visualViewport;
+      const visTop = vv ? vv.offsetTop : 0, visH = vv ? vv.height : window.innerHeight;
+      const r = field.getBoundingClientRect();
+      // put the label just inside the top of the visible area, so the list below it has the most room
+      const delta = r.top - visTop - 8;
+      if (Math.abs(delta) > 4) window.scrollBy(0, delta);
+    };
+    setTimeout(fit, 60); setTimeout(fit, 400);
+  }
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', () => {
+    const a = document.activeElement;
+    if (a && (a.id === 'from-input' || a.id === 'to-input')) liftField(a);
+  });
+  // Say how many suggestions there are as soon as you type
+  function sayCount(inp) {
+    const q = inp.value.trim();
+    if (!q) { placeStatus.textContent = ''; return; }
+    const n = matches(q).length;
+    sayPlace(n ? n + (n === 1 ? ' suggestion' : ' suggestions') + ' available.' : 'No places found.');
   }
   function mountPlace(side, code) {
     const old = side === 'from' ? fromIn : toIn;
@@ -616,6 +631,11 @@
       source: (q, populate) => populate(matches(q).map(x => x.name + ' (' + x.code + ')')),
       // Keep the spoken instructions short
       tAssistiveHint: () => 'Suggestions appear below as you type.',
+      // The component waits about 1.4 seconds before saying how many results there are.
+      // We say it ourselves straight away instead (see sayCount), so its own message is left empty.
+      tStatusResults: () => '',
+      tStatusNoResults: () => '',
+      tNoResults: () => 'No places found',
       onConfirm: v => {
         const inp = side === 'from' ? fromIn : toIn;
         const ap = v ? W.airportByName(v) : null;
@@ -625,7 +645,7 @@
     const inp = host.querySelector('input');
     inp.dataset.code = a ? a.code : '';
     inp.dataset.hint = inp.getAttribute('aria-describedby') || '';
-    inp.addEventListener('input', () => { const ap = W.airportByName(inp.value); inp.dataset.code = ap ? ap.code : ''; liftField(inp); });
+    inp.addEventListener('input', () => { const ap = W.airportByName(inp.value); inp.dataset.code = ap ? ap.code : ''; sayCount(inp); liftField(inp); });
     inp.addEventListener('focus', () => liftField(inp));
     if (side === 'from') fromIn = inp; else toIn = inp;
   }

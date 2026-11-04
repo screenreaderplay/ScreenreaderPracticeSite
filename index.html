@@ -35,7 +35,17 @@
   .keytable th, .keytable td { text-align: left; vertical-align: top; padding: 9px 12px; border-top: 1px solid var(--line); }
   .keytable thead th { background: var(--accent-soft); border-top: 0; }
   .keytable td:first-child { font-weight: 700; width: 45%; }
-  @media (max-width: 520px) { .keys, .task { padding: 14px 12px; } .more { padding: 4px 12px; } .keytable th, .keytable td { padding: 8px 8px; } .keytable td:first-child { width: 50%; } }
+  @media (max-width: 520px) {
+    .keys, .task { padding: 14px 12px; } .more { padding: 4px 12px; }
+    /* On a phone, each key or gesture sits on its own line, with what it does underneath */
+    .keytable, .keytable tbody, .keytable tr, .keytable td { display: block; width: auto; }
+    .keytable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .keytable tr { padding: 10px 12px; border-top: 1px solid var(--line); }
+    .keytable tr:first-child { border-top: 0; }
+    .keytable td { padding: 0; border: 0; }
+    .keytable td:first-child { width: auto; }
+    .keytable td + td { margin-top: 2px; color: var(--muted); }
+  }
   .sc { color: var(--muted); font-size: .88rem; }
 </style>
 </head>

@@ -663,6 +663,10 @@
   }
   // From and To start empty, so there's nothing to delete before typing
   setAirport(fromIn, ''); setAirport(toIn, '');
+  // Safari can refill typed text when a page is reloaded or reopened: clear anything that isn't a chosen place
+  window.addEventListener('pageshow', () => {
+    [fromIn, toIn].forEach(el => { if (!USE_PICKER && !el.dataset.code && el.value) el.value = ''; });
+  });
   activate($('#swap'), () => {
     const a = fromIn.dataset.code, b = toIn.dataset.code;
     setAirport(fromIn, b); setAirport(toIn, a);
@@ -1103,6 +1107,9 @@
     ['best', 'cheapest', 'fastest'].forEach(m => {
       const top = W.sortFlights(filtered, m)[0];
       $('#sub-' + m).textContent = top ? W.money(top.price) + ' · ' + W.fmtDur(top.dur) : 'No flights';
+      // Short on screen ("6h 38m"), in full for screen readers, so "m" isn't read as "million"
+      const nm = { best: 'Best', cheapest: 'Cheapest', fastest: 'Fastest' }[m];
+      $('#tab-' + m).setAttribute('aria-label', top ? nm + ', ' + W.money(top.price) + ', ' + W.spokenDur(top.dur) : nm + ', no flights');
     });
     const list = W.sortFlights(filtered, state.sort);
     const ul = $('#list');
@@ -1110,8 +1117,9 @@
     list.forEach(f => ul.appendChild(card(f, s)));
     $('#empty').hidden = list.length > 0;
     const sortName = { best: 'best', cheapest: 'cheapest first', fastest: 'fastest first' }[state.sort];
-    $('#list-h').textContent = 'Search results: ' + list.length + (list.length === 1 ? ' flight' : ' flights') + ', ' + sortName;
-    const msg = 'Showing ' + list.length + ' of ' + state.flights.length + ' flights, sorted by ' + state.sort + '.';
+    const found = list.length + (list.length === 1 ? ' flight' : ' flights') + ' found, sorted by ' + sortName;
+    $('#list-h').textContent = 'Search results: ' + found;
+    const msg = found + '.';
     if (doAnnounce) announce($('#status'), msg, 500); else $('#status').textContent = msg;
   }
 

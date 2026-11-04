@@ -3,27 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FlyAble Flights practice site</title>
+<title>Screen reader practice: FlyAble Flights</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="styles.css">
 <style>
   .intro { padding-block: 32px 36px; }
   .intro .wrap, section.block .wrap { display: grid; gap: 14px; }
   section.block { padding-block: 24px; }
-  .versions { margin: 0; padding-left: 1.4rem; display: grid; gap: 10px; font-size: 1.1rem; }
+  .versions { margin: 0; padding-left: 1.4rem; display: grid; gap: 10px; font-size: 1.15rem; }
   .versions a { font-weight: 700; }
-  .more { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 18px; max-width: 78ch; }
-  .more-h { margin: 0; font-size: 1.15rem; }
-  .more-h button { all: unset; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; padding: 14px 0; cursor: pointer; font-weight: 700; font-family: var(--font-display); color: var(--accent); }
-  .more-h .pm::after { content: "+"; font-size: 1.4rem; line-height: 1; }
+  .more { background: var(--surface); border: 2px solid var(--line); border-radius: 14px; padding: 4px 20px; max-width: 80ch; }
+  .more-h { margin: 0; font-size: 1.35rem; }
+  .more-h button { all: unset; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; padding: 18px 0; cursor: pointer; font-weight: 700; font-family: var(--font-display); color: var(--accent); }
+  .more-h .pm::after { content: "+"; font-size: 1.6rem; line-height: 1; }
   .more-h button[aria-expanded="true"] .pm::after { content: "−"; }
   .more-h button:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
-  .more > div { padding-bottom: 16px; display: grid; gap: 10px; }
+  .more > div { padding-bottom: 20px; display: grid; gap: 16px; }
   .more ol, .more ul { margin: 0; padding-left: 1.4rem; display: grid; gap: 8px; }
-  .more h3 { font-size: 1.15rem; margin-top: 10px; }
-  .more h4 { font-size: 1rem; margin-top: 6px; }
+  .more h3 { font-size: 1.25rem; margin: 6px 0 0; }
+  .more h4 { font-size: 1.05rem; margin: 6px 0 0; }
   .more li ul { margin-top: 6px; }
   .more code { font-size: .88em; background: var(--sunk); padding: 1px 5px; border-radius: 4px; }
+  .keys { background: var(--sunk); border-radius: 12px; padding: 16px 20px; display: grid; gap: 10px; }
+  .task { background: var(--bg); border: 1px solid var(--line); border-left: 6px solid var(--accent); border-radius: 12px; padding: 18px 22px; display: grid; gap: 12px; }
+  .task h3 { margin: 0; font-size: 1.3rem; }
+  .task .time { font-weight: 400; color: var(--muted); }
+  .think { background: var(--accent-soft); border-radius: 10px; padding: 12px 16px; display: grid; gap: 6px; }
+  .think p { margin: 0; font-weight: 700; }
+  .tip { margin: 0; font-weight: 700; }
   .sc { color: var(--muted); font-size: .88rem; }
 </style>
 </head>
@@ -41,8 +48,8 @@
 <main id="main">
   <div class="hero intro">
     <div class="wrap">
-      <h1>FlyAble Flights practice site</h1>
-      <p class="lede">A pretend flight booking site for practising with a screen reader. The same page is built twice: once accessibly, and once with hidden faults.</p>
+      <h1>Screen reader practice: FlyAble Flights</h1>
+      <p class="lede">For the Skyscanner screen reader course. FlyAble Flights is a made-up airline, built twice: once so it works well with a screen reader, and once with hidden problems. The two versions look the same.</p>
     </div>
   </div>
 
@@ -50,75 +57,156 @@
     <div class="wrap">
       <h2 id="versions-h">Choose a version</h2>
       <ol class="versions">
-        <li><a href="custom.html">Accessible version</a></li>
-        <li><a href="broken.html">Inaccessible version</a></li>
+        <li><a href="custom.html">FlyAble Flights: accessible version</a></li>
+        <li><a href="broken.html">FlyAble Flights: inaccessible version</a></li>
       </ol>
+
+      <!-- ===================== MAC ===================== -->
       <div class="more">
-        <h2 class="more-h"><button type="button" aria-expanded="false" aria-controls="tasks-panel">Practice tasks<span class="pm" aria-hidden="true"></span></button></h2>
-        <div id="tasks-panel" hidden>
-          <h3>Mac practice tasks, with VoiceOver</h3>
-          <p>Use Safari. Headphones help, so you can hear VoiceOver clearly. Press Control at any time to stop VoiceOver talking.</p>
-          <p><strong>Keys you'll need:</strong> VO means holding down Control and Option together.</p>
+        <h2 class="more-h"><button type="button" aria-expanded="false" aria-controls="mac-panel">Mac practice tasks<span class="pm" aria-hidden="true"></span></button></h2>
+        <div id="mac-panel" hidden>
+          <p>Use Safari with VoiceOver. Keep these steps open on your phone, or in a second Safari window, while you use the practice site on your Mac.</p>
+
+          <div class="keys">
+            <h3>Keys you'll need</h3>
+            <p>VO means holding down Control and Option together.</p>
+            <ul>
+              <li>Turn VoiceOver on or off: Command+F5 (on some keyboards, Fn+Command+F5), or press Touch ID three times quickly</li>
+              <li>Pause the speech: Control</li>
+              <li>Move forward or back: VO+Right arrow or VO+Left arrow</li>
+              <li>Activate a link or button: VO+Space</li>
+              <li>In an open list: Up and Down arrows to move, Enter to choose</li>
+              <li>List headings: VO+U, then Left or Right arrow until you reach Headings</li>
+              <li>Next or previous heading: VO+Command+H or VO+Command+Shift+H</li>
+            </ul>
+          </div>
+
+          <div class="task">
+            <h3 id="mac1">Mac practice task 1 of 5: Get comfortable turning VoiceOver on and off <span class="time">(2 minutes)</span></h3>
+            <ol>
+              <li>Turn VoiceOver on with your shortcut.</li>
+              <li>Turn it off again.</li>
+              <li>Repeat until it feels natural.</li>
+            </ol>
+          </div>
+
+          <div class="task">
+            <h3 id="mac2">Mac practice task 2 of 5: Explore the page <span class="time">(5 minutes)</span></h3>
+            <ol>
+              <li>With VoiceOver off, open <a href="custom.html">FlyAble Flights: accessible version</a>.</li>
+              <li>Turn VoiceOver on. Move forward through the page with VO+Right arrow, and back with VO+Left arrow. Press Control to pause the speech whenever it gets too much.</li>
+              <li>Find the cookie message and accept all cookies.</li>
+              <li>Find the question "How much luggage is included?". Open it and read the answer.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Can you reach and understand all the content?</li>
+                <li>Does the order things are read in make sense?</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task">
+            <h3 id="mac3">Mac practice task 3 of 5: Search for a flight <span class="time">(8 minutes)</span></h3>
+            <p>On the accessible version, search for a return flight from Camelot to Avalon for 2 adults.</p>
+            <h4>Where you're going</h4>
+            <ol>
+              <li>Set Trip type to Return.</li>
+              <li>In From, type "Cam" and choose Camelot from the suggestions.</li>
+              <li>In To, type "Ava" and choose Avalon.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Are you told how many suggestions there are?</li>
+                <li>Can you move into the list and choose one?</li>
+              </ul>
+            </div>
+            <h4>Your travel dates</h4>
+            <ol>
+              <li>Before choosing any dates, press Search flights.</li>
+              <li>Open Travel dates. Choose a departure date, then a return date.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>When you searched without dates, was the error announced?</li>
+                <li>Can you move around the calendar and choose dates?</li>
+                <li>When the calendar closes, where is your focus?</li>
+              </ul>
+            </div>
+            <h4>Passengers and cabin</h4>
+            <ol>
+              <li>Open Passengers and cabin, and set Adults to 2.</li>
+              <li>Change the cabin class.</li>
+              <li>Close Passengers and cabin, and press Search flights.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Is the new number of adults announced?</li>
+                <li>Can you choose a cabin class?</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task">
+            <h3 id="mac4">Mac practice task 4 of 5: Explore and sort the results <span class="time">(10 minutes)</span></h3>
+            <h4>Move by headings</h4>
+            <ol>
+              <li>On the search results, press VO+U, then Left or Right arrow until you reach Headings.</li>
+              <li>Arrow down to the heading that starts "Search results" and press Enter.</li>
+              <li>Press VO+Command+H to jump from result to result, to the 3rd result.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Do the headings help you understand and move through the results?</li>
+              </ul>
+            </div>
+            <h4>Save a flight</h4>
+            <ol>
+              <li>Find the 3rd result's Save button and press VO+Space.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Are you told the flight is saved?</li>
+              </ul>
+            </div>
+            <h4>Sort the results</h4>
+            <ol>
+              <li>Find the Best, Cheapest and Fastest tabs, and choose Cheapest.</li>
+              <li>Move to the first result and listen to its price, times and flight time.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Are the sort options clear?</li>
+                <li>Are you told how many flights there are?</li>
+                <li>Are the flight details easy to follow?</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task">
+            <h3 id="mac5">Mac practice task 5 of 5: Find the accessibility problems <span class="time">(10 minutes)</span></h3>
+            <ol>
+              <li>Open <a href="broken.html">FlyAble Flights: inaccessible version</a>.</li>
+              <li>Search for a flight, move through the results and use the controls.</li>
+              <li>Use the testing checklist below to find as many problems as you can.</li>
+            </ol>
+            <p class="tip">Don't get stuck on one problem. Note it, move on, and we'll talk about what you found together.</p>
+          </div>
+
+          <h3>Testing checklist</h3>
           <ul>
-            <li>Turn VoiceOver on or off: Command+F5 (on some keyboards, Fn+Command+F5), or press Touch ID three times quickly</li>
-            <li>Move forward or back: VO+Right arrow or VO+Left arrow</li>
-            <li>Activate a link or button: VO+Space</li>
-            <li>In an open list: Up and Down arrows to move, Enter to choose</li>
-            <li>List headings: VO+U, then Left or Right arrow until you reach Headings</li>
-            <li>Next or previous heading: VO+Command+H or VO+Command+Shift+H</li>
-          </ul>
-
-          <h4>Mac practice task 1 of 5: Turn VoiceOver on and off (2 minutes)</h4>
-          <ol>
-            <li>Turn VoiceOver on with your shortcut, then turn it off again.</li>
-            <li>Repeat until you're comfortable doing it without thinking.</li>
-          </ol>
-
-          <h4>Mac practice task 2 of 5: Can you reach all the content on the page, and does it make sense? (5 minutes)</h4>
-          <ol>
-            <li>With VoiceOver off, open the <a href="custom.html">Accessible version</a>.</li>
-            <li>Turn VoiceOver on with your shortcut.</li>
-            <li>While VoiceOver is reading, press Control to pause it. Get used to doing this whenever the speech gets too much.</li>
-            <li>Find the cookie message. Open the cookie settings, turn on Analytics cookies only, and save.</li>
-            <li>What is the policy on bringing your pet dragon on a flight?</li>
-            <li>Find out whether there is step-free access at Mount Olympus airport.</li>
-            <li>In Popular destinations, move the slideshow to the Camelot slide and explore its content.</li>
-            <li>Press the "Search flights to Camelot" button. What happens?</li>
-            <li>Turn VoiceOver off and post "done" in the Zoom chat.</li>
-          </ol>
-
-          <h4>Mac practice task 3 of 5: Can you use every part of the form, and does focus go to the right place? (10 minutes)</h4>
-          <ol>
-            <li>Book a return flight from Camelot to Avalon. Search by typing part of each place name, then choosing from the results.</li>
-            <li>Choose 1 adult and 2 children.</li>
-            <li>Choose Business class.</li>
-            <li>Don't pick any dates yet.</li>
-            <li>Press Search flights. What happens? Was the error announced?</li>
-            <li>Now add your dates and press Search flights again.</li>
-            <li>Stop when you reach the search results.</li>
-          </ol>
-
-          <h4>Mac practice task 4 of 5: Can you understand the page and move through the results using headings? (5 minutes)</h4>
-          <ol>
-            <li>On the search results, press VO+U and go to Headings. Do the headings make sense?</li>
-            <li>Arrow down to the heading that starts "Search results" and press Enter.</li>
-            <li>Press VO+Command+H to jump forward through the results. Go to the 3rd result.</li>
-            <li>Find that result's Save button and select it. Were you told it was saved?</li>
-          </ol>
-
-          <h4>Mac practice task 5 of 5: Accessibility testing (10 minutes)</h4>
-          <ol>
-            <li>Open the <a href="broken.html">Inaccessible version</a>.</li>
-            <li>Use your new VoiceOver skills to find as many accessibility problems as you can, using the checklist below.</li>
-          </ol>
-
-          <h4>Testing checklist</h4>
-          <ul>
-            <li><strong>Navigating:</strong> can you move to everything on the page, and is it easy to do so?</li>
-            <li><strong>Understanding:</strong> is everything read out, with any extra hints you need? Are changes to the page announced?</li>
-            <li><strong>Operating:</strong> can you use all the controls on the page?</li>
-            <li><strong>Managing focus:</strong> when you finish something, does your focus go to the right place?</li>
-            <li><strong>State:</strong> are things like selected or not selected, and expanded or collapsed, announced?</li>
+            <li><strong>Navigating:</strong> can you reach everything on the page, and move around easily?</li>
+            <li><strong>Understanding:</strong> are labels, instructions and information clear, with any hints you need?</li>
+            <li><strong>Operating:</strong> can you use all the controls and finish your task?</li>
+            <li><strong>Managing focus:</strong> does your focus move where you expect, and stay there?</li>
+            <li><strong>State and feedback:</strong> are selections, changes and updates announced?</li>
           </ul>
           <p>In more detail:</p>
           <ul>
@@ -131,102 +219,225 @@
             <li>Can you move through the search results using headings?</li>
             <li>Are updates announced, for example when you add a passenger, or when there is an error?</li>
           </ul>
+        </div>
+      </div>
 
-          <h3>Phone practice tasks, with VoiceOver or TalkBack</h3>
-          <p>Use Safari on iPhone with VoiceOver, or Chrome on Android with TalkBack. You'll use the same practice site, in your phone's web browser.</p>
-          <p><strong>Gestures you'll need:</strong></p>
+      <!-- ===================== PHONE ===================== -->
+      <div class="more">
+        <h2 class="more-h"><button type="button" aria-expanded="false" aria-controls="phone-panel">Phone practice tasks<span class="pm" aria-hidden="true"></span></button></h2>
+        <div id="phone-panel" hidden>
+          <p>Use Safari on iPhone with VoiceOver, or Chrome on Android with TalkBack. Keep these steps open on your Mac while you use the practice site on your phone.</p>
+
+          <div class="keys">
+            <h3>Gestures you'll need</h3>
+            <ul>
+              <li>Turn the screen reader on or off: iPhone, press the side button three times (the Home button on older iPhones). Android, press and hold both volume keys for a few seconds.</li>
+              <li>Pause or carry on speaking: tap with two fingers</li>
+              <li>Move forward or back: swipe right or swipe left with one finger</li>
+              <li>Activate the item you're on: double tap anywhere on the screen</li>
+              <li>Hear what's under your finger: drag one finger over the screen</li>
+              <li>Move by headings on iPhone: twist two fingers on the screen, like turning a dial, until you hear "Headings". Then swipe down for the next heading and up for the previous one.</li>
+              <li>Move by headings on Android: swipe up or down with three fingers until you hear "Headings". Then swipe down with one finger for the next heading, and up for the previous one.</li>
+              <li>Typing on iPhone: switch Typing Style to Touch Typing (Settings, Accessibility, VoiceOver, Typing), so you just lift your finger to type a letter.</li>
+            </ul>
+          </div>
+
+          <div class="task">
+            <h3 id="ph1">Phone practice task 1 of 5: Turn your screen reader on and off <span class="time">(3 minutes)</span></h3>
+            <ol>
+              <li>Turn your screen reader on with your shortcut.</li>
+              <li>Turn it off again.</li>
+              <li>Repeat until it feels natural.</li>
+            </ol>
+          </div>
+
+          <div class="task">
+            <h3 id="ph2">Phone practice task 2 of 5: Explore the page <span class="time">(5 minutes)</span></h3>
+            <ol>
+              <li>With your screen reader off, open <a href="custom.html">FlyAble Flights: accessible version</a> in your phone's browser.</li>
+              <li>Turn your screen reader on and swipe right through the page. Tap with two fingers to pause the speech, and again to carry on.</li>
+              <li>Find the cookie message and accept all cookies.</li>
+              <li>Find the question "How much luggage is included?". Double tap to open it and read the answer.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Can you reach and understand all the content?</li>
+                <li>Does the order things are read in make sense?</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task">
+            <h3 id="ph3">Phone practice task 3 of 5: Search for a flight <span class="time">(8 minutes)</span></h3>
+            <p>On the accessible version, search for a return flight from Camelot to Avalon for 2 adults.</p>
+            <h4>Where you're going</h4>
+            <ol>
+              <li>Set Trip type to Return.</li>
+              <li>Double tap From, type "Cam", then swipe right to the results and double tap Camelot.</li>
+              <li>Do the same for To, typing "Ava" and choosing Avalon.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Are you told how many places were found?</li>
+                <li>Can you reach the list and choose one?</li>
+              </ul>
+            </div>
+            <h4>Your travel dates</h4>
+            <ol>
+              <li>Before choosing any dates, double tap Search flights.</li>
+              <li>Double tap Travel dates. Choose a departure date, then a return date.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>When you searched without dates, was the error announced?</li>
+                <li>Can you move around the calendar and choose dates?</li>
+                <li>When the calendar closes, where is your focus?</li>
+              </ul>
+            </div>
+            <h4>Passengers and cabin</h4>
+            <ol>
+              <li>Open Passengers and cabin, and set Adults to 2.</li>
+              <li>Change the cabin class.</li>
+              <li>Close Passengers and cabin, and double tap Search flights.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Is the new number of adults announced?</li>
+                <li>Can you choose a cabin class?</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task">
+            <h3 id="ph4">Phone practice task 4 of 5: Explore and sort the results <span class="time">(8 minutes)</span></h3>
+            <h4>Move by headings</h4>
+            <ol>
+              <li>On the search results, set your screen reader to move by headings: the rotor on iPhone, or a three-finger swipe up or down on Android.</li>
+              <li>Swipe down to the heading that starts "Search results".</li>
+              <li>Keep swiping down to jump from result to result, to the 3rd result.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Do the headings help you understand and move through the results?</li>
+              </ul>
+            </div>
+            <h4>Save a flight</h4>
+            <ol>
+              <li>Swipe right to the 3rd result's Save button and double tap it.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Are you told the flight is saved?</li>
+              </ul>
+            </div>
+            <h4>Sort the results</h4>
+            <ol>
+              <li>Find the Best, Cheapest and Fastest tabs, and double tap Cheapest.</li>
+              <li>Swipe right to the first result and listen to its price, times and flight time.</li>
+            </ol>
+            <div class="think">
+              <p>Think about:</p>
+              <ul>
+                <li>Are the sort options clear?</li>
+                <li>Are you told how many flights there are?</li>
+                <li>Are the flight details easy to follow?</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task">
+            <h3 id="ph5">Phone practice task 5 of 5: Test a Skyscanner page <span class="time">(10 minutes)</span></h3>
+            <ol>
+              <li>Pick any Skyscanner page or journey you're working on, or would like to test, and open it in your phone's browser.</li>
+              <li>Use the testing checklist below to see how well it works with your screen reader.</li>
+              <li>Turn your screen reader off and post what you found in the Zoom chat.</li>
+            </ol>
+            <p class="tip">Don't get stuck on one problem. Note it, move on, and we'll talk about what you found together.</p>
+          </div>
+
+          <h3>Testing checklist</h3>
           <ul>
-            <li>Turn the screen reader on or off: iPhone, press the side button three times (the Home button on older iPhones). Android, press and hold both volume keys for a few seconds.</li>
-            <li>Move forward or back: swipe right or swipe left with one finger</li>
-            <li>Activate the item you're on: double tap anywhere on the screen</li>
-            <li>Pause or carry on speaking: tap with two fingers</li>
-            <li>Hear what's under your finger: drag one finger over the screen</li>
-            <li>Move by headings on iPhone: twist two fingers on the screen, like turning a dial, until you hear "Headings". Then swipe down for the next heading and up for the previous one.</li>
-            <li>Move by headings on Android: swipe up or down with three fingers until you hear "Headings". Then swipe down with one finger for the next heading, and up for the previous one.</li>
-            <li>Typing on iPhone: switch Typing Style to Touch Typing (Settings, Accessibility, VoiceOver, Typing), so you just lift your finger to type a letter.</li>
+            <li><strong>Navigating:</strong> can you reach everything on the page, and move around easily?</li>
+            <li><strong>Understanding:</strong> are labels, instructions and information clear, with any hints you need?</li>
+            <li><strong>Operating:</strong> can you use all the controls and finish your task?</li>
+            <li><strong>Managing focus:</strong> does your focus move where you expect, and stay there?</li>
+            <li><strong>State and feedback:</strong> are selections, changes and updates announced?</li>
           </ul>
+        </div>
+      </div>
 
-          <h4>Phone practice task 1 of 5: Turn your screen reader on and off (3 minutes)</h4>
+      <!-- ===================== EXTRA ===================== -->
+      <div class="more">
+        <h2 class="more-h"><button type="button" aria-expanded="false" aria-controls="extra-panel">Extra practice tasks<span class="pm" aria-hidden="true"></span></button></h2>
+        <div id="extra-panel" hidden>
+          <p>More to try on both versions, on your Mac or your phone, during the session or afterwards.</p>
           <ol>
-            <li>Turn your screen reader on with your shortcut, then turn it off again.</li>
-            <li>Repeat until you're comfortable doing it without thinking.</li>
-          </ol>
-
-          <h4>Phone practice task 2 of 5: Can you reach all the content on the page, and does it make sense? (5 minutes)</h4>
-          <ol>
-            <li>With the screen reader off, open the <a href="custom.html">Accessible version</a> in your phone's browser.</li>
-            <li>Turn your screen reader on with your shortcut, and swipe right through the page.</li>
-            <li>While it is reading, tap the screen with two fingers to pause the speech, and tap with two fingers again to carry on. This works on iPhone and Android.</li>
-            <li>Find the cookie message. Open the cookie settings, turn on Analytics cookies only, and save.</li>
-            <li>How much luggage is included in every fare?</li>
-            <li>Find out how much it costs to change your dates after booking.</li>
-            <li>In Popular destinations, move the slideshow to the Camelot slide and explore its content.</li>
-            <li>Double tap the "Search flights to Camelot" button. What happens?</li>
-            <li>Turn your screen reader off and post "done" in the Zoom chat.</li>
-          </ol>
-
-          <h4>Phone practice task 3 of 5: Can you use every part of the form, and does focus go to the right place? (10 minutes)</h4>
-          <ol>
-            <li>Book a return flight from Camelot to Avalon. Search by typing part of each place name, then swipe right to reach the results and double tap to choose one.</li>
-            <li>Choose 1 adult and 2 children.</li>
-            <li>Choose Business class.</li>
-            <li>Don't pick any dates yet.</li>
-            <li>Double tap Search flights. What happens? Was the error announced?</li>
-            <li>Now add your dates and double tap Search flights again.</li>
-            <li>Stop when you reach the search results.</li>
-          </ol>
-
-          <h4>Phone practice task 4 of 5: Can you understand the page and move through the results using headings? (5 minutes)</h4>
-          <ol>
-            <li>On the search results, set your screen reader to move by headings, and swipe down through them. Do the headings make sense?</li>
-            <li>Move by headings to the heading that starts "Search results".</li>
-            <li>Keep swiping down to jump forward through the results. Go to the 3rd result.</li>
-            <li>Swipe right to that result's Save button and double tap it. Were you told it was saved?</li>
-          </ol>
-
-          <h4>Phone practice task 5 of 5: Test your own page (10 minutes)</h4>
-          <ol>
-            <li>Pick any Skyscanner page or journey you're working on, or would like to test, and open it in your phone's browser.</li>
-            <li>Use the testing checklist above to see how well it works with your screen reader.</li>
-            <li>Turn your screen reader off and post what you found in the Zoom chat.</li>
-          </ol>
-
-          <h3>Extra practice</h3>
-          <p>More tasks to try on both versions.</p>
-          <ol class="tasks">
+            <li>Open the cookie settings, turn on Analytics cookies only, and save.</li>
+            <li>Move the Popular destinations slideshow to Camelot and explore it. Then activate "Search flights to Camelot". What happens?</li>
+            <li>What is the policy on bringing a pet dragon in the cabin?</li>
             <li>Open the calendar from Travel dates. Go to next month, use the Cheapest button to find the cheapest day, then choose it. Then, still in the calendar, choose a return date a week later. When the calendar closes, where are you, and do you know what to do next?</li>
             <li>Find out what "Include nearby airports" means, using the help button next to it.</li>
             <li>Turn on Direct flights only and Flexible dates, then search.</li>
-            <li>Sort the results by Cheapest. How do you know the list changed?</li>
-            <li>Filter to flights that depart before 12:00.</li>
+            <li>Filter to flights that depart before 12:00. How do you know the list changed?</li>
             <li>Select a flight. Leave the email empty and try to confirm. Then fix it, add a checked bag, accept the terms and confirm.</li>
             <li>Find your booking reference, close the booking and check where your focus lands.</li>
           </ol>
         </div>
       </div>
+
+      <!-- ===================== FAULTS ===================== -->
       <div class="more">
         <h2 class="more-h"><button type="button" aria-expanded="false" aria-controls="faults-panel">Faults in the inaccessible version<span class="pm" aria-hidden="true"></span></button></h2>
         <div id="faults-panel" hidden>
+          <p>Grouped under the five areas of the testing checklist.</p>
+
+          <h3>Navigating</h3>
           <ul>
-            <li>Main navigation: "Flights" is underlined as the current page, but <code>aria-current</code> is missing, so screen readers don't say it is the current page. <span class="sc">WCAG 1.3.1</span></li>
-            <li>Trip type: Return and One way are radio buttons, but neither is ever announced as selected. <span class="sc">4.1.2</span></li>
-            <li>The swap button between From and To only works with a mouse: it has no name and no role, and you can't reach it with the keyboard. <span class="sc">2.1.1, 4.1.2</span></li>
-            <li>From and To: the instructions say to press Down arrow to reach the results, which makes no sense on a phone. Typing announces "2 results available. Press Down arrow to choose.", but the results are hidden from screen readers: Down arrow does nothing, swiping or exploring by touch can't reach them, and they can only be chosen with a mouse. <span class="sc">2.1.1, 4.1.2, 3.3.2</span></li>
-            <li>Calendar: it opens, but focus stays on Travel dates and nothing tells you it opened. It is not modal, so you have to go looking for it. <span class="sc">2.4.3</span></li>
-            <li>Calendar days only say the number and price, for example "30 £106". The month, weekday, low or high price and "select as departure date" are missing. Low and high prices are shown only by colour. <span class="sc">1.3.1, 1.4.1, 2.4.6</span></li>
+            <li>From and To: typing announces how many results there are, but the results are hidden from screen readers. Down arrow does nothing, and swiping or exploring by touch can't reach them. <span class="sc">WCAG 4.1.2</span></li>
+            <li>Search results: each flight's price and departure time look like a heading but aren't marked up as one, so you can't jump from flight to flight by heading. <span class="sc">1.3.1</span></li>
+            <li>The cookie message shows at the bottom of the screen straight away, but it is last in the page, so screen reader users don't hear about it until the end. <span class="sc">1.3.2, 2.4.3</span></li>
+          </ul>
+
+          <h3>Understanding</h3>
+          <ul>
+            <li>From and To: the instructions say to press Down arrow to reach the results, which makes no sense on a phone. <span class="sc">3.3.2</span></li>
+            <li>Calendar days only say the number and price, for example "30 £106". The month, weekday, low or high price and "select as departure date" are missing. <span class="sc">1.3.1, 2.4.6</span></li>
             <li>The calendar's heading just says "Select dates" and never changes, so nothing tells you whether you are choosing your departure or your return date. <span class="sc">2.4.6, 3.3.2</span></li>
-            <li>After you choose a departure date, focus is thrown to the top of the page with no message, while the calendar stays open waiting for a return date. <span class="sc">2.4.3, 3.2.2</span></li>
-            <li>The cookie message shows at the bottom of the screen straight away, but it is last in the page, so screen reader users don't hear about it until the end and have to go to the bottom to dismiss it. <span class="sc">1.3.2, 2.4.3</span></li>
             <li>The cookie buttons just say "Accept", "Close" and "Settings", and after choosing, "Change" and "Close". "Close" actually rejects optional cookies, which nothing tells you. <span class="sc">2.4.6, 3.3.2</span></li>
-            <li>Search results: each flight's price and departure time look like a heading but aren't marked up as one, so you can't jump from flight to flight by heading. You have to read through every detail of each flight to reach the next. <span class="sc">1.3.1, 2.4.6</span></li>
-            <li>Cabin class is a home-made drop-down that only works with a mouse. You can't reach it with Tab, it isn't announced as a drop-down or button, it doesn't say whether it's open, and the "Cabin class" label isn't linked to it, so screen readers just read "Economy" as plain text. <span class="sc">2.1.1, 4.1.2, 1.3.1</span></li>
+            <li>Popular destinations: images have no alt text, so file names may be read. The Previous and Next buttons have no names, so they are read as symbols, and slides are labelled only "Slide 1", "Slide 2" and so on. <span class="sc">1.1.1, 4.1.2</span></li>
+            <li>The buttons that close Passengers and cabin and the booking confirmation both just say "Done", so out of context you can't tell what they close. <span class="sc">2.4.6</span></li>
+            <li>Search results: every result's buttons are called just "Save" and "Select", so you can't tell which flight they belong to. <span class="sc">2.4.6</span></li>
+          </ul>
+
+          <h3>Operating</h3>
+          <ul>
+            <li>The swap button between From and To only works with a mouse: it has no name and no role, and you can't reach it with the keyboard. <span class="sc">2.1.1, 4.1.2</span></li>
+            <li>From and To: the results can only be chosen with a mouse. <span class="sc">2.1.1</span></li>
+            <li>Cabin class is a home-made drop-down that only works with a mouse. You can't reach it with Tab, it isn't announced as a drop-down or button, and the "Cabin class" label isn't linked to it. <span class="sc">2.1.1, 4.1.2, 1.3.1</span></li>
+          </ul>
+
+          <h3>Managing focus</h3>
+          <ul>
+            <li>Calendar: it opens, but focus stays on Travel dates. It is not modal, so you have to go looking for it. <span class="sc">2.4.3</span></li>
+            <li>After you choose a departure date, focus is thrown to the top of the page, while the calendar stays open waiting for a return date. <span class="sc">2.4.3, 3.2.2</span></li>
+          </ul>
+
+          <h3>State and feedback</h3>
+          <ul>
+            <li>Main navigation: "Flights" is underlined as the current page, but screen readers aren't told it is the current page. <span class="sc">1.3.1</span></li>
+            <li>Trip type: Return and One way are radio buttons, but neither is ever announced as selected. <span class="sc">4.1.2</span></li>
+            <li>Calendar: nothing tells you it has opened. <span class="sc">4.1.3</span></li>
+            <li>Calendar: low and high prices are shown only by colour. <span class="sc">1.4.1</span></li>
             <li>When you search, a "Searching for flights…" spinner appears, but nothing tells a screen reader user that the search has started. <span class="sc">4.1.3</span></li>
             <li>Search errors, such as "Choose your travel dates", appear in red on screen, but nothing is announced: focus stays on the Search button and the fields aren't marked as having an error. <span class="sc">3.3.1, 4.1.3</span></li>
-            <li>Search results: every result's buttons are called just "Save" and "Select", so in a list of buttons you can't tell which flight they belong to. The Save button never says whether the flight is saved. <span class="sc">2.4.6, 4.1.2</span></li>
+            <li>The Save button never says whether the flight is saved. <span class="sc">4.1.2</span></li>
             <li>Changing the sort or the filters updates the results silently, so you aren't told the list has changed or how many flights it now shows. <span class="sc">4.1.3</span></li>
-            <li>The button that closes Passengers and cabin, and the one that closes the booking confirmation, both just say "Done", so out of context you can't tell what they finish or close. <span class="sc">2.4.6</span></li>
-            <li>Popular destinations: images have no alt text, so file names may be read. <span class="sc">1.1.1</span></li>
-            <li>Popular destinations: the Previous and Next buttons have no names, so they are read as symbols such as "‹" or "left-pointing angle quotation mark". Slides are labelled only "Slide 1", "Slide 2" and so on, which tells you nothing about the destination. <span class="sc">4.1.2, 1.3.1</span></li>
           </ul>
         </div>
       </div>

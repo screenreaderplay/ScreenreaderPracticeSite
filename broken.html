@@ -504,6 +504,7 @@
   }
   // Results count: assertive and quick, so you know straight away that the list changed.
   const placeStatus = $('#place-status');
+  let keyboardHints = false;  // set on computers, where the Down arrow instructions apply
   let placeTimer;
   function sayPlace(msg) {
     clearTimeout(placeTimer);
@@ -596,6 +597,7 @@
      The search box is at the top, and the list of places is straight under it and already showing,
      so you can swipe right into it, explore just below the box, or type to narrow it down.
      The home-made inline list above (makePlace) is kept for the inaccessible version. */
+  // Phones and tablets get the full-screen search; computers keep the inline list, which works well there
   const USE_PICKER = false;
   const picker = $('#picker'), pickInput = $('#picker-input'), pickList = $('#picker-list'), pickLive = $('#picker-live');
   let pickFor = null, pickTimer = null;
@@ -646,7 +648,12 @@
   $('#picker-cancel').addEventListener('click', () => picker.close());
   picker.addEventListener('close', () => { const b = pickFor; setTimeout(() => b && b.focus(), 100); });
   if (USE_PICKER) { fromIn = pickerButton(fromIn); toIn = pickerButton(toIn); }
-  else { makePlace(fromIn); makePlace(toIn); }
+  else {
+    // On a computer, keep the inline list and its Down arrow instructions, as before
+    keyboardHints = true;
+    ['from', 'to'].forEach(x => { const h = $('#' + x + '-hint'); if (h) h.textContent = 'Type to search places, then press Down arrow to reach the results.'; });
+    makePlace(fromIn); makePlace(toIn);
+  }
   // From and To start empty, so there's nothing to delete before typing
   setAirport(fromIn, ''); setAirport(toIn, '');
   activate($('#swap'), () => {

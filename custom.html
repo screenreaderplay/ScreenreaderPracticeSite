@@ -577,11 +577,12 @@
      The search box is at the top, and the list of places is straight under it and already showing,
      so you can swipe right into it, explore just below the box, or type to narrow it down.
      The home-made inline list above (makePlace) is kept for the inaccessible version. */
-  // Phones and tablets only: their main input is touch and they can't hover. A Windows or Mac computer,
-  // including a laptop with a touch screen, has a mouse or trackpad as its main input, so it keeps the inline list.
+  // Phones and tablets only (iPhone, iPad, Android). Windows and Mac computers, touch screen or not,
+  // keep the inline list.
   // For testing, add ?places=search or ?places=list to the address to force one or the other.
   const placesParam = new URLSearchParams(location.search).get('places');
-  const USE_PICKER = placesParam ? placesParam === 'search' : window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const mobileOS = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const USE_PICKER = placesParam ? placesParam === 'search' : mobileOS;
   const picker = $('#picker'), pickInput = $('#picker-input'), pickList = $('#picker-list'), pickLive = $('#picker-live');
   let pickFor = null, pickTimer = null;
   function pickerButton(input) {

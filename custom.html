@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Search flights – FlyAble Flights (accessible version)</title>
+<link rel="stylesheet" href="vendor/accessible-autocomplete.min.css">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -374,6 +375,7 @@
   </div>
 </div>
 
+<script src="vendor/accessible-autocomplete.min.js"></script>
 <script src="data.js"></script>
 <script>
 (function () {
@@ -457,6 +459,7 @@
      message says how many there are. This holds up in VoiceOver on Mac and iPhone. */
   const comboStatus = $('#combo-status');
   function setAirport(input, code) {
+    if (USE_TESTED_AUTOCOMPLETE) return mountPlace(input === fromIn ? 'from' : 'to', code);
     const a = W.airport(code);
     input.value = a ? a.name + ' (' + a.code + ')' : '';
     input.dataset.code = a ? a.code : '';
@@ -557,9 +560,44 @@
     document.addEventListener('mousedown', e => { if (!box.hidden && !field.contains(e.target)) settle(); });
     input.addEventListener('change', () => { if (box.hidden) settle(); });
   }
-  const fromIn = $('#from-input'), toIn = $('#to-input');
-  makePlace(fromIn);
-  makePlace(toIn);
+  let fromIn = $('#from-input'), toIn = $('#to-input');
+  /* From and To use the GOV.UK accessible autocomplete (github.com/alphagov/accessible-autocomplete):
+     a combobox and listbox tested with VoiceOver on iPhone and Mac, TalkBack, JAWS and NVDA.
+     The home-made version above (makePlace) is kept for the inaccessible version. */
+  const USE_TESTED_AUTOCOMPLETE = !!window.accessibleAutocomplete;
+  function mountPlace(side, code) {
+    const old = side === 'from' ? fromIn : toIn;
+    let host = old.closest('.ac-host');
+    if (!host) {
+      host = document.createElement('div'); host.className = 'ac-host';
+      const field = old.closest('.field');
+      ['-hint', '-results'].forEach(x => { const el = $('#' + side + x); if (el) el.remove(); });
+      old.replaceWith(host);
+    }
+    host.innerHTML = '';
+    const a = W.airport(code);
+    accessibleAutocomplete({
+      element: host,
+      id: side + '-input',
+      name: side,
+      minLength: 1,
+      displayMenu: 'inline',
+      inputClasses: 'control',
+      defaultValue: a ? a.name + ' (' + a.code + ')' : '',
+      source: (q, populate) => populate(matches(q).map(x => x.name + ' (' + x.code + ')')),
+      onConfirm: v => {
+        const inp = side === 'from' ? fromIn : toIn;
+        const ap = v ? W.airportByName(v) : null;
+        if (ap) { inp.dataset.code = ap.code; clearFieldError(inp); }
+      }
+    });
+    const inp = host.querySelector('input');
+    inp.dataset.code = a ? a.code : '';
+    inp.dataset.hint = inp.getAttribute('aria-describedby') || '';
+    inp.addEventListener('input', () => { const ap = W.airportByName(inp.value); inp.dataset.code = ap ? ap.code : ''; });
+    if (side === 'from') fromIn = inp; else toIn = inp;
+  }
+  if (!USE_TESTED_AUTOCOMPLETE) { makePlace(fromIn); makePlace(toIn); }
   setAirport(fromIn, 'CML'); setAirport(toIn, 'ATS');
   activate($('#swap'), () => {
     const a = fromIn.dataset.code, b = toIn.dataset.code;

@@ -424,3 +424,12 @@ p.hint, p.price-note, p.dest-price, p.dest-region, p.dest-count, p.cal-month-che
   .route .swap { margin-top: 0; justify-self: start; }
 }
 .row:has(.route) { align-items: flex-start; }
+/* GOV.UK accessible autocomplete, styled to match the site */
+.ac-host .autocomplete__wrapper { position: relative; }
+.ac-host .autocomplete__input { font: inherit; color: var(--ink); background: var(--surface); border: 1.5px solid var(--muted); border-radius: 8px; padding: 10px 12px; min-height: 46px; width: 100%; box-sizing: border-box; }
+.ac-host .autocomplete__input--focused { outline: 3px solid var(--focus); outline-offset: 2px; box-shadow: none; }
+.ac-host .autocomplete__menu { margin-top: 6px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: var(--radius); }
+.ac-host .autocomplete__option { font: inherit; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.ac-host .autocomplete__option:last-child { border-bottom: 0; }
+.ac-host .autocomplete__option--focused, .ac-host .autocomplete__option:hover { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.ac-host .autocomplete__option--no-results { color: var(--muted); }

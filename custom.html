@@ -786,7 +786,13 @@
     const first = $('[data-date="' + start + '"]', calBody);
     if (first) first.autofocus = true;
     cal.showModal();
-    if (first) first.autofocus = false;
+    if (first) {
+      first.autofocus = false;
+      // Safari on iPhone doesn't move VoiceOver for autofocus alone, so move focus to the day explicitly too
+      // (on the Mac it's already there, so nothing moves)
+      first.focus();
+      if (window.matchMedia('(pointer: coarse)').matches) setTimeout(() => { if (cal.open && document.activeElement !== first) first.focus(); }, 300);
+    }
     datesBtn.setAttribute('aria-expanded', 'true');
   }
   function closeCal() { if (cal.open) cal.close(); }

@@ -99,22 +99,25 @@
             <div class="counter">
               <div class="who"><span id="ad-label">Adults</span><span class="hint">16 or over</span></div>
               <div class="stepper">
-                <button type="button" class="step-btn" data-for="adults" data-step="-1" aria-disabled="true">−</button>
+                <button type="button" class="step-btn" data-for="adults" data-step="-1" aria-label="Remove an adult" aria-disabled="true">−</button>
                 <span class="step-val" id="adults" data-min="1" data-max="9" data-value="1">1</span>
-                <button type="button" class="step-btn" data-for="adults" data-step="1">+</button>
+                <button type="button" class="step-btn" data-for="adults" data-step="1" aria-label="Add an adult">+</button>
               </div>
             </div>
             <div class="counter">
               <div class="who"><span id="ch-label">Children</span><span class="hint">2 to 15</span></div>
               <div class="stepper">
-                <button type="button" class="step-btn" data-for="children" data-step="-1" aria-disabled="true">−</button>
+                <button type="button" class="step-btn" data-for="children" data-step="-1" aria-label="Remove a child" aria-disabled="true">−</button>
                 <span class="step-val" id="children" data-min="0" data-max="8" data-value="0">0</span>
-                <button type="button" class="step-btn" data-for="children" data-step="1">+</button>
+                <button type="button" class="step-btn" data-for="children" data-step="1" aria-label="Add a child">+</button>
               </div>
             </div>
             <div class="field">
-              <label class="label" for="cabin">Cabin class</label>
-              <select class="control" id="cabin"></select>
+              <div class="label">Cabin class</div>
+              <div style="position:relative">
+                <div class="control btnlike" id="cabin"><span id="cabin-val">Economy</span></div>
+                <div class="pop" id="cabin-list" hidden style="padding:4px"></div>
+              </div>
             </div>
             <p class="vh" role="status" id="pax-live"></p>
             <div class="btn btn-primary" role="button" tabindex="0" id="pax-done">Done</div>
@@ -914,11 +917,15 @@
   makeCounter($('#adults'), 'adult', 'adults'); makeCounter($('#children'), 'child', 'children');
 
   // Cabin class: the browser's own drop-down, which works the same everywhere
-  const cab = $('#cabin');
-  cab.innerHTML = W.cabins.map(c => '<option value="' + c.value + '">' + c.label + '</option>').join('');
-  cab.value = state.cabin;
-  cab.addEventListener('change', () => { state.cabin = cab.value; updatePax(); });
-  function closeCabin() {}
+  const cab = $('#cabin'), cabList = $('#cabin-list');
+  cabList.innerHTML = W.cabins.map(c => '<div class="cab-opt" data-value="' + c.value + '" style="padding:10px 12px;border-radius:6px;cursor:pointer">' + c.label + '</div>').join('');
+  function showCabin() { $('#cabin-val').textContent = W.cabin(state.cabin).label;
+    $$('.cab-opt').forEach(o => { o.style.fontWeight = o.dataset.value === state.cabin ? '700' : '400'; o.style.background = o.dataset.value === state.cabin ? 'var(--line)' : ''; }); }
+  cab.addEventListener('click', () => { cabList.hidden = !cabList.hidden; });
+  cabList.addEventListener('click', e => { const o = e.target.closest('.cab-opt'); if (!o) return;
+    state.cabin = o.dataset.value; cabList.hidden = true; showCabin(); updatePax(); });
+  showCabin();
+  function closeCabin() { cabList.hidden = true; }
 
   // Close popovers on outside click
   document.addEventListener('mousedown', e => {

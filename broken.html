@@ -141,6 +141,19 @@
     </section>
   </div>
 
+  <dialog class="modal picker" id="picker" aria-labelledby="picker-h">
+    <div class="modal-head">
+      <h2 id="picker-h">Flying from</h2>
+      <button type="button" class="btn btn-secondary" id="picker-cancel">Cancel</button>
+    </div>
+    <div class="modal-body picker-body">
+      <label for="picker-input">Search places</label>
+      <input id="picker-input" class="control" type="text" autocomplete="off" spellcheck="false">
+      <ul class="picker-list" id="picker-list" aria-label="Places"></ul>
+      <p class="vh" role="status" id="picker-live"></p>
+    </div>
+  </dialog>
+
   <dialog class="modal cal-dialog cal-float" id="cal" aria-labelledby="cal-step">
     <div class="modal-head">
       <h2 id="cal-step">Select dates</h2>
@@ -477,7 +490,7 @@
      message says how many there are. This holds up in VoiceOver on Mac and iPhone. */
   const comboStatus = $('#combo-status');
   function setAirport(input, code) {
-    if (USE_TESTED_AUTOCOMPLETE) return mountPlace(input === fromIn ? 'from' : 'to', code);
+    if (USE_PICKER) return setPickerValue(input, code);
     const a = W.airport(code);
     input.value = a ? a.name + ' (' + a.code + ')' : '';
     input.dataset.code = a ? a.code : '';
@@ -579,87 +592,61 @@
     input.addEventListener('change', () => { if (box.hidden) settle(); });
   }
   let fromIn = $('#from-input'), toIn = $('#to-input');
-  /* From and To use the GOV.UK accessible autocomplete (github.com/alphagov/accessible-autocomplete):
-     a combobox and listbox tested with VoiceOver on iPhone and Mac, TalkBack, JAWS and NVDA.
-     The home-made version above (makePlace) is kept for the inaccessible version. */
-  const USE_TESTED_AUTOCOMPLETE = false;
-  // On a phone, line things up so the suggestions sit directly above the keyboard,
-  // with the field just above them. Nothing else on the page comes between the list and the keyboard,
-  // so exploring up from the keyboard reaches the suggestions first.
-  const touchScreen = window.matchMedia('(pointer: coarse)').matches;
-  function liftField(inp) {
-    if (!touchScreen) return;
-    const host = inp.closest('.ac-host');
-    const fit = () => {
-      const vv = window.visualViewport;
-      const visTop = vv ? vv.offsetTop : 0, visBottom = visTop + (vv ? vv.height : window.innerHeight);
-      const list = host.querySelector('.autocomplete__menu--visible');
-      const target = list || inp;
-      const r = target.getBoundingClientRect();
-      let delta = r.bottom - (visBottom - 6);
-      // never push the field itself off the top of the visible area
-      const fieldTop = inp.closest('.field').getBoundingClientRect().top - delta;
-      if (fieldTop < visTop + 4) delta -= (visTop + 4 - fieldTop);
-      if (Math.abs(delta) > 3) window.scrollBy(0, delta);
-    };
-    setTimeout(fit, 80); setTimeout(fit, 400);
-    if (!host._watch) {
-      host._watch = new MutationObserver(() => { if (document.activeElement === inp) setTimeout(fit, 30); });
-      host._watch.observe(host, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-    }
+  /* From and To: a button that opens a full-screen search, the pattern travel sites use on phones.
+     The search box is at the top, and the list of places is straight under it and already showing,
+     so you can swipe right into it, explore just below the box, or type to narrow it down.
+     The home-made inline list above (makePlace) is kept for the inaccessible version. */
+  const USE_PICKER = false;
+  const picker = $('#picker'), pickInput = $('#picker-input'), pickList = $('#picker-list'), pickLive = $('#picker-live');
+  let pickFor = null, pickTimer = null;
+  function pickerButton(input) {
+    const side = input.id.startsWith('from') ? 'from' : 'to';
+    const b = document.createElement('button');
+    b.type = 'button'; b.id = input.id; b.className = 'control btnlike place-btn';
+    b.setAttribute('aria-haspopup', 'dialog');
+    b.dataset.side = side; b.dataset.code = '';
+    b.innerHTML = '<span class="place-val"></span>';
+    ['-hint', '-results'].forEach(x => { const el = $('#' + side + x); if (el) el.remove(); });
+    input.replaceWith(b);
+    b.addEventListener('click', () => openPicker(b));
+    return b;
   }
-  if (window.visualViewport) window.visualViewport.addEventListener('resize', () => {
-    const a = document.activeElement;
-    if (a && (a.id === 'from-input' || a.id === 'to-input')) liftField(a);
+  function setPickerValue(btn, code) {
+    const a = W.airport(code), side = btn.dataset.side;
+    btn.dataset.code = a ? a.code : '';
+    $('.place-val', btn).textContent = a ? a.name + ' (' + a.code + ')' : 'Choose a place';
+    btn.setAttribute('aria-label', (side === 'from' ? 'From' : 'To') + ', ' + (a ? a.name + ' (' + a.code + ')' : 'not chosen'));
+  }
+  function fillPicker(q) {
+    const found = matches(q);
+    pickList.innerHTML = found.map(a => '<li><button type="button" class="optrow" data-code="' + a.code + '"><span>' + a.name + '</span><span class="code">' + a.code + '</span></button></li>').join('') ||
+      '<li class="picker-none">No places found</li>';
+    return found.length;
+  }
+  function openPicker(btn) {
+    pickFor = btn;
+    $('#picker-h').textContent = btn.dataset.side === 'from' ? 'Flying from' : 'Flying to';
+    pickInput.value = '';
+    fillPicker('');
+    pickLive.textContent = '';
+    picker.showModal();
+    pickInput.focus();
+  }
+  pickInput.addEventListener('input', () => {
+    const n = fillPicker(pickInput.value);
+    clearTimeout(pickTimer); pickLive.textContent = '';
+    pickTimer = setTimeout(() => { pickLive.textContent = n ? n + (n === 1 ? ' place' : ' places') + ' found.' : 'No places found.'; }, 150);
   });
-  // Say how many suggestions there are as soon as you type
-  function sayCount(inp) {
-    const q = inp.value.trim();
-    if (!q) { placeStatus.textContent = ''; return; }
-    const n = matches(q).length;
-    sayPlace(n ? n + (n === 1 ? ' suggestion' : ' suggestions') + ' available.' : 'No places found.');
-  }
-  function mountPlace(side, code) {
-    const old = side === 'from' ? fromIn : toIn;
-    let host = old.closest('.ac-host');
-    if (!host) {
-      host = document.createElement('div'); host.className = 'ac-host';
-      const field = old.closest('.field');
-      ['-hint', '-results'].forEach(x => { const el = $('#' + side + x); if (el) el.remove(); });
-      old.replaceWith(host);
-    }
-    host.innerHTML = '';
-    const a = W.airport(code);
-    accessibleAutocomplete({
-      element: host,
-      id: side + '-input',
-      name: side,
-      minLength: 1,
-      displayMenu: 'inline',
-      inputClasses: 'control',
-      defaultValue: a ? a.name + ' (' + a.code + ')' : '',
-      source: (q, populate) => populate(matches(q).map(x => x.name + ' (' + x.code + ')')),
-      // Keep the spoken instructions short
-      tAssistiveHint: () => 'Suggestions appear below as you type.',
-      // The component waits about 1.4 seconds before saying how many results there are.
-      // We say it ourselves straight away instead (see sayCount), so its own message is left empty.
-      tStatusResults: () => '',
-      tStatusNoResults: () => '',
-      tNoResults: () => 'No places found',
-      onConfirm: v => {
-        const inp = side === 'from' ? fromIn : toIn;
-        const ap = v ? W.airportByName(v) : null;
-        if (ap) { inp.dataset.code = ap.code; clearFieldError(inp); }
-      }
-    });
-    const inp = host.querySelector('input');
-    inp.dataset.code = a ? a.code : '';
-    inp.dataset.hint = inp.getAttribute('aria-describedby') || '';
-    inp.addEventListener('input', () => { const ap = W.airportByName(inp.value); inp.dataset.code = ap ? ap.code : ''; sayCount(inp); liftField(inp); });
-    inp.addEventListener('focus', () => liftField(inp));
-    if (side === 'from') fromIn = inp; else toIn = inp;
-  }
-  if (!USE_TESTED_AUTOCOMPLETE) { makePlace(fromIn); makePlace(toIn); }
+  pickList.addEventListener('click', e => {
+    const b = e.target.closest('button[data-code]'); if (!b) return;
+    setPickerValue(pickFor, b.dataset.code);
+    clearFieldError(pickFor);
+    picker.close();
+  });
+  $('#picker-cancel').addEventListener('click', () => picker.close());
+  picker.addEventListener('close', () => { const b = pickFor; setTimeout(() => b && b.focus(), 100); });
+  if (USE_PICKER) { fromIn = pickerButton(fromIn); toIn = pickerButton(toIn); }
+  else { makePlace(fromIn); makePlace(toIn); }
   // From and To start empty, so there's nothing to delete before typing
   setAirport(fromIn, ''); setAirport(toIn, '');
   activate($('#swap'), () => {

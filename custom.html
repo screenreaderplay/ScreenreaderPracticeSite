@@ -565,6 +565,17 @@
      a combobox and listbox tested with VoiceOver on iPhone and Mac, TalkBack, JAWS and NVDA.
      The home-made version above (makePlace) is kept for the inaccessible version. */
   const USE_TESTED_AUTOCOMPLETE = !!window.accessibleAutocomplete;
+  // On a phone, move the field to the top of the screen while typing,
+  // so the suggestions under it sit above the on-screen keyboard, where they can be found
+  const touchScreen = window.matchMedia('(pointer: coarse)').matches;
+  function liftField(inp) {
+    if (!touchScreen) return;
+    const field = inp.closest('.field');
+    setTimeout(() => {
+      const top = field.getBoundingClientRect().top + window.scrollY - 8;
+      if (Math.abs(window.scrollY - top) > 4) window.scrollTo(0, top);
+    }, 350);
+  }
   function mountPlace(side, code) {
     const old = side === 'from' ? fromIn : toIn;
     let host = old.closest('.ac-host');
@@ -585,6 +596,8 @@
       inputClasses: 'control',
       defaultValue: a ? a.name + ' (' + a.code + ')' : '',
       source: (q, populate) => populate(matches(q).map(x => x.name + ' (' + x.code + ')')),
+      // Keep the spoken instructions short
+      tAssistiveHint: () => 'Suggestions appear below as you type.',
       onConfirm: v => {
         const inp = side === 'from' ? fromIn : toIn;
         const ap = v ? W.airportByName(v) : null;
@@ -594,11 +607,13 @@
     const inp = host.querySelector('input');
     inp.dataset.code = a ? a.code : '';
     inp.dataset.hint = inp.getAttribute('aria-describedby') || '';
-    inp.addEventListener('input', () => { const ap = W.airportByName(inp.value); inp.dataset.code = ap ? ap.code : ''; });
+    inp.addEventListener('input', () => { const ap = W.airportByName(inp.value); inp.dataset.code = ap ? ap.code : ''; liftField(inp); });
+    inp.addEventListener('focus', () => liftField(inp));
     if (side === 'from') fromIn = inp; else toIn = inp;
   }
   if (!USE_TESTED_AUTOCOMPLETE) { makePlace(fromIn); makePlace(toIn); }
-  setAirport(fromIn, 'CML'); setAirport(toIn, 'ATS');
+  // From and To start empty, so there's nothing to delete before typing
+  setAirport(fromIn, ''); setAirport(toIn, '');
   activate($('#swap'), () => {
     const a = fromIn.dataset.code, b = toIn.dataset.code;
     setAirport(fromIn, b); setAirport(toIn, a);

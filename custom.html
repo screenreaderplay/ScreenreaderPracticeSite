@@ -839,7 +839,8 @@
       dates.ret = null;
       setStep('return');
       refreshDays();
-      say((changed ? 'Departure date changed to ' : 'Departure date ') + spoken(iso) + '. Now choose your return date.');
+      // Short and to the point: the day you're on already says it's your departure date
+      say(changed ? 'Departure date changed. Now choose your return date.' : 'Now choose your return date.');
     } else {
       dates.ret = iso;
       clearFieldError(datesBtn);

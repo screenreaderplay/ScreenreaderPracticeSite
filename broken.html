@@ -583,20 +583,30 @@
      a combobox and listbox tested with VoiceOver on iPhone and Mac, TalkBack, JAWS and NVDA.
      The home-made version above (makePlace) is kept for the inaccessible version. */
   const USE_TESTED_AUTOCOMPLETE = false;
-  // On a phone, keep the field and its suggestions in the part of the screen above the keyboard
+  // On a phone, line things up so the suggestions sit directly above the keyboard,
+  // with the field just above them. Nothing else on the page comes between the list and the keyboard,
+  // so exploring up from the keyboard reaches the suggestions first.
   const touchScreen = window.matchMedia('(pointer: coarse)').matches;
   function liftField(inp) {
     if (!touchScreen) return;
-    const field = inp.closest('.field');
+    const host = inp.closest('.ac-host');
     const fit = () => {
       const vv = window.visualViewport;
-      const visTop = vv ? vv.offsetTop : 0, visH = vv ? vv.height : window.innerHeight;
-      const r = field.getBoundingClientRect();
-      // put the label just inside the top of the visible area, so the list below it has the most room
-      const delta = r.top - visTop - 8;
-      if (Math.abs(delta) > 4) window.scrollBy(0, delta);
+      const visTop = vv ? vv.offsetTop : 0, visBottom = visTop + (vv ? vv.height : window.innerHeight);
+      const list = host.querySelector('.autocomplete__menu--visible');
+      const target = list || inp;
+      const r = target.getBoundingClientRect();
+      let delta = r.bottom - (visBottom - 6);
+      // never push the field itself off the top of the visible area
+      const fieldTop = inp.closest('.field').getBoundingClientRect().top - delta;
+      if (fieldTop < visTop + 4) delta -= (visTop + 4 - fieldTop);
+      if (Math.abs(delta) > 3) window.scrollBy(0, delta);
     };
-    setTimeout(fit, 60); setTimeout(fit, 400);
+    setTimeout(fit, 80); setTimeout(fit, 400);
+    if (!host._watch) {
+      host._watch = new MutationObserver(() => { if (document.activeElement === inp) setTimeout(fit, 30); });
+      host._watch.observe(host, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    }
   }
   if (window.visualViewport) window.visualViewport.addEventListener('resize', () => {
     const a = document.activeElement;

@@ -83,8 +83,8 @@
           <div class="field">
             <label for="from-input">From</label>
             <input id="from-input" class="control" type="text" autocomplete="off" spellcheck="false" aria-describedby="from-hint" data-hint="from-hint">
-            <span class="vh" id="from-hint">Type to search places, then press Down arrow to reach the results.</span>
-            <div class="pop place-results" id="from-results" hidden><ul class="listbox" aria-label="From results"></ul></div>
+            <span class="vh" id="from-hint">Type to search places. Matching places appear in a list straight after this box.</span>
+            <div class="place-results" id="from-results" hidden><ul class="listbox" aria-label="From results"></ul></div>
             <span class="field-error" id="from-err" hidden></span>
           </div>
           <div class="swap" role="button" tabindex="0" id="swap" aria-label="Swap From and To">
@@ -93,8 +93,8 @@
           <div class="field">
             <label for="to-input">To</label>
             <input id="to-input" class="control" type="text" autocomplete="off" spellcheck="false" aria-describedby="to-hint" data-hint="to-hint">
-            <span class="vh" id="to-hint">Type to search places, then press Down arrow to reach the results.</span>
-            <div class="pop place-results" id="to-results" hidden><ul class="listbox" aria-label="To results"></ul></div>
+            <span class="vh" id="to-hint">Type to search places. Matching places appear in a list straight after this box.</span>
+            <div class="place-results" id="to-results" hidden><ul class="listbox" aria-label="To results"></ul></div>
             <span class="field-error" id="to-err" hidden></span>
           </div>
         </div>
@@ -499,7 +499,7 @@
       });
       box.hidden = !found.length;
       if (speak) sayPlace(found.length
-        ? found.length + (found.length === 1 ? ' result' : ' results') + '. First: ' + found[0].name + '. Press Down arrow to choose.'
+        ? found.length + (found.length === 1 ? ' result' : ' results') + '. First: ' + found[0].name + '.'
         : 'No places match.');
     }
     function pick(code) {

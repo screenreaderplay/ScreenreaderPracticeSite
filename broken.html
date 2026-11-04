@@ -68,7 +68,7 @@
             <label for="from-input">From</label>
             <input id="from-input" class="control" type="text" autocomplete="off" spellcheck="false" aria-describedby="from-hint" data-hint="from-hint">
             <span class="vh" id="from-hint">Type to search places, then press Down arrow to reach the results.</span>
-            <div class="pop place-results" id="from-results" aria-hidden="true" hidden><ul class="listbox" aria-label="From results"></ul></div>
+            <div class="place-results" id="from-results" aria-hidden="true" hidden><ul class="listbox" aria-label="From results"></ul></div>
             <span class="field-error" id="from-err" hidden></span>
           </div>
           <div class="swap" id="swap">
@@ -78,7 +78,7 @@
             <label for="to-input">To</label>
             <input id="to-input" class="control" type="text" autocomplete="off" spellcheck="false" aria-describedby="to-hint" data-hint="to-hint">
             <span class="vh" id="to-hint">Type to search places, then press Down arrow to reach the results.</span>
-            <div class="pop place-results" id="to-results" aria-hidden="true" hidden><ul class="listbox" aria-label="To results"></ul></div>
+            <div class="place-results" id="to-results" aria-hidden="true" hidden><ul class="listbox" aria-label="To results"></ul></div>
             <span class="field-error" id="to-err" hidden></span>
           </div>
         </div>
@@ -520,7 +520,7 @@
       });
       box.hidden = !found.length;
       if (speak) sayPlace(found.length
-        ? found.length + (found.length === 1 ? ' result' : ' results') + ' available.'
+        ? found.length + (found.length === 1 ? ' result' : ' results') + ' available. Press Down arrow to choose.'
         : 'No places match.');
     }
     function pick(code) {

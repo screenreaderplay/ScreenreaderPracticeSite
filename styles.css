@@ -383,7 +383,8 @@ dialog.modal.cal-dialog { width: min(860px, calc(100vw - 16px)); }
 .cal-table .day.past { color: var(--faint); }
 .cal-table .day.past .dn { font-weight: 400; text-decoration: line-through; }
 /* From / To results: a list of real buttons */
-.place-results { padding: 4px; }
+.place-results { margin-top: 6px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.place-results .listbox { max-height: none; }
 .place-results .listbox { padding: 0; }
 .place-results button.optrow { width: 100%; font: inherit; color: var(--ink); background: none; border: 0; text-align: left; }
 .place-results button.optrow:hover, .place-results button.optrow:focus { background: var(--accent-soft); }
@@ -414,3 +415,12 @@ p.hint, p.price-note, p.dest-price, p.dest-region, p.dest-count, p.cal-month-che
 .spinner { width: 24px; height: 24px; border: 3px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; flex: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+/* From and To: keep the boxes lined up when a results list opens under one of them */
+.route { align-items: start; }
+.route .swap { margin-top: 33px; }
+.place-results .optrow { min-width: 0; }
+@media (max-width: 560px) {
+  .route { grid-template-columns: minmax(0, 1fr); }
+  .route .swap { margin-top: 0; justify-self: start; }
+}
+.row:has(.route) { align-items: flex-start; }

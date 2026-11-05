@@ -46,6 +46,12 @@
     .keytable td:first-child { width: auto; }
     .keytable td + td { margin-top: 2px; color: var(--muted); }
   }
+  /* Extra practice: each task as a card. The list keeps its list semantics (role="list"), numbers come from a CSS counter that screen readers skip, and the icons are hidden from them */
+  .xp { list-style: none; padding: 0 !important; margin: 0; display: grid; gap: 12px; counter-reset: xp; }
+  .xp li { counter-increment: xp; display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 16px; background: var(--sunk); border-radius: 12px; padding: 14px 18px; }
+  .xp li::before { content: counter(xp); content: counter(xp) / ""; display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+  .xp-icon { color: var(--accent); padding-right: 14px; border-right: 2px solid var(--accent); box-sizing: content-box; }
+  @media (max-width: 520px) { .xp li { grid-template-columns: auto 1fr; gap: 12px; padding: 12px; } .xp-icon { display: none; } }
   .sc { color: var(--muted); font-size: .88rem; }
 </style>
 </head>
@@ -124,19 +130,19 @@
               <p>Think about:</p>
               <ul>
                 <li>Can you reach and understand all the content?</li>
-                <li>Does the order things are read in make sense?</li>
+                <li>Does the reading order make sense?</li>
               </ul>
             </div>
           </div>
 
           <div class="task">
-            <h3 id="mac3">Mac practice task 3 of 5: Search for a flight <span class="time">(8 minutes)</span></h3>
+            <h3 id="mac3">Mac practice task 3 of 5: Choose your travel destinations <span class="time">(8 minutes)</span></h3>
             <p>On the accessible version, search for a return flight from Camelot to Avalon for 2 adults.</p>
             <h4>Where you're going</h4>
             <ol>
               <li>Set Trip type to Return.</li>
-              <li>In From, type "Cam" and choose Camelot from the suggestions.</li>
-              <li>In To, type "Ava" and choose Avalon.</li>
+              <li>In the From field, type "Cam" and choose Camelot from the suggestions.</li>
+              <li>In the To field, type "Ava" and choose Avalon from the suggestions.</li>
             </ol>
             <div class="think">
               <p>Think about:</p>
@@ -167,14 +173,14 @@
             <div class="think">
               <p>Think about:</p>
               <ul>
-                <li>Is the new number of adults announced?</li>
+                <li>Is the updated number of adults announced?</li>
                 <li>Can you choose a cabin class?</li>
               </ul>
             </div>
           </div>
 
           <div class="task">
-            <h3 id="mac4">Mac practice task 4 of 5: Explore and sort the results <span class="time">(8 minutes)</span></h3>
+            <h3 id="mac4">Mac practice task 4 of 5: Explore and sort results <span class="time">(8 minutes)</span></h3>
             <h4>Move by headings</h4>
             <ol>
               <li>On the search results, press VO+U, then Left or Right arrow until you reach Headings.</li>
@@ -189,7 +195,7 @@
             </div>
             <h4>Save a flight</h4>
             <ol>
-              <li>Find the 3rd result's Save button and press VO+Space.</li>
+              <li>Go back to moving item by item: press VO+Right arrow until you reach the 3rd result's Save button, then press VO+Space.</li>
             </ol>
             <div class="think">
               <p>Think about:</p>
@@ -291,19 +297,19 @@
               <p>Think about:</p>
               <ul>
                 <li>Can you reach and understand all the content?</li>
-                <li>Does the order things are read in make sense?</li>
+                <li>Does the reading order make sense?</li>
               </ul>
             </div>
           </div>
 
           <div class="task">
-            <h3 id="ph3">Mobile practice task 3 of 5: Search for a flight <span class="time">(8 minutes)</span></h3>
+            <h3 id="ph3">Mobile practice task 3 of 5: Choose your travel destinations <span class="time">(8 minutes)</span></h3>
             <p>On the accessible version, search for a return flight from Camelot to Avalon for 2 adults.</p>
             <h4>Where you're going</h4>
             <ol>
               <li>Set Trip type to Return.</li>
-              <li>Double tap From, type "Cam", then swipe right to the results and double tap Camelot.</li>
-              <li>Do the same for To, typing "Ava" and choosing Avalon.</li>
+              <li>Double tap the From field, type "Cam", then swipe right to the results and double tap Camelot.</li>
+              <li>Do the same for the To field, typing "Ava" and choosing Avalon.</li>
             </ol>
             <div class="think">
               <p>Think about:</p>
@@ -334,14 +340,14 @@
             <div class="think">
               <p>Think about:</p>
               <ul>
-                <li>Is the new number of adults announced?</li>
+                <li>Is the updated number of adults announced?</li>
                 <li>Can you choose a cabin class?</li>
               </ul>
             </div>
           </div>
 
           <div class="task">
-            <h3 id="ph4">Mobile practice task 4 of 5: Explore and sort the results <span class="time">(8 minutes)</span></h3>
+            <h3 id="ph4">Mobile practice task 4 of 5: Explore and sort results <span class="time">(8 minutes)</span></h3>
             <h4>Move by headings</h4>
             <ol>
               <li>On the search results, set your screen reader to move by headings: the rotor on iPhone, or a three-finger swipe up or down on Android.</li>
@@ -405,16 +411,16 @@
         <h2 class="more-h"><button type="button" aria-expanded="false" aria-controls="extra-panel">Extra practice tasks<span class="pm" aria-hidden="true"></span></button></h2>
         <div id="extra-panel" hidden>
           <p>More to try on both versions, on your Mac or your phone, during the session or afterwards.</p>
-          <ol>
-            <li>Open the cookie settings, turn on Analytics cookies only, and save.</li>
-            <li>Move the Popular destinations slideshow to Camelot and explore it. Then activate "Search flights to Camelot". What happens?</li>
-            <li>What is the policy on bringing a pet dragon in the cabin?</li>
-            <li>Open the calendar from Travel dates. Go to next month, use the Cheapest button to find the cheapest day, then choose it. Then, still in the calendar, choose a return date a week later. When the calendar closes, where are you, and do you know what to do next?</li>
-            <li>Find out what "Include nearby airports" means, using the help button next to it.</li>
-            <li>Turn on Direct flights only and Flexible dates, then search.</li>
-            <li>Filter to flights that depart before 12:00. How do you know the list changed?</li>
-            <li>Select a flight. Leave the email empty and try to confirm. Then fix it, add a checked bag, accept the terms and confirm.</li>
-            <li>Find your booking reference, close the booking and check where your focus lands.</li>
+          <ol class="xp" role="list">
+            <li><svg class="xp-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="14.5" cy="14" r="1"/><circle cx="9.5" cy="15.5" r=".8"/><path d="M15 5.5a3 3 0 0 0 3.5 3.5"/></svg><span>Open the cookie settings, turn on Analytics cookies only, and save.</span></li>
+            <li><svg class="xp-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Move the Popular destinations slideshow to Camelot and explore it. Then activate "Search flights to Camelot". What happens?</span></li>
+            <li><svg class="xp-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="9" r="1.8"/><circle cx="11" cy="6" r="1.8"/><circle cx="15.5" cy="6.5" r="1.8"/><circle cx="18.5" cy="10.5" r="1.8"/><path d="M8 17c0-3 2.5-5.5 4.5-5.5S17 14 17 17c0 2-2 2.5-4.5 2.5S8 19 8 17z"/></svg><span>What is the policy on bringing a pet dragon in the cabin?</span></li>
+            <li><svg class="xp-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Open the calendar from Travel dates. Go to next month, use the Cheapest button to find the cheapest day, then choose it. Then, still in the calendar, choose a return date a week later. When the calendar closes, where are you, and do you know what to do next?</span></li>
+            <li><svg class="xp-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5 4 12l1.5-1.5 6 .5 4-4.5c1-1 2.5-1.5 3-1s0 2-1 3l-4.5 4 .5 6L12 20l-1.5-6.5z"/></svg><span>Find out what "Include nearby airports" means, using the help button next to it.</span></li>
+            <li><svg class="xp-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6.5 7.5V19l-3 1.5v-8z"/></svg><span>Turn on Direct flights only and Flexible dates, then search.</span></li>
+            <li><svg class="xp-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.5" cy="6.5" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="17.5" r="1"/></svg><span>Filter to flights that depart before 12:00. How do you know the list changed?</span></li>
+            <li><svg class="xp-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M9 7.5V5.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5.5v2M8 7.5v12M16 7.5v12"/></svg><span>Select a flight. Leave the email empty and try to confirm. Then fix it, add a checked bag, accept the terms and confirm.</span></li>
+            <li><svg class="xp-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v16l-5-4-5 4z"/></svg><span>Find your booking reference, close the booking and check where your focus lands.</span></li>
           </ol>
         </div>
       </div>

@@ -921,6 +921,9 @@
 
   // Close popovers on outside click
   document.addEventListener('mousedown', e => {
+    // On iPhone, picking from the Cabin class list can send a stray tap to the page
+    // behind the list. Don't treat that as a click outside while Cabin class has focus.
+    if (document.activeElement === cab) return;
     if (!paxPop.hidden && !paxPop.contains(e.target) && !paxBtn.contains(e.target)) closePax(false);
   });
 

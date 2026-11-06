@@ -919,11 +919,23 @@
   cab.addEventListener('change', () => { state.cabin = cab.value; updatePax(); });
   function closeCabin() {}
 
+  // On iPhone, picking from the Cabin class list can send a stray tap to the form behind
+  // the list, which moves focus up the page. For a moment after Cabin class is used,
+  // ignore taps outside Passengers and cabin, and keep focus on Cabin class.
+  let cabT = 0;
+  const cabUsed = () => { cabT = Date.now(); };
+  ['change', 'input', 'focus', 'blur'].forEach(t => cab.addEventListener(t, cabUsed));
+  const cabGuard = t => !paxPop.hidden && !paxPop.contains(t) && !paxBtn.contains(t) &&
+    (document.activeElement === cab || Date.now() - cabT < 1000);
+  ['mousedown', 'mouseup', 'click', 'touchend'].forEach(type => document.addEventListener(type, e => {
+    if (cabGuard(e.target)) { e.preventDefault(); e.stopPropagation(); cabUsed(); }
+  }, true));
+  document.addEventListener('focusin', e => {
+    if (cabGuard(e.target) && e.target !== cab) { cabUsed(); cab.focus(); }
+  }, true);
+
   // Close popovers on outside click
   document.addEventListener('mousedown', e => {
-    // On iPhone, picking from the Cabin class list can send a stray tap to the page
-    // behind the list. Don't treat that as a click outside while Cabin class has focus.
-    if (document.activeElement === cab) return;
     if (!paxPop.hidden && !paxPop.contains(e.target) && !paxBtn.contains(e.target)) closePax(false);
   });
 

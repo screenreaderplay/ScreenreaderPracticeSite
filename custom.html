@@ -109,8 +109,8 @@
 
       <div class="row">
         <div class="field" style="flex: 0 1 340px;">
-          <div class="label" id="pax-label">Passengers</div>
-          <div class="control btnlike" role="button" tabindex="0" id="pax-btn" aria-expanded="false" aria-controls="pax-pop" aria-labelledby="pax-label pax-val"><span id="pax-val">1 adult</span></div>
+          <div class="label" id="pax-label">Passengers and cabin</div>
+          <div class="control btnlike" role="button" tabindex="0" id="pax-btn" aria-expanded="false" aria-controls="pax-pop" aria-labelledby="pax-label pax-val"><span id="pax-val">1 adult, Economy</span></div>
           <div class="pop pax-pop" id="pax-pop" role="group" aria-labelledby="pax-label" hidden>
             <div class="counter">
               <div class="who"><span id="ad-label">Adults</span><span class="hint">16 or over</span></div>
@@ -128,13 +128,13 @@
                 <button type="button" class="step-btn" data-for="children" data-step="1" aria-label="Add a child">+</button>
               </div>
             </div>
+            <div class="field">
+              <label class="label" for="cabin">Cabin class</label>
+              <select class="control" id="cabin"></select>
+            </div>
             <p class="vh" role="status" id="pax-live"></p>
-            <div class="btn btn-primary" role="button" tabindex="0" id="pax-done">Close passengers</div>
+            <div class="btn btn-primary" role="button" tabindex="0" id="pax-done">Close passengers and cabin</div>
           </div>
-        </div>
-        <div class="field" style="flex: 0 1 340px;">
-          <label class="label" for="cabin">Cabin class</label>
-          <select class="control" id="cabin"></select>
         </div>
       </div>
 
@@ -876,7 +876,7 @@
     if (c) parts.push(c + (c === 1 ? ' child' : ' children'));
     return parts.join(', ');
   }
-  function updatePax() { $('#pax-val').textContent = paxSummary(); }
+  function updatePax() { $('#pax-val').textContent = paxSummary() + ', ' + W.cabin(state.cabin).label; }
   function openPax() { paxPop.hidden = false; paxBtn.setAttribute('aria-expanded', 'true'); $('[data-for="adults"][data-step="1"]').focus(); }
   function closePax(focus) { closeCabin(); paxPop.hidden = true; paxBtn.setAttribute('aria-expanded', 'false'); if (focus) paxBtn.focus(); }
   activate(paxBtn, () => (paxPop.hidden ? openPax() : closePax(true)));
@@ -903,7 +903,7 @@
       else { set(n); msg = (n === 0 ? 'No ' + many : n + ' ' + (n === 1 ? one : many)) + '.'; }
       paxLive.textContent = '';
       setTimeout(() => { paxLive.textContent = msg; }, 50);
-      // Cleared again so it isn't read later when you move on
+      // Cleared again so it isn't read later when you move on to Cabin class
       clearTimeout(paxLive._t); paxLive._t = setTimeout(() => { if (paxLive.textContent === msg) paxLive.textContent = ''; }, 4000);
     }
     minus.addEventListener('click', () => step(-1));
@@ -916,9 +916,8 @@
   const cab = $('#cabin');
   cab.innerHTML = W.cabins.map(c => '<option value="' + c.value + '">' + c.label + '</option>').join('');
   cab.value = state.cabin;
-  cab.addEventListener('change', () => { state.cabin = cab.value; });
+  cab.addEventListener('change', () => { state.cabin = cab.value; updatePax(); });
   function closeCabin() {}
-
 
   // Close popovers on outside click
   document.addEventListener('mousedown', e => {
